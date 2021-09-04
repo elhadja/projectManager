@@ -28,6 +28,10 @@ public class CustomUserDetailsImpl implements CustomUserDetails {
 		this.isCredentialsNonExpired = true;
 		this.isEnabled = true;
 	}
+	
+	public CustomUserDetailsImpl() {
+		
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,5 +70,10 @@ public class CustomUserDetailsImpl implements CustomUserDetails {
 	
 	public long getUserId() {
 		return userId;
+	}
+
+	@Override
+	public void setUserId(Long id) {
+		this.userId = id;
 	}
 }

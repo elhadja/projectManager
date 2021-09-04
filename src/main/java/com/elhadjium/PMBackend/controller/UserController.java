@@ -19,6 +19,7 @@ import com.elhadjium.PMBackend.dto.LoginOutputDTO;
 import com.elhadjium.PMBackend.dto.signupInputDTO;
 import com.elhadjium.PMBackend.entity.CustomUserDetails;
 import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.exception.PMBadCredentialsException;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.UserService;
 import com.elhadjium.PMBackend.util.JwtToken;
@@ -47,22 +48,20 @@ public class UserController {
 	}
 	
 	@PostMapping("login")
-	public ResponseEntity<?> login(@RequestBody LoginInputDTO input) throws Exception {
+	public LoginOutputDTO login(@RequestBody LoginInputDTO input) throws Exception {
 		input.validate();
-		try {
-			authManager.authenticate(
-				new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword())
-			); 
-		} catch (BadCredentialsException e) {
-			return ResponseEntity.status(401)
-								 .body(null);
-		} 		
 
-		CustomUserDetails user = (CustomUserDetails) userService.loadUserByUsername(input.getEmail());
+		try {
+			authManager.authenticate(new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword())); 
+		} catch (BadCredentialsException e) {
+			throw new PMBadCredentialsException("Incorrect credentials");
+		}
+
+		CustomUserDetails userCusDetails = (CustomUserDetails) userService.loadUserByUsername(input.getEmail());
 		UserDetails userDetails = userService.loadUserByUsername(input.getEmail());
 		String token = jwt.generateToken(userDetails);
 
-		return ResponseEntity.ok(new LoginOutputDTO(user.getUserId(), token));
+		return new LoginOutputDTO(userCusDetails.getUserId(), token);
 	}
 	
 	@GetMapping("/test")

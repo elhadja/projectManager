@@ -37,5 +37,7 @@ public class signupInputDTO implements DTOValidator {
 		if (JavaUtil.isNullOrEmpty(email) || JavaUtil.isNullOrEmpty(pseudo) || JavaUtil.isNullOrEmpty(password)) {
 			throw new PMInvalidInputDTO("données invalide");
 		}
+		// TODO check email format using regex
+		// TODO check password format using regex
 	}
 }

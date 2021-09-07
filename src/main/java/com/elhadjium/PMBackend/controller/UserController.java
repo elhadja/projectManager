@@ -1,6 +1,10 @@
 package com.elhadjium.PMBackend.controller;
 
+import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +40,9 @@ public class UserController {
 	
 	@Autowired
 	private JwtToken jwt;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@PostMapping("signup")
 	public Long signup(@RequestBody signupInputDTO signupInputDTO) throws Exception {
@@ -64,9 +72,9 @@ public class UserController {
 		return new LoginOutputDTO(userCusDetails.getUserId(), token);
 	}
 	
-	@GetMapping("/test")
+	@GetMapping("test")
 	public String test() {
-		return "test ok";
+		return messageSource.getMessage("good.morning.message", null, LocaleContextHolder.getLocale());
 	}
 
 	// TODO handle Any Exception othan than PMruntimeException

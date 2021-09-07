@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.server.i18n.AcceptHeaderLocaleContextResolver;
 import org.springframework.web.servlet.LocaleResolver;  
 
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
@@ -19,7 +21,7 @@ public class PmBackendApplication {
 	
 	@Bean
 	public LocaleResolver localeResolver() {
-	    SessionLocaleResolver slr = new SessionLocaleResolver();
+		AcceptHeaderLocaleResolver slr = new AcceptHeaderLocaleResolver();
 	    slr.setDefaultLocale(Locale.US);
 	    return slr;
 	}

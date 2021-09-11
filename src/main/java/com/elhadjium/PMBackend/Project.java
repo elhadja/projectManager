@@ -9,6 +9,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.elhadjium.PMBackend.entity.User;
@@ -30,6 +31,9 @@ public class Project implements Serializable {
 			   orphanRemoval = true)
 	private List<UserProject> users = new ArrayList<UserProject>();
 	
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	private List<User> managers = new ArrayList<User>();
+	
 	public void addUser(User user) {
 		UserProject userProject = new UserProject();
 		userProject.setProject(this);
@@ -41,6 +45,11 @@ public class Project implements Serializable {
 	
 	public void removeUser(User user)  {
 		throw new RuntimeException("not implemented yet");
+	}
+	
+	public void addManager(User manager) {
+		managers.add(manager);
+		manager.getManagedProjects().add(this);
 	}
 
 	public Long getId() {
@@ -73,6 +82,14 @@ public class Project implements Serializable {
 
 	public void setUsers(List<UserProject> users) {
 		this.users = users;
+	}
+	
+	public List<User> getManagers() {
+		return managers;
+	}
+
+	public void setManagers(List<User> managers) {
+		this.managers = managers;
 	}
 
 	@Override

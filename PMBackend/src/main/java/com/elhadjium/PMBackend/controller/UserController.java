@@ -1,6 +1,7 @@
 package com.elhadjium.PMBackend.controller;
 
-import java.util.Locale;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -15,14 +16,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
+import com.elhadjium.PMBackend.dto.GetUserProjectOutputDTO;
 import com.elhadjium.PMBackend.dto.LoginInputDTO;
 import com.elhadjium.PMBackend.dto.LoginOutputDTO;
+import com.elhadjium.PMBackend.dto.ProjectManagerOutputDTO;
 import com.elhadjium.PMBackend.dto.signupInputDTO;
 import com.elhadjium.PMBackend.entity.CustomUserDetails;
 import com.elhadjium.PMBackend.entity.User;
@@ -81,6 +83,29 @@ public class UserController {
 		project.setName(userProjectInputDTO.getName());
 		project.setDescription(userProjectInputDTO.getDescription());
 		return userService.CreateUserProject(Long.valueOf(userId), project);
+	}
+	
+	@GetMapping("{id}/projects")
+	public List<GetUserProjectOutputDTO> getUserProjects(@PathVariable("id") String userId) throws Exception {
+		List<Project> userProjects = userService.getUserProjects(Long.valueOf(userId));
+		List<GetUserProjectOutputDTO> getUserProjectOutputDTOs = new ArrayList<GetUserProjectOutputDTO>();
+		for (Project project: userProjects) {
+			GetUserProjectOutputDTO userProjectOutputDTO = new GetUserProjectOutputDTO();
+			userProjectOutputDTO.setProjectDescription(project.getDescription());
+			userProjectOutputDTO.setProjectName(project.getName());
+			userProjectOutputDTO.setProjectId(project.getId());
+			userProjectOutputDTO.setProjectManagers(new ArrayList<ProjectManagerOutputDTO>());
+			for (User user: project.getManagers()) {
+				ProjectManagerOutputDTO manager = new ProjectManagerOutputDTO();
+				manager.setPseudo(user.getPseudo());
+				manager.setId(user.getId());
+				userProjectOutputDTO.getProjectManagers().add(manager);
+			}
+			
+			getUserProjectOutputDTOs.add(userProjectOutputDTO);
+		}
+		
+		return getUserProjectOutputDTOs;
 	}
 	
 	@GetMapping("test")

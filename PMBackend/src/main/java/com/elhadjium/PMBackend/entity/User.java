@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
 import com.elhadjium.PMBackend.Project;
@@ -35,6 +36,9 @@ public class User implements Serializable {
 			   orphanRemoval = true)
 	private List<UserProject> projects = new ArrayList<UserProject>();
 	
+	@ManyToMany(mappedBy = "managers")
+	private List<Project> managedProjects = new ArrayList<Project>();
+	
 	public User() {}
 	
 	public User(Long id, String firstName, String lastName, String email, String pseudo, String password) {
@@ -58,7 +62,7 @@ public class User implements Serializable {
 	public void removeProject(Project userProject) {
 		throw new RuntimeException("Not implemented yet");
 	}
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -113,6 +117,14 @@ public class User implements Serializable {
 
 	public void setProjects(List<UserProject> projects) {
 		this.projects = projects;
+	}
+	
+	public List<Project> getManagedProjects() {
+		return managedProjects;
+	}
+
+	public void setManagedProjects(List<Project> managedProjects) {
+		this.managedProjects = managedProjects;
 	}
 
 	@Override

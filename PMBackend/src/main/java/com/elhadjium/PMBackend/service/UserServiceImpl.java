@@ -1,24 +1,39 @@
 package com.elhadjium.PMBackend.service;
 
 import java.util.ArrayList;
+
 import java.util.Collection;
+import java.util.NoSuchElementException;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.elhadjium.PMBackend.Project;
+import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.entity.CustomUserDetailsImpl;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.exception.PMEntityExistsException;
+import com.elhadjium.PMBackend.exception.PMEntityNotExistsException;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 @Service
 public class UserServiceImpl implements UserService{
 	@Autowired
-	UserDAO userDAO;
+	private UserDAO userDAO;
+	
+	@Autowired
+	private ProjectDAO projectDAO;
+	
+	@Autowired
+	private MessageSource messageSource;
 	
 	private BCryptPasswordEncoder passwordEncodere = new BCryptPasswordEncoder();
 
@@ -40,5 +55,21 @@ public class UserServiceImpl implements UserService{
 		} catch (Exception e) {
 			throw new UsernameNotFoundException("user not found");
 		}
+	}
+	
+	@Transactional
+	public Long CreateUserProject(Long userId, Project project) {
+		
+		try {
+			User user = userDAO.findById(userId).get();
+			project = projectDAO.save(project);
+			user.addProject(project);
+		} catch (NoSuchElementException e) {
+			throw new PMEntityNotExistsException(messageSource.getMessage("msgErrorEntityNotFound", 
+																			new Object[] {messageSource.getMessage("user", null, LocaleContextHolder.getLocale()), userId} ,
+																			LocaleContextHolder.getLocale()));
+		}
+		
+		return project.getId();
 	}
 }

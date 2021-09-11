@@ -12,12 +12,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.LoginInputDTO;
 import com.elhadjium.PMBackend.dto.LoginOutputDTO;
@@ -70,6 +72,15 @@ public class UserController {
 		String token = jwt.generateToken(userDetails);
 
 		return new LoginOutputDTO(userCusDetails.getUserId(), token);
+	}
+	
+	@PostMapping("{id}/projects")
+	public Long createUserProject(@RequestBody AddUserProjectInputDTO userProjectInputDTO,
+									@PathVariable("id") String userId) throws Exception {
+		Project project = new Project();
+		project.setName(userProjectInputDTO.getName());
+		project.setDescription(userProjectInputDTO.getDescription());
+		return userService.CreateUserProject(Long.valueOf(userId), project);
 	}
 	
 	@GetMapping("test")

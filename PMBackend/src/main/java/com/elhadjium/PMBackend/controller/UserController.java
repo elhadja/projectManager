@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elhadjium.PMBackend.Project;
+import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserProjectOutputDTO;
 import com.elhadjium.PMBackend.dto.LoginInputDTO;
@@ -34,7 +35,7 @@ import com.elhadjium.PMBackend.service.UserService;
 import com.elhadjium.PMBackend.util.JwtToken;
 
 @RestController
-@RequestMapping("pm-api/users")
+@RequestMapping(PMConstants.PMBaseUri + "/users")
 public class UserController {
 	@Autowired
 	private UserService userService;

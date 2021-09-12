@@ -44,7 +44,28 @@ public class Project implements Serializable {
 	}
 	
 	public void removeUser(User user)  {
-		throw new RuntimeException("not implemented yet");
+		UserProject userProject = new UserProject();
+		userProject.setUser(user);
+		userProject.setProject(this);
+
+		users.remove(userProject);
+		user.getProjects().remove(userProject);
+	}
+	
+	public void removeAllUsers() {
+		for (UserProject userProject: users) {
+			userProject.getUser().getProjects().remove(userProject);
+		}
+
+		users.clear();
+	}
+	
+	public void removeAllManagers() {
+		for (User user: managers) {
+			user.getManagedProjects().remove(this);
+		}
+
+		managers.clear();
 	}
 	
 	public void addManager(User manager) {

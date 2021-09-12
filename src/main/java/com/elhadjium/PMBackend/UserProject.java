@@ -12,6 +12,16 @@ import com.elhadjium.PMBackend.entity.User;
 @Entity
 public class UserProject implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public UserProject() {
+		
+	}
+	
+	public UserProject(User user, Project project) {
+		super();
+		this.user = user;
+		this.project = project;
+	}
 
 	@Id
 	@ManyToOne

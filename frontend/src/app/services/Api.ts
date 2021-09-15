@@ -66,6 +66,8 @@ export class API {
             this.messageService.showErrorMessage(error.error.message);
         } else if (error.status === 500) {
             this.messageService.showErrorMessage("Internal server error, please contact an administrator");
+        } else {
+            this.messageService.showErrorMessage(error.error.message);
         }
 
         return throwError(error);

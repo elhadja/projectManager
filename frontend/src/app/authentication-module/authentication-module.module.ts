@@ -5,10 +5,11 @@ import { RegisterComponent } from './register/register.component';
 import { RouterModule, Routes } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input'; 
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon'; 
 import {MatButtonModule} from '@angular/material/button'; 
 import { LoginService } from './services/login-service';
+import { SignupService } from './services/signup.service';
 
 const routes: Routes = [
   {path: '', component: LoginComponent},
@@ -25,6 +26,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     MatInputModule,
     MatFormFieldModule,
     MatIconModule,
@@ -32,7 +34,8 @@ const routes: Routes = [
     RouterModule.forChild(routes)
   ],
   providers: [
-    LoginService
+    LoginService,
+    SignupService
   ]
 })
 export class AuthenticationModuleModule { }

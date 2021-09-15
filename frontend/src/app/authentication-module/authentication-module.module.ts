@@ -6,6 +6,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input'; 
 import { ReactiveFormsModule } from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon'; 
+import {MatButtonModule} from '@angular/material/button'; 
+import { LoginService } from './services/login-service';
 
 const routes: Routes = [
   {path: '', component: LoginComponent},
@@ -24,7 +27,12 @@ const routes: Routes = [
     ReactiveFormsModule,
     MatInputModule,
     MatFormFieldModule,
+    MatIconModule,
+    MatButtonModule,
     RouterModule.forChild(routes)
+  ],
+  providers: [
+    LoginService
   ]
 })
 export class AuthenticationModuleModule { }

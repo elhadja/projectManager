@@ -1,0 +1,12 @@
+<div class="alert" 
+    *ngIf="!!message"
+    [ngClass]="{'alert-success': messageType === 0,
+                'alert-warning': messageType === 1,
+                'alert-danger': messageType === 2}">
+    <p>
+        {{ message }}
+    </p>
+    <button (click)="hide()" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>

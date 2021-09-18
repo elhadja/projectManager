@@ -74,7 +74,7 @@ public class UserControllerTest {
 	public void login_ok() throws Exception {
 		//prepare
 		LoginInputDTO input = new LoginInputDTO();
-		input.setEmail("spring@test.com");
+		input.setUserIdentifier("spring@test.com");
 		input.setPassword("mqlkdfjqmlsdkfjqmslkdjfmqlksd");
 		UserDetails customUserDetails = new CustomUserDetailsImpl();
 		
@@ -99,7 +99,7 @@ public class UserControllerTest {
 	public void login_badCredentials() throws Exception {
 		// prepare
 		LoginInputDTO input = new LoginInputDTO();
-		input.setEmail("spring@test.com");
+		input.setUserIdentifier("spring@test.com");
 		input.setPassword("mqlkdfjqmlsdkfjqmslkdjfmqlksd");
 		
 		when(authManager.authenticate(any())).thenThrow(BadCredentialsException.class);

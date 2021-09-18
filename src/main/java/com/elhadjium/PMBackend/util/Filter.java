@@ -31,15 +31,15 @@ public class Filter extends OncePerRequestFilter{
 			throws ServletException, IOException {
 		String header = request.getHeader("Authorization");
 		String jwt = null;
-		String email = null;
+		String userIdentifier = null;
 		if (header != null && header.startsWith("Bearer")) {
 			jwt = header.substring(7);
-			email = jwtToken.extractUsername(jwt);
+			userIdentifier = jwtToken.extractUsername(jwt);
 		}
 		
-		if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+		if (userIdentifier != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = this.userService.loadUserByUsername(email);
+            UserDetails userDetails = this.userService.loadUserByUsername(userIdentifier);
 
             if (jwtToken.validateToken(jwt, userDetails)) {
 

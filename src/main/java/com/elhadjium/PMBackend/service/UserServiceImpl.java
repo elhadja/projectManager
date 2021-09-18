@@ -50,10 +50,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String userIdentifier) throws UsernameNotFoundException {
 		try {
-			User u = userDAO.findByEmail(username);
-			return new CustomUserDetailsImpl(u.getEmail(), u.getPassword(), u.getId(), (Collection<? extends GrantedAuthority>) new ArrayList<GrantedAuthority>());
+			User u = userDAO.findByEmail(userIdentifier);
+			if (u == null) {
+				u = userDAO.findByPseudo(userIdentifier);
+			}
+			return new CustomUserDetailsImpl(userIdentifier, u.getPassword(), u.getId(), (Collection<? extends GrantedAuthority>) new ArrayList<GrantedAuthority>());
 		} catch (Exception e) {
 			throw new UsernameNotFoundException("user not found");
 		}

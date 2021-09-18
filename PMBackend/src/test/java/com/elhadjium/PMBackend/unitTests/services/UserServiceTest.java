@@ -26,11 +26,14 @@ public class UserServiceTest {
 	
 	@Test
 	public void signup_ok() throws Exception {
-		// prepare
+		
+		User user = new User();
+		user.setPassword("password");
+		// mock
 		when(userDAO.save(any(User.class))).thenReturn(new User());
 
 		// When
-		userService.signup(new User());
+		userService.signup(user);
 		
 		// Then
 		verify(userDAO).save(any(User.class));

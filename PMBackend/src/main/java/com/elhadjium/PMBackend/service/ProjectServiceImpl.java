@@ -24,6 +24,7 @@ public class ProjectServiceImpl implements ProjectService {
 	@Autowired
 	private UserDAO userDAO;
 
+	// TODO integration testing
 	@Transactional
 	public void updateProject(Long projectId, UpdateProjectInputDTO updateProjectInputDTO) {
 		updateProjectInputDTO.validate();

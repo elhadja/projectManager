@@ -65,13 +65,13 @@ public class UserController {
 		input.validate();
 
 		try {
-			authManager.authenticate(new UsernamePasswordAuthenticationToken(input.getEmail(), input.getPassword())); 
+			authManager.authenticate(new UsernamePasswordAuthenticationToken(input.getUserIdentifier(), input.getPassword())); 
 		} catch (BadCredentialsException e) {
 			throw new PMBadCredentialsException("Incorrect credentials");
 		}
 
-		CustomUserDetails userCusDetails = (CustomUserDetails) userService.loadUserByUsername(input.getEmail());
-		UserDetails userDetails = userService.loadUserByUsername(input.getEmail());
+		CustomUserDetails userCusDetails = (CustomUserDetails) userService.loadUserByUsername(input.getUserIdentifier());
+		UserDetails userDetails = userService.loadUserByUsername(input.getUserIdentifier());
 		String token = jwt.generateToken(userDetails);
 
 		return new LoginOutputDTO(userCusDetails.getUserId(), token);

@@ -8,14 +8,14 @@ import { LoginService } from '../services/login-service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  emailFormControl: FormControl;
+  userIdentifierFormControl: FormControl;
   passwordFormControl: FormControl;
 
   public hidePassword: boolean;
   constructor(private loginService: LoginService) { 
     this.hidePassword = true;
     // TODO add validators
-    this.emailFormControl = new FormControl('');
+    this.userIdentifierFormControl = new FormControl('');
     this.passwordFormControl = new FormControl('');
   }
 
@@ -23,12 +23,12 @@ export class LoginComponent implements OnInit {
   }
 
   public isValidForm(): boolean {
-    return this.emailFormControl.valid && this.passwordFormControl.valid;
+    return this.userIdentifierFormControl.valid && this.passwordFormControl.valid;
   }
 
   public onLogin(): void {
     this.loginService.login({
-      email: this.emailFormControl.value,
+      userIdentifier: this.userIdentifierFormControl.value,
       password: this.passwordFormControl.value
     });
   }

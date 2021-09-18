@@ -1,5 +1,4 @@
 export interface LoginOutputDTO {
-    email?: string,
-    pseudo?: string,
+    userIdentifier?: string,
     password: string
 }

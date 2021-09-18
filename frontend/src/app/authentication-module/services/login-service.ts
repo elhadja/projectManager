@@ -17,8 +17,7 @@ export class LoginService {
                         localStorage.setItem('token', response.token);
                         this.api.setHttpOptions(response.token);
 
-                        this.router.navigate(["/" + PMConstants.AUTHENTICATION_MODULE_BASE_URI,
-                                                PMConstants.SIGNUP_URI]);
+                        this.router.navigate(["/" + PMConstants.PROJECT_MODULE_BASE_URI]);
                     });
     }
 }

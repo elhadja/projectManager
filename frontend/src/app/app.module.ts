@@ -8,11 +8,16 @@ import { MessageComponent } from './components/message/message.component';
 import { API } from './services/Api';
 import { MessageService } from './services/message.service';
 import { HttpClientModule } from '@angular/common/http';
+import { RouteSecureService } from './services/routeSecure.service';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+
+const SERVICES = [API, MessageService, RouteSecureService];
 
 @NgModule({
   declarations: [
     AppComponent,
-    MessageComponent
+    MessageComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -20,7 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     HttpClientModule
   ],
-  providers: [API, MessageService],
+  providers: [...SERVICES],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -10,8 +10,9 @@ import { MessageService } from './services/message.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouteSecureService } from './services/routeSecure.service';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { sessionManagerService } from './services/sessionManager.service';
 
-const SERVICES = [API, MessageService, RouteSecureService];
+const SERVICES = [API, MessageService, RouteSecureService, sessionManagerService];
 
 @NgModule({
   declarations: [

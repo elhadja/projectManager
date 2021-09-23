@@ -1,2 +1,29 @@
-<p>home works!</p>
 <button (click)="onLogout()">logout</button>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <h1 class="text-center">Your projects</h1>
+            <button mat-stroked-button (click)="onOpenAddProjectDialog()">add project</button>
+            <table mat-table [dataSource]="projects" class="mat-elevation-z8" style="width: 100%;">
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.projectName}} </td>
+                </ng-container>
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef> description </th>
+                    <td mat-cell *matCellDef="let element"> {{element.projectDescription}} </td>
+                </ng-container>
+                <ng-container matColumnDef="projectManagers">
+                    <th mat-header-cell *matHeaderCellDef> project managers </th>
+                    <td mat-cell *matCellDef="let element" > 
+                        <ng-template ngFor let-manager [ngForOf]="element.projectManagers">
+                            {{ manager.pseudo }} <br>
+                        </ng-template>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+    </div>
+</div>

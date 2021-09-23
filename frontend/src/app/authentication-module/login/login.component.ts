@@ -15,8 +15,8 @@ export class LoginComponent implements OnInit {
   constructor(private loginService: LoginService) { 
     this.hidePassword = true;
     // TODO add validators
-    this.userIdentifierFormControl = new FormControl('');
-    this.passwordFormControl = new FormControl('');
+    this.userIdentifierFormControl = new FormControl('elhadj');
+    this.passwordFormControl = new FormControl('password');
   }
 
   ngOnInit(): void {

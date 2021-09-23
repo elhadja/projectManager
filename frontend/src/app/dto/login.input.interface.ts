@@ -1,4 +1,4 @@
 export interface LoginInputDTO {
-    userId: number,
+    id: number,
     token: string
 }

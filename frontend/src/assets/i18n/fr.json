@@ -1,0 +1,6 @@
+{
+    "loginComponent": {
+        "requiredPassword": "Le mot passe est obligatoire",
+        "passwordLabel": "Entrer votre mot de passe"
+    }
+}

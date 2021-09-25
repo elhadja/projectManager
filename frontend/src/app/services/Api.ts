@@ -16,7 +16,8 @@ export class API {
         this.httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',
-                Authorization: ''
+                'Accept-Language': 'fr', // TODO allow user to set language
+                'Authorization': ''
             })
         };
         let token = localStorage.getItem('token');

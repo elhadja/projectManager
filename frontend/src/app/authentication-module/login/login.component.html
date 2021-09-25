@@ -14,13 +14,13 @@
                         </mat-error>
                     </mat-form-field >
                     <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Enter your password</mat-label>
+                        <mat-label>{{ 'loginComponent.passwordLabel' | translate }}</mat-label>
                         <input matInput [formControl]="passwordFormControl" [type]="hidePassword ? 'password' : 'text'" required>
                         <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
                         <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
                         <mat-error *ngIf="passwordFormControl.hasError('required')">
-                            Password is <strong>required</strong>
+                            {{ 'loginComponent.requiredPassword' | translate }}
                         </mat-error>
                     </mat-form-field>
                     <button mat-stroked-button (click)='onLogin()' [disabled]='!isValidForm()'>login</button>

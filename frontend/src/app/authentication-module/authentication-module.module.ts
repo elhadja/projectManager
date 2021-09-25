@@ -10,6 +10,9 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button'; 
 import { LoginService } from './services/login-service';
 import { SignupService } from './services/signup.service';
+import { HttpClient } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpLoaderFactory } from '../app.module';
 
 const routes: Routes = [
   {path: '', component: LoginComponent},
@@ -31,6 +34,11 @@ const routes: Routes = [
     MatFormFieldModule,
     MatIconModule,
     MatButtonModule,
+    TranslateModule.forChild({
+            loader: {provide: TranslateLoader, useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
     RouterModule.forChild(routes)
   ],
   providers: [

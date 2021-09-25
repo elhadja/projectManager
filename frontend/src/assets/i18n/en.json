@@ -1,0 +1,6 @@
+{
+    "loginComponent": {
+        "requiredPassword": "Password is required",
+        "passwordLabel": "enter your fucking password"
+    }
+}

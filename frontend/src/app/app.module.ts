@@ -7,10 +7,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MessageComponent } from './components/message/message.component';
 import { API } from './services/Api';
 import { MessageService } from './services/message.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { RouteSecureService } from './services/routeSecure.service';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { sessionManagerService } from './services/sessionManager.service';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader'
 
 const SERVICES = [API, MessageService, RouteSecureService, sessionManagerService];
 
@@ -24,9 +26,20 @@ const SERVICES = [API, MessageService, RouteSecureService, sessionManagerService
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })
   ],
   providers: [...SERVICES],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+    return new TranslateHttpLoader(http);
+}

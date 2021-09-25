@@ -22,15 +22,16 @@ export class HomeComponent implements OnInit {
               private dialogCreateProjectService: DialogCreateProjectService) {
     this.projects = [];
     this.dialogCreateProjectService.onCreateProjectSuccess.subscribe(() => {
-      // TODO refactor
-      addProjectDialog.closeAll();
-      this.homeService.getUserProjects().subscribe((projects) => {
-        this.projects = [...projects];
-      })
+      this.closeDialogAddProject();
+      this.loadUserProject();
     })
   }
 
   ngOnInit(): void {
+    this.loadUserProject();
+  }
+
+  private loadUserProject(): void {
     this.homeService.getUserProjects().subscribe((projects) => {
       this.projects = [...projects];
     })
@@ -43,5 +44,14 @@ export class HomeComponent implements OnInit {
 
   public onOpenAddProjectDialog(): void {
     this.addProjectDialog.open(CreateProjectComponent);
+  }
+
+  public onClickOnProject(projectId: number): void{
+    // TODO manage page loading
+    this.router.navigateByUrl('/notFound');
+  }
+
+  private closeDialogAddProject(): void {
+      this.addProjectDialog.closeAll();
   }
 }

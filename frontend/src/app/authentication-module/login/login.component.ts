@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { LoginService } from '../services/login-service';
 
 @Component({
@@ -14,9 +14,8 @@ export class LoginComponent implements OnInit {
   public hidePassword: boolean;
   constructor(private loginService: LoginService) { 
     this.hidePassword = true;
-    // TODO add validators
-    this.userIdentifierFormControl = new FormControl('elhadj');
-    this.passwordFormControl = new FormControl('password');
+    this.userIdentifierFormControl = new FormControl('elhadj', [Validators.required, Validators.minLength(2)]);
+    this.passwordFormControl = new FormControl('password', [Validators.required]);
   }
 
   ngOnInit(): void {

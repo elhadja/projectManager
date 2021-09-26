@@ -24,6 +24,8 @@ import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserProjectOutputDTO;
+import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
+import com.elhadjium.PMBackend.dto.GetUsersByCriteriaOutputDTO;
 import com.elhadjium.PMBackend.dto.LoginInputDTO;
 import com.elhadjium.PMBackend.dto.LoginOutputDTO;
 import com.elhadjium.PMBackend.dto.ProjectManagerOutputDTO;
@@ -116,6 +118,17 @@ public class UserController {
 		}
 		
 		return getUserProjectOutputDTOs;
+	}
+	
+	// TODO add limit
+	@GetMapping
+	public List<GetUsersByCriteriaOutputDTO> getUsersByCriteria(@RequestBody GetUsersByCriteriaInputDTO input) throws Exception {
+		List<GetUsersByCriteriaOutputDTO> userListOutput = new ArrayList<GetUsersByCriteriaOutputDTO>();
+		List<User> users = userService.getUsersByCriteria(input);
+		for (User user: users) {
+			userListOutput.add(new GetUsersByCriteriaOutputDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getPseudo()));
+		}
+		return userListOutput;
 	}
 	
 	@GetMapping("test")

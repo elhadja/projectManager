@@ -7,6 +7,7 @@ public class GetUserProjectOutputDTO {
 	private String projectName;
 	private String projectDescription;
 	private List<ProjectManagerOutputDTO> projectManagers;
+	private List<ProjectManagerOutputDTO> projectUsers;
 
 	public Long getProjectId() {
 		return projectId;
@@ -38,5 +39,13 @@ public class GetUserProjectOutputDTO {
 
 	public void setProjectManagers(List<ProjectManagerOutputDTO> projectManagers) {
 		this.projectManagers = projectManagers;
+	}
+
+	public List<ProjectManagerOutputDTO> getProjectUsers() {
+		return projectUsers;
+	}
+
+	public void setProjectUsers(List<ProjectManagerOutputDTO> projectUsers) {
+		this.projectUsers = projectUsers;
 	}
 }

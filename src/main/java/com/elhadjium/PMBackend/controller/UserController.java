@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elhadjium.PMBackend.Project;
+import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserProjectOutputDTO;
@@ -101,6 +102,14 @@ public class UserController {
 				manager.setPseudo(user.getPseudo());
 				manager.setId(user.getId());
 				userProjectOutputDTO.getProjectManagers().add(manager);
+			}
+			userProjectOutputDTO.setProjectUsers(new ArrayList<ProjectManagerOutputDTO>());
+			for (UserProject user: project.getUsers()) {
+				ProjectManagerOutputDTO projectUser = new ProjectManagerOutputDTO();
+				projectUser.setPseudo(user.getUser().getPseudo());
+				projectUser.setId(user.getUser().getId());
+				userProjectOutputDTO.getProjectUsers().add(projectUser);
+
 			}
 			
 			getUserProjectOutputDTOs.add(userProjectOutputDTO);

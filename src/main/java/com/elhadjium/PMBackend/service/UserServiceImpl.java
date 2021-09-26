@@ -42,7 +42,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Long signup(User user) {
 		if (userDAO.findByPseudo(user.getPseudo()) != null || userDAO.findByEmail(user.getEmail()) != null) {
-			throw new PMEntityExistsException(user.getEmail() + " or " + user.getPseudo() + "is already used");
+			// TODO use message manager
+			throw new PMEntityExistsException(messageSource.getMessage("msgErrorUserAlreadExists", null, LocaleContextHolder.getLocale()));
 		}
 
 		user.setPassword(passwordEncodere.encode(user.getPassword()));
@@ -64,6 +65,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Transactional
 	public Long CreateUserProject(Long userId, Project project) {
+		if (projectDAO.findByName(project.getName()) != null) {
+			throw new PMEntityExistsException(messageSource.getMessage("msgErrorProjectAlreadyExists", null, LocaleContextHolder.getLocale()));
+		}
 		
 		try {
 			User user = userDAO.findById(userId).get();

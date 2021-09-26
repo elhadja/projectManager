@@ -5,4 +5,5 @@ export interface projectInputDTO {
     projectName: string,
     projectDescription: string,
     projectManagers: ProjectManagerInputDTO[];
+    projectUsers: ProjectManagerInputDTO[];
 }

@@ -1,0 +1,93 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            {{ getComponentName() + '.projectDetails' | translate}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <mat-form-field appearance="fill" class="w-100">
+                <mat-label>{{ getComponentName() + '.projectName' | translate }}</mat-label>
+                <input matInput [formControl]="projectName" minlength="2">
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="w-100">
+                <mat-label>{{ getComponentName() + '.projectDescription' | translate }}</mat-label>
+                <input matInput [formControl]="projectDescription">
+            </mat-form-field>
+
+        </div>
+    </div>
+    <!-- send invitation -->
+    <div class="row mt-5">
+        <div class="col">
+            <h1>Send Invitations</h1>
+            <div>
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>firstname</mat-label>
+                    <input matInput [formControl]="userFirstName" minlength="2">
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>lastname</mat-label>
+                    <input matInput [formControl]="userLastName" minlength="2">
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>pseudo</mat-label>
+                    <input matInput [formControl]="userPseudo" minlength="2">
+                </mat-form-field>
+                <button mat-stroked-button (click)="onSearchUsers()">invite</button>
+            </div>
+            <div>
+                <button mat-stroked-button (click)="onSendInvitations()">invite</button>
+                <p-table [value]="users" 
+                        [(selection)]="selectedUsers" dataKey="id"
+                        responsiveLayout="scroll">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3rem">
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </th>
+                            <th>firstname</th>
+                            <th>lastname</th>
+                            <th>pseudo</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row>
+                        <tr>
+                            <td>
+                                <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                            </td>
+                            <td>{{row.firstname}}</td>
+                            <td>{{row.lastname}}</td>
+                            <td>{{row.pseudo}}</td>
+                    </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+       </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col">
+            <!-- project users -->
+            <p-table [value]="projectUsersDataTable" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Pseudo</th>
+                        <th>Is Manager</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td>{{row.pseudo}}</td>
+                        <td>
+                            <span *ngIf="row.isManager; else elseBlock">Yes</span>
+                            <ng-template #elseBlock>
+                                No
+                            </ng-template>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

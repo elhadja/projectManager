@@ -12,30 +12,56 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { DialogCreateProjectService } from './services/dialogCreateProject.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpLoaderFactory } from '../app.module';
+import { HttpClient } from '@angular/common/http';
+import {MatMenuModule} from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { DialogProjectDetailsComponent } from './dialog/dialog-project-details/dialog-project-details.component';
+import {TableModule} from 'primeng/table';
+import { DialogDetailsProjectService } from './services/dialogProjectDetails.service';
 
 const routes: Routes = [
   {path: '', canActivate: [RouteSecureService], component: HomeComponent}
 ]
 
-@NgModule({
-  declarations: [
-    HomeComponent,
-    CreateProjectComponent
-  ],
-  imports: [
-    CommonModule,
+const PRIME_NG_MODULES = [
+  TableModule
+]
+
+const MAT_MODULES = [
     MatTableModule,
     MatFormFieldModule,
-    FormsModule,
-    ReactiveFormsModule,
     MatDialogModule,
     MatInputModule,
     MatButtonModule,
+    MatMenuModule,
+    MatIconModule,
+]
+
+@NgModule({
+  declarations: [
+    HomeComponent,
+    CreateProjectComponent,
+    DialogProjectDetailsComponent
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    [...MAT_MODULES],
+    [...PRIME_NG_MODULES],
+    TranslateModule.forChild({
+            loader: {provide: TranslateLoader, useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        }),
     RouterModule.forChild(routes)
   ],
   providers: [
     HomeService,
-    DialogCreateProjectService
+    DialogCreateProjectService,
+    DialogDetailsProjectService
   ]
 })
 export class ProjectModule { }

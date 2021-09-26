@@ -39,6 +39,9 @@ public class User implements Serializable {
 	@ManyToMany(mappedBy = "managers")
 	private List<Project> managedProjects = new ArrayList<Project>();
 	
+	@OneToMany(mappedBy = "guest", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<InvitationToProject> invitationnToProject = new ArrayList<InvitationToProject>();
+	
 	public User() {}
 	
 	public User(Long id, String firstName, String lastName, String email, String pseudo, String password) {
@@ -61,6 +64,16 @@ public class User implements Serializable {
 	
 	public void removeProject(Project userProject) {
 		throw new RuntimeException("Not implemented yet");
+	}
+	
+	public void addInvitationToProject(InvitationToProject invitation) {
+		invitationnToProject.add(invitation);
+		invitation.setGuest(this);
+	}
+
+	public void removeInvitationToProject(InvitationToProject invitation) {
+		invitation.setGuest(null);
+		invitationnToProject.remove(invitation);
 	}
 	
 	public Long getId() {
@@ -125,6 +138,14 @@ public class User implements Serializable {
 
 	public void setManagedProjects(List<Project> managedProjects) {
 		this.managedProjects = managedProjects;
+	}
+	
+	public List<InvitationToProject> getInvitationnToProject() {
+		return invitationnToProject;
+	}
+
+	public void setInvitationnToProject(List<InvitationToProject> invitationnToProject) {
+		this.invitationnToProject = invitationnToProject;
 	}
 
 	@Override

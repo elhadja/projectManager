@@ -26,6 +26,7 @@ import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserProjectOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
 import com.elhadjium.PMBackend.dto.GetUsersByCriteriaOutputDTO;
+import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.LoginInputDTO;
 import com.elhadjium.PMBackend.dto.LoginOutputDTO;
 import com.elhadjium.PMBackend.dto.ProjectManagerOutputDTO;
@@ -130,6 +131,12 @@ public class UserController {
 		}
 		return userListOutput;
 	}
+	
+	@PostMapping("{id}/projects/{projectIds}")
+	public void acceptInvitationToProject(@PathVariable("projectIds") String[] projectIds, @PathVariable("id") String userId) {
+		userService.acceptInvitationToProjects(projectIds, Long.valueOf(userId));
+	}
+	
 	
 	@GetMapping("test")
 	public String test() {

@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
+import com.elhadjium.PMBackend.dao.InvitationToProjectDAO;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
+import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
+import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.User;
 
 @Service
@@ -23,6 +26,9 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Autowired
 	private UserDAO userDAO;
+	
+	@Autowired
+	private InvitationToProjectDAO invitationToProjectDAO;
 
 	// TODO integration testing
 	@Transactional
@@ -56,6 +62,15 @@ public class ProjectServiceImpl implements ProjectService {
 		} catch (NoSuchElementException e) {
 			// TODO
 		}
+	}
+
+	@Override
+	@Transactional
+	public void addInvitations(Long projectId, InviteUsersToProjectInputDTO input) {
+		InvitationToProject invitationToProject = new InvitationToProject();
+		invitationToProject.setAuthor(userDAO.findById(input.getAuthorId()).get());
+		projectDao.findById(projectId).get().addInvitation(invitationToProject);
+		userDAO.findById(input.getGuestId()).get().addInvitationToProject(invitationToProject);
 	}
 
 }

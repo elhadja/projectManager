@@ -20,6 +20,7 @@ import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
+import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
 import com.elhadjium.PMBackend.entity.CustomUserDetailsImpl;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.exception.PMEntityExistsException;
@@ -99,5 +100,12 @@ public class UserServiceImpl implements UserService {
 			throw new PMEntityNotExistsException(messageSource.getMessage("msgErrorEntityNotFound", 
 																			new Object[] {messageSource.getMessage("user", null, LocaleContextHolder.getLocale()), userId} ,
 																			LocaleContextHolder.getLocale()));
+	}
+
+	@Override
+	public List<User> getUsersByCriteria(GetUsersByCriteriaInputDTO input) {
+		// TODO replace by custom findbycriteria -> dao
+		// TODO Unit Test
+		return userDAO.findByPseudoOrFirstNameOrLastName(input.getPseudo(), input.getFirstname(), input.getLastname());
 	}
 }

@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.User;
 
 @Entity
@@ -35,6 +36,9 @@ public class Project implements Serializable {
 	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<User> managers = new ArrayList<User>();
+	
+	@OneToMany(mappedBy = "project")
+	private List<InvitationToProject> invitationsToProject = new ArrayList<InvitationToProject>();
 	
 	public void addUser(User user) {
 		UserProject userProject = new UserProject();
@@ -73,6 +77,16 @@ public class Project implements Serializable {
 	public void addManager(User manager) {
 		managers.add(manager);
 		manager.getManagedProjects().add(this);
+	}
+	
+	public void removeInvitation(InvitationToProject invitation) {
+		invitationsToProject.remove(invitation);
+		invitation.setProject(null);
+	}
+	
+	public void addInvitation(InvitationToProject invitation) {
+		invitationsToProject.add(invitation);
+		invitation.setProject(this);
 	}
 
 	public Long getId() {
@@ -113,6 +127,14 @@ public class Project implements Serializable {
 
 	public void setManagers(List<User> managers) {
 		this.managers = managers;
+	}
+
+	public List<InvitationToProject> getInvitationsToProject() {
+		return invitationsToProject;
+	}
+
+	public void setInvitationsToProject(List<InvitationToProject> invitationsToProject) {
+		this.invitationsToProject = invitationsToProject;
 	}
 
 	@Override

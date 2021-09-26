@@ -13,4 +13,5 @@ public interface UserService extends UserDetailsService {
 	public Long CreateUserProject(Long userId, Project project);
 	public List<Project> getUserProjects(Long userId);
 	public List<User> getUsersByCriteria(GetUsersByCriteriaInputDTO input);
+	public void acceptInvitationToProjects(String[] projectIds, Long userId);
 }

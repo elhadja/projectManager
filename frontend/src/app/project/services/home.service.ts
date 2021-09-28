@@ -10,7 +10,7 @@ import { sessionManagerService } from "src/app/services/sessionManager.service";
 @Injectable()
 export class HomeService {
     public constructor(private api: API,
-                        private sessionManager: sessionManagerService) {
+                        public sessionManager: sessionManagerService) {
 
     }
 

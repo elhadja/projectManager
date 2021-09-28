@@ -20,6 +20,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { DialogProjectDetailsComponent } from './dialog/dialog-project-details/dialog-project-details.component';
 import {TableModule} from 'primeng/table';
 import { DialogDetailsProjectService } from './services/dialogProjectDetails.service';
+import {MatTabsModule} from '@angular/material/tabs';
+
 
 const routes: Routes = [
   {path: '', canActivate: [RouteSecureService], component: HomeComponent}
@@ -37,6 +39,7 @@ const MAT_MODULES = [
     MatButtonModule,
     MatMenuModule,
     MatIconModule,
+    MatTabsModule
 ]
 
 @NgModule({

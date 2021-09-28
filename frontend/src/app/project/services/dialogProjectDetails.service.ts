@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ApiConstant } from "src/app/common/ApiConstant";
 import { GetUserByCriteriaOutputDTO } from "src/app/dto/GetUserByCriteriaOutputDTO";
+import { UpdateProjectOutputDTO } from "src/app/dto/updateProjectOutputDTO";
 import { API } from "src/app/services/Api";
 
 @Injectable()
@@ -17,5 +18,9 @@ export class DialogDetailsProjectService {
     // TODO use DTO
     public inviteUsersToProject(input: any, idProject: number): Observable<void> {
         return this.api.post(ApiConstant.PROJECTS_BASE_URI + '/' + idProject + '/inviteUsers', input);
+    }
+
+    public updateProjectDetails(input: UpdateProjectOutputDTO, idProject: number): Observable<void> {
+        return this.api.put(ApiConstant.PROJECTS_BASE_URI + '/' + idProject,  input);
     }
 }

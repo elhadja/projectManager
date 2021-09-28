@@ -5,6 +5,8 @@ import { GetUserByCriteriaOutputDTO } from 'src/app/dto/GetUserByCriteriaOutputD
 import { GetUserInvitationsInputDTO } from 'src/app/dto/GetUserInvitationInputDTO';
 import { GetUsersByCriteriaInputDTO } from 'src/app/dto/getUsersByCriteriaInputDTO';
 import { projectInputDTO } from 'src/app/dto/project.input.dto';
+import { UpdateProjectOutputDTO } from 'src/app/dto/updateProjectOutputDTO';
+import { MessageService } from 'src/app/services/message.service';
 import { DialogCreateProjectService } from '../../services/dialogCreateProject.service';
 import { DialogDetailsProjectService } from '../../services/dialogProjectDetails.service';
 
@@ -30,7 +32,8 @@ export class DialogProjectDetailsComponent implements OnInit {
   public userPseudo: FormControl;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
-            private dialogProjectDetailsService: DialogDetailsProjectService) {
+            private dialogProjectDetailsService: DialogDetailsProjectService,
+            private messageServcie: MessageService) {
     this.projectName = new FormControl('', [Validators.required, Validators.minLength(2)]),
     this.projectDescription = new FormControl('', [Validators.required, Validators.minLength(2)])
     this.projectUsersDataTable = [];
@@ -53,22 +56,13 @@ export class DialogProjectDetailsComponent implements OnInit {
   }
 
   private initTableData(): void {
-    let help: ProjectUsersTableRow[] = [];
-    for (let manager of this.project.projectManagers) {
-      help.push({
-        pseudo: manager.pseudo,
-        isManager: true
-      });
-    }
-
     for (let user of this.project.projectUsers) {
-      // TODO backend: don't repeat infos
-      help.push({
+      this.projectUsersDataTable.push({
         pseudo: user.pseudo,
-        isManager: false
+        isManager: this.project.projectManagers.some(manager => manager.id === user.id)
       });
     }
-    this.projectUsersDataTable = [...help];
+    this.projectUsersDataTable = [...this.projectUsersDataTable];
   }
 
   public getComponentName(): string {
@@ -80,7 +74,9 @@ export class DialogProjectDetailsComponent implements OnInit {
       this.dialogProjectDetailsService.inviteUsersToProject({
         guestId: user.id,
         authorId: 4
-      }, this.project.projectId).subscribe();
+      }, this.project.projectId).subscribe(() => {
+        this.messageServcie.showSuccessMessage("Invitation sent with success");
+      });
     })
   }
 
@@ -93,5 +89,34 @@ export class DialogProjectDetailsComponent implements OnInit {
       this.selectedUsers = [];
       this.users = [...users];
     })
+  }
+  
+  public onSaveProjectDetails(): void {
+    let managers: number[] = [];
+    let users: number[] = [];
+
+    this.project.projectManagers.forEach(manager => managers.push(manager.id));
+    this.project.projectUsers.forEach(user => users.push(user.id));
+
+    const output: UpdateProjectOutputDTO = {
+      projectName: this.projectName.value,
+      projectDescription: this.projectDescription.value,
+      projectManagersIds: managers,
+      projectUsersIds: users
+    }
+
+    this.dialogProjectDetailsService.updateProjectDetails(output, this.project.projectId).subscribe(() => {
+      this.messageServcie.showSuccessMessage("Project update successfully");
+    })
+  }
+
+  public onDeleteUser(rowData: ProjectUsersTableRow): void {
+    console.log('clic')
+    this.projectUsersDataTable = this.projectUsersDataTable.filter(row => row.pseudo !== rowData.pseudo);
+    this.projectUsersDataTable = [...this.projectUsersDataTable];
+    this.project.projectUsers = this.project.projectUsers.filter(user => user.pseudo !== rowData.pseudo);
+    if (rowData.isManager) {
+      this.project.projectManagers = this.project.projectManagers.filter(user => user.pseudo !== rowData.pseudo);
+    }
   }
 }

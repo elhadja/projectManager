@@ -7,7 +7,7 @@
         </div>
     </div>
     <div class="row justify-content-center">
-        <div class="col">
+        <div class="col" *ngIf="projects.length > 0; else emptyProjects">
             <table mat-table [dataSource]="projects" class="mat-elevation-z8" style="width: 100%;">
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -33,7 +33,7 @@
                                 <mat-icon>more_horiz</mat-icon>
                             </button>
                             <mat-menu #menu="matMenu">
-                                <button mat-menu-item (click)="onOpenProjectDetails(element)">
+                                <button mat-menu-item [disabled]="!isUserAdmin(element)" (click)="onOpenProjectDetails(element)">
                                     <span>details</span>
                                 </button>
                                 <button mat-menu-item (click)="onMoveProjectToDraft(element.projectId)">
@@ -47,39 +47,48 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
         </div>
+        <ng-template #emptyProjects>
+            Vous ne participez à aucun projet actuellement
+        </ng-template>
     </div>
-    <div class="row">
+    <div class="row mt-5">
         <div class="col">
             <h1>Invitations</h1>
-            <button mat-stroked-button class="bg-success" (click)="onAcceptInvitations()">accept</button>
-            <button mat-stroked-button class="bg-danger" (click)="onDeleteInvitations()">delete</button>
-            <p-table [value]="invitations" 
-                     [(selection)]="selectedInvitations" dataKey="invitationToProjectId"
-                     (onRowSelect)="onRowSelect($event)"
-                     (onRowUnselect)="onRowUnselect($event)"
-                     responsiveLayout="scroll">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th style="width: 3rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-                        </th>
-                        <th>name</th>
-                        <th>description</th>
-                        <th>inivation author</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-row>
-                    <tr>
-                        <td>
-                            <p-tableCheckbox [value]="row"></p-tableCheckbox>
-                        </td>
-                        <td>{{row.projectName}}</td>
-                        <td>{{row.projectDescription}}</td>
-                        <td>{{row.authorPseudo}}</td>
-                   </tr>
-                </ng-template>
-            </p-table>
-
+            <div *ngIf="invitations.length > 0; else emptyInvitations">
+                <div class="mb-2">
+                    <button mat-stroked-button (click)="onAcceptInvitations()">accept</button>
+                    <button mat-stroked-button (click)="onDeleteInvitations()">delete</button>
+                </div>
+                <p-table [value]="invitations" 
+                        [(selection)]="selectedInvitations" dataKey="invitationToProjectId"
+                        (onRowSelect)="onRowSelect($event)"
+                        (onRowUnselect)="onRowUnselect($event)"
+                        responsiveLayout="scroll"
+                        styleClass="p-datatable-striped"
+                        class="bg-primary">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3rem">
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </th>
+                            <th>name</th>
+                            <th>description</th>
+                            <th>inivation author</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row>
+                        <tr>
+                            <td>
+                                <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                            </td>
+                            <td>{{row.projectName}}</td>
+                            <td>{{row.projectDescription}}</td>
+                            <td>{{row.authorPseudo}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <ng-template class="w-100 text-center" #emptyInvitations>Vous n'avez aucune invitations</ng-template>
         </div>
     </div>
 </div>

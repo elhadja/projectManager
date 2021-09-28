@@ -104,6 +104,7 @@ export class HomeComponent implements OnInit {
 
    this.homeService.acceptInvitationToProject(ids).subscribe(() => {
     this.loadUserProject();
+    this.loadUserInvitations();
    });
   }
 
@@ -116,6 +117,10 @@ export class HomeComponent implements OnInit {
     this.homeService.cancelInvitationToProject(ids).subscribe(() => {
       this.loadUserInvitations();
     });
+  }
+
+  public isUserAdmin(rowData: projectInputDTO): boolean {
+    return rowData.projectManagers.some(manager => this.homeService.sessionManager.getUserId() === manager.id);
   }
 
 }

@@ -1,6 +1,8 @@
 package com.elhadjium.PMBackend.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
@@ -18,6 +20,7 @@ import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.exception.PMRuntimeException;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -29,7 +32,7 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Autowired
 	private InvitationToProjectDAO invitationToProjectDAO;
-
+	
 	// TODO integration testing
 	@Transactional
 	public void updateProject(Long projectId, UpdateProjectInputDTO updateProjectInputDTO) {
@@ -39,13 +42,20 @@ public class ProjectServiceImpl implements ProjectService {
 			project.setName(updateProjectInputDTO.getProjectName());
 			project.setDescription(updateProjectInputDTO.getProjectDescription());
 
-			Map<Long, User> userCache = new HashMap<Long, User>();
+			// get users to remove from project
+			List<User> usersToRemoveFromProject = new ArrayList<User>();
 			for (UserProject userProject: project.getUsers()) {
 				if (!updateProjectInputDTO.getProjectUsersIds().contains(userProject.getUser().getId())) {
-					project.removeUser(userProject.getUser());
+					usersToRemoveFromProject.add(userProject.getUser());
 				}
 			}
+			// remove users
+			for (User userToRemove: usersToRemoveFromProject) {
+				project.removeUser(userToRemove);
+			}
 
+			// add users to project
+			Map<Long, User> userCache = new HashMap<Long, User>();
 			for (Long userId: updateProjectInputDTO.getProjectUsersIds()) {
 				userCache.put(userId, userDAO.findById(userId).get());
 				if (!project.getUsers().contains(new UserProject(userCache.get(userId), project))) {
@@ -53,6 +63,7 @@ public class ProjectServiceImpl implements ProjectService {
 				} 
 			}
 			
+			// actualize managers
 			project.removeAllManagers();
 			for (Long managerId: updateProjectInputDTO.getProjectManagersIds()) {
 				User user = userCache.containsKey(managerId) ? userCache.get(managerId) : userDAO.findById(managerId).get();
@@ -67,10 +78,23 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	@Transactional
 	public void addInvitations(Long projectId, InviteUsersToProjectInputDTO input) {
+		User guest = userDAO.findById(input.getGuestId()).get();
+		guest.getProjects().forEach((project) -> {
+			if (project.getProject().getId() == projectId) {
+				throw new PMRuntimeException("User already on this project", 400);
+			}
+		});
+		
+		guest.getInvitationnToProject().forEach((invitation) -> {
+			if (invitation.getProject().getId() == projectId) {
+				throw new PMRuntimeException("An anvitation was already sent to this user");
+			}
+		});
+		
 		InvitationToProject invitationToProject = new InvitationToProject();
 		invitationToProject.setAuthor(userDAO.findById(input.getAuthorId()).get());
 		projectDao.findById(projectId).get().addInvitation(invitationToProject);
-		userDAO.findById(input.getGuestId()).get().addInvitationToProject(invitationToProject);
+		guest.addInvitationToProject(invitationToProject);
 	}
 
 }

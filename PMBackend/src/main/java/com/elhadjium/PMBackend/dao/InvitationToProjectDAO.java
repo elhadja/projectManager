@@ -12,4 +12,7 @@ public interface InvitationToProjectDAO extends JpaRepository<InvitationToProjec
 	@Query("select ip from InvitationToProject ip where ip.guest.id = :guestId and ip.project.id = :projectId")
 	List<InvitationToProject> findByProjectIdAndGuestId(@Param("projectId") long projectId,
 														@Param("guestId") long guestId);
+	
+	@Query("select ip from InvitationToProject ip where ip.guest.id = :guestId")
+	List<InvitationToProject> findByGuestId(@Param("guestId") long guestId);
 }

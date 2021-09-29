@@ -101,17 +101,17 @@ public class UserServiceImpl implements UserService {
 		return projects;
 	}
 	
+	public List<InvitationToProject> getUserInvitationToProject(long guestId) {
+		return invitationToProjectDAO.findByGuestId(guestId);
+	}
+	
 	@Transactional
 	public void acceptInvitationToProjects(String[] projectIds, Long userId) {
-		for (String projectId: projectIds) {
-			List<InvitationToProject> invitations =  invitationToProjectDAO.findByProjectIdAndGuestId(Long.valueOf(projectId), userId);
-			if (!invitations.isEmpty()) {
-				InvitationToProject invitation = invitations.get(0);
-				invitation.getGuest().addProject(invitations.get(0).getProject());
-				invitation.getGuest().removeInvitationToProject(invitation);
-				invitation.getProject().removeInvitation(invitation);
-
-			}
+		for (String invitationId: projectIds) {
+			InvitationToProject invitation =  invitationToProjectDAO.findById(Long.valueOf(invitationId)).get();
+			invitation.getGuest().addProject(invitation.getProject());
+			invitation.getGuest().removeInvitationToProject(invitation);
+			invitation.getProject().removeInvitation(invitation);
 		}
 	}
 	
@@ -126,5 +126,15 @@ public class UserServiceImpl implements UserService {
 		// TODO replace by custom findbycriteria -> dao
 		// TODO Unit Test
 		return userDAO.findByPseudoOrFirstNameOrLastName(input.getPseudo(), input.getFirstname(), input.getLastname());
+	}
+
+	@Override
+	@Transactional
+	public void cancelInvitationToProjects(String[] invitationsIds, Long valueOf) {
+		for (String invitationId: invitationsIds) {
+			InvitationToProject invitation =  invitationToProjectDAO.findById(Long.valueOf(invitationId)).get();
+			invitation.getGuest().removeInvitationToProject(invitation);
+			invitation.getProject().removeInvitation(invitation);
+		}
 	}
 }

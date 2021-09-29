@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +24,7 @@ import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
+import com.elhadjium.PMBackend.dto.GetUserInvitationsOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserProjectOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
 import com.elhadjium.PMBackend.dto.GetUsersByCriteriaOutputDTO;
@@ -32,6 +34,7 @@ import com.elhadjium.PMBackend.dto.LoginOutputDTO;
 import com.elhadjium.PMBackend.dto.ProjectManagerOutputDTO;
 import com.elhadjium.PMBackend.dto.signupInputDTO;
 import com.elhadjium.PMBackend.entity.CustomUserDetails;
+import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.exception.PMBadCredentialsException;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
@@ -122,7 +125,7 @@ public class UserController {
 	}
 	
 	// TODO add limit
-	@GetMapping
+	@PostMapping
 	public List<GetUsersByCriteriaOutputDTO> getUsersByCriteria(@RequestBody GetUsersByCriteriaInputDTO input) throws Exception {
 		List<GetUsersByCriteriaOutputDTO> userListOutput = new ArrayList<GetUsersByCriteriaOutputDTO>();
 		List<User> users = userService.getUsersByCriteria(input);
@@ -132,11 +135,31 @@ public class UserController {
 		return userListOutput;
 	}
 	
-	@PostMapping("{id}/projects/{projectIds}")
-	public void acceptInvitationToProject(@PathVariable("projectIds") String[] projectIds, @PathVariable("id") String userId) {
-		userService.acceptInvitationToProjects(projectIds, Long.valueOf(userId));
+	@PostMapping("{id}/projects/{invitationsIds}")
+	public void acceptInvitationToProject(@PathVariable("invitationsIds") String[] invitationsIds, @PathVariable("id") String userId) {
+		userService.acceptInvitationToProjects(invitationsIds, Long.valueOf(userId));
 	}
 	
+	@DeleteMapping("{id}/projects/{invitationsIds}")
+	public void CancelInvitationToProject(@PathVariable("invitationsIds") String[] invitationsIds, @PathVariable("id") String userId) {
+		userService.cancelInvitationToProjects(invitationsIds, Long.valueOf(userId));
+	}
+
+	
+	@GetMapping("{id}/invitationToProjects")
+	public List<GetUserInvitationsOutputDTO> getUserInvitations(@PathVariable("id") String id) {
+		List<InvitationToProject> inviations = userService.getUserInvitationToProject(Long.valueOf(id));
+		List<GetUserInvitationsOutputDTO> result = new ArrayList<GetUserInvitationsOutputDTO>();
+		inviations.forEach((InvitationToProject i) -> {
+			GetUserInvitationsOutputDTO output = new GetUserInvitationsOutputDTO();
+			output.setAuthorPseudo(i.getAuthor().getPseudo());
+			output.setProjectDescription(i.getProject().getDescription());
+			output.setProjectName(i.getProject().getName());
+			output.setInvitationToProjectId(i.getId());
+			result.add(output);
+		});
+		return result;
+	}
 	
 	@GetMapping("test")
 	public String test() {

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" style="width: 800px;">
     <div class="row">
         <h1 class="col text-center">
             {{ getComponentName() + '.projectDetails' | translate}}
@@ -6,18 +6,24 @@
         <button mat-stroked-button (click)="onSaveProjectDetails()">save</button>
     </div>
     <div class="row">
-        <div class="col">
+        <div class="col d-flex flex-column">
             <mat-tab-group mat-align-tabs="start">
-                <mat-tab label="Home">
-                    <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>{{ getComponentName() + '.projectName' | translate }}</mat-label>
-                        <input matInput [formControl]="projectName" minlength="2">
-                    </mat-form-field>
-                    <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>{{ getComponentName() + '.projectDescription' | translate }}</mat-label>
-                        <input matInput [formControl]="projectDescription">
-                    </mat-form-field>
-                </mat-tab>
+                <mat-tab label="Home" class="my-2">
+                    <div class="d-flex flex-column justify-content-center">
+                        <div class="w-50 mx-auto">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>{{ getComponentName() + '.projectName' | translate }}</mat-label>
+                                <input matInput [formControl]="projectName" minlength="2">
+                            </mat-form-field>
+                        </div>
+                        <div class="w-50 mx-auto">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>{{ getComponentName() + '.projectDescription' | translate }}</mat-label>
+                                <input matInput [formControl]="projectDescription">
+                            </mat-form-field>
+                        </div>
+                   </div>
+               </mat-tab>
             <mat-tab label="Gestion des utilisateurs">
                 <!-- send invitation -->
                 <h1>Send Invitations</h1>
@@ -26,15 +32,15 @@
                         <mat-label>firstname</mat-label>
                         <input matInput [formControl]="userFirstName" minlength="2">
                     </mat-form-field>
-                    <mat-form-field appearance="fill">
+                    <mat-form-field appearance="fill" class="mx-2">
                         <mat-label>lastname</mat-label>
                         <input matInput [formControl]="userLastName" class="mx-2" minlength="2">
                     </mat-form-field>
                     <mat-form-field appearance="fill">
                         <mat-label>pseudo</mat-label>
-                        <input matInput [formControl]="userPseudo" class="mr-2" minlength="2">
+                        <input matInput [formControl]="userPseudo" minlength="2">
                     </mat-form-field>
-                    <button mat-stroked-button (click)="onSearchUsers()">Search</button>
+                    <button mat-stroked-button (click)="onSearchUsers()" class="mx-2">Search</button>
                 </div>
                 <div *ngIf="users != null  && users.length > 0">
                     <button mat-stroked-button (click)="onSendInvitations()">Send Invitations</button>

@@ -78,6 +78,18 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	@Transactional
 	public void addInvitations(Long projectId, InviteUsersToProjectInputDTO input) {
+		User author = userDAO.findById(input.getAuthorId()).get();
+		boolean isManager = false;
+		for (Project managedProject: author.getManagedProjects()) {
+			if (managedProject.getId() == projectId) {
+				isManager = true;
+				break;
+			}
+		}
+		if (!isManager) {
+			throw new PMRuntimeException("You don't have access to this functionality", 400);
+		}
+
 		User guest = userDAO.findById(input.getGuestId()).get();
 		guest.getProjects().forEach((project) -> {
 			if (project.getProject().getId() == projectId) {
@@ -87,12 +99,12 @@ public class ProjectServiceImpl implements ProjectService {
 		
 		guest.getInvitationnToProject().forEach((invitation) -> {
 			if (invitation.getProject().getId() == projectId) {
-				throw new PMRuntimeException("An anvitation was already sent to this user");
+				throw new PMRuntimeException("An anvitation was already sent to this user", 400);
 			}
 		});
 		
 		InvitationToProject invitationToProject = new InvitationToProject();
-		invitationToProject.setAuthor(userDAO.findById(input.getAuthorId()).get());
+		invitationToProject.setAuthor(author);
 		projectDao.findById(projectId).get().addInvitation(invitationToProject);
 		guest.addInvitationToProject(invitationToProject);
 	}

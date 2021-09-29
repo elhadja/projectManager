@@ -7,6 +7,7 @@ import { GetUsersByCriteriaInputDTO } from 'src/app/dto/getUsersByCriteriaInputD
 import { projectInputDTO } from 'src/app/dto/project.input.dto';
 import { UpdateProjectOutputDTO } from 'src/app/dto/updateProjectOutputDTO';
 import { MessageService } from 'src/app/services/message.service';
+import { sessionManagerService } from 'src/app/services/sessionManager.service';
 import { DialogCreateProjectService } from '../../services/dialogCreateProject.service';
 import { DialogDetailsProjectService } from '../../services/dialogProjectDetails.service';
 
@@ -33,7 +34,8 @@ export class DialogProjectDetailsComponent implements OnInit {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
             private dialogProjectDetailsService: DialogDetailsProjectService,
-            private messageServcie: MessageService) {
+            private messageServcie: MessageService,
+            private sessionManager: sessionManagerService) {
     this.projectName = new FormControl('', [Validators.required, Validators.minLength(2)]),
     this.projectDescription = new FormControl('', [Validators.required, Validators.minLength(2)])
     this.projectUsersDataTable = [];
@@ -73,7 +75,7 @@ export class DialogProjectDetailsComponent implements OnInit {
     this.selectedUsers.forEach((user) => {
       this.dialogProjectDetailsService.inviteUsersToProject({
         guestId: user.id,
-        authorId: 4
+        authorId: this.sessionManager.getUserId()
       }, this.project.projectId).subscribe(() => {
         this.messageServcie.showSuccessMessage("Invitation sent with success");
       });
@@ -105,6 +107,7 @@ export class DialogProjectDetailsComponent implements OnInit {
       projectUsersIds: users
     }
 
+    // TODO handle view actualization on errors
     this.dialogProjectDetailsService.updateProjectDetails(output, this.project.projectId).subscribe(() => {
       this.messageServcie.showSuccessMessage("Project update successfully");
     })
@@ -118,5 +121,20 @@ export class DialogProjectDetailsComponent implements OnInit {
     if (rowData.isManager) {
       this.project.projectManagers = this.project.projectManagers.filter(user => user.pseudo !== rowData.pseudo);
     }
+  }
+
+  public onUpdateisManager(row: ProjectUsersTableRow): void {
+    row.isManager = !row.isManager;
+      this.project.projectUsers.forEach(user => {
+        if (user.pseudo === row.pseudo) {
+          if (row.isManager) {
+            this.project.projectManagers.push({
+              ...user
+            });
+          } else {
+            this.project.projectManagers = this.project.projectManagers.filter(manager => manager.pseudo !== row.pseudo);
+          }
+        }
+      });
   }
 }

@@ -78,9 +78,9 @@
                         <tr>
                             <td>{{row.pseudo}}</td>
                             <td>
-                                <input type="checkbox" [checked]="row.isManager" (change)="row.isManager = !row.isManager">
+                                <input type="checkbox" [checked]="row.isManager" (change)="onUpdateisManager(row)">
                            </td>
-                            <td><mat-icon (click)="onDeleteUser(row)">delete_forever</mat-icon></td>
+                            <td *ngIf="projectUsersDataTable.length > 1"><mat-icon (click)="onDeleteUser(row)">delete_forever</mat-icon></td>
                         </tr>
                     </ng-template>
                 </p-table>

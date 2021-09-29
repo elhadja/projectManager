@@ -33,7 +33,7 @@
                                 <mat-icon>more_horiz</mat-icon>
                             </button>
                             <mat-menu #menu="matMenu">
-                                <button mat-menu-item [disabled]="!isUserAdmin(element)" (click)="onOpenProjectDetails(element)">
+                                <button mat-menu-item (click)="onOpenProjectDetails(element)">
                                     <span>details</span>
                                 </button>
                                 <button mat-menu-item (click)="onMoveProjectToDraft(element.projectId)">

@@ -1,4 +1,4 @@
-package com.elhadjium.PMBackend.service;
+package com.elhadjium.PMBackend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,7 @@ import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
+import com.elhadjium.PMBackend.service.ProjectService;
 
 @RestController
 @RequestMapping(PMConstants.PMBaseUri + "/projects")

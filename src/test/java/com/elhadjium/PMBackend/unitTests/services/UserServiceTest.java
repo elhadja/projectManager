@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.context.MessageSource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.elhadjium.PMBackend.dao.UserDAO;
@@ -20,6 +21,9 @@ import com.elhadjium.PMBackend.service.UserServiceImpl;
 public class UserServiceTest {
 	@Mock
 	private UserDAO userDAO;
+	
+	@Mock
+	private MessageSource messageSource;
 	
 	@InjectMocks
 	private UserService userService = new UserServiceImpl();

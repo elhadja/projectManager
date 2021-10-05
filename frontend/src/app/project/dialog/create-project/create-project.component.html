@@ -1,0 +1,18 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1 class="text-center">New project</h1>
+            <div>
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Project Name</mat-label>
+                    <input matInput [formControl]="projectName" minlength="2">
+                </mat-form-field>
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Project Description</mat-label>
+                    <input matInput [formControl]="projectDescription">
+                </mat-form-field>
+                <button mat-stroked-button (click)="onAddProject()" [disabled]="!isValidForm()">create</button>
+            </div>
+        </div>
+    </div>
+</div>

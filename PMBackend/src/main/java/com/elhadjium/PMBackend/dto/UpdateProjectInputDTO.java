@@ -51,6 +51,10 @@ public class UpdateProjectInputDTO implements DTOValidator {
 			throw new PMInvalidInputDTO("project name cannot be null or empty");
 		}
 		
+		if (projectManagersIds.isEmpty() || projectUsersIds.isEmpty()) {
+			throw new PMInvalidInputDTO("List of user project cannot be empty and should have at least one manager");
+		}
+		
 		for (Long id: projectManagersIds) {
 			if (id <= 0) {
 				throw new PMInvalidInputDTO("project manager's IDs must be >= 0");

@@ -4,24 +4,15 @@ import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.util.JavaUtil;
 
 public class LoginInputDTO implements DTOValidator {
-	private String email;
-	private String pseudo;
+	private String userIdentifier;
 	private String password;
 
-	public String getEmail() {
-		return email;
+	public String getUserIdentifier() {
+		return userIdentifier;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPseudo() {
-		return pseudo;
-	}
-
-	public void setPseudo(String pseudo) {
-		this.pseudo = pseudo;
+	public void setUserIdentifier(String email) {
+		this.userIdentifier = email;
 	}
 
 	public String getPassword() {
@@ -34,7 +25,7 @@ public class LoginInputDTO implements DTOValidator {
 
 	@Override
 	public void validate() {
-		if (JavaUtil.isNullOrEmpty(email) && JavaUtil.isNullOrEmpty(pseudo)) {
+		if (JavaUtil.isNullOrEmpty(userIdentifier)) {
 			throw new PMInvalidInputDTO("You should enter an email or an pseudo");
 		}
 		if (JavaUtil.isNullOrEmpty(password)) {

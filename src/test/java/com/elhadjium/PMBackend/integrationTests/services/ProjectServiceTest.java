@@ -15,7 +15,9 @@ import org.springframework.test.context.jdbc.Sql;
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
+import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
+import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.service.ProjectService;
 
 @SpringBootTest
@@ -54,5 +56,25 @@ public class ProjectServiceTest {
 		Project project = projectDAO.findById(1L).get();
 		assertEquals(2, project.getUsers().size());
 		assertEquals(1, project.getManagers().size());
+	}
+	
+	@Test
+	@Sql("/addInvitationOk.sql")
+	@Transactional
+	public void addInvitations_ok() throws Exception {
+		// prepare
+		final long projectId = 1;
+		final long expectedNumberOfInvitations = 1;
+		final long guestId = 2;
+
+		InviteUsersToProjectInputDTO input = new InviteUsersToProjectInputDTO(guestId, 1L);
+
+		// when
+		projectService.addInvitations(projectId, input);
+		
+		// then
+		List<InvitationToProject> invitations = userDAO.findById(guestId).get().getInvitationnToProject();
+		assertEquals(expectedNumberOfInvitations, invitations.size());
+		assertEquals(projectId, invitations.get(0).getProject().getId());
 	}
 }

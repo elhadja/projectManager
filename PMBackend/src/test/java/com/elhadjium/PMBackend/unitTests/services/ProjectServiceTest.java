@@ -1,20 +1,22 @@
 package com.elhadjium.PMBackend.unitTests.services;
 
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Arrays;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.elhadjium.PMBackend.Project;
-import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
+import com.elhadjium.PMBackend.service.ProjectService;
+import com.elhadjium.PMBackend.service.ProjectServiceImpl;
 
 @ExtendWith(SpringExtension.class)
 public class ProjectServiceTest {
@@ -24,35 +26,34 @@ public class ProjectServiceTest {
 	@Mock
 	private UserDAO userDAO;
 	
-	/*
-	public void updateProject_shouldRemoveSomeUsersToTheProject() throws Exception {
+	@InjectMocks
+	private ProjectService projectService = new ProjectServiceImpl();
+	
+	@Test
+	public void updateProject_shouldFailWhenTringToRemoveAllUsers() throws Exception {
 		// prepare
-		long projectId = 1;
-
-		User user1 = new User(1L, null, null, null, null, null);
-		User user2 = new User(2L, null, null, null, null, null);
-		User user3 = new User(3L, null, null, null, null, null); // to remove
-		User user4 = new User(4L, null, null, null, null, null); // to remove
-
-		Project project = new Project();
-		project.setId(projectId);
-		
-		UserProject userProject1 = new UserProject(user1, project);
-		UserProject userProject2 = new UserProject(user2, project);
-		UserProject userProject3 = new UserProject(user3, project);
-		UserProject userProject4 = new UserProject(user4, project);
-
 		UpdateProjectInputDTO input = new UpdateProjectInputDTO();
-		input.setProjectName("project luna");
-		input.setProjectManagersIds(List.of(1L));
-		input.setProjectUsersIds(List.of(1L, 2L));
-		
-		// mock
-		when(projectDAO.findById(projectId)).thenReturn(Optional.of(new Project()));
-
-		
-		
+		input.setProjectManagersIds(Arrays.asList(1L));
+		input.setProjectUsersIds(new ArrayList<Long>());
+		try {
+			// when
+			projectService.updateProject(1L, input);
+			fail();
+		} catch (PMInvalidInputDTO e) {
+		}
 	}
-	*/
-
+	
+	@Test
+	public void updateProject_shouldFailWhenTringToRemoveAllManagers() throws Exception {
+		// prepare
+		UpdateProjectInputDTO input = new UpdateProjectInputDTO();
+		input.setProjectUsersIds(Arrays.asList(1L));
+		input.setProjectManagersIds(new ArrayList<Long>());
+		try {
+			// when
+			projectService.updateProject(1L, input);
+			fail();
+		} catch (PMInvalidInputDTO e) {
+		}
+	}
 }

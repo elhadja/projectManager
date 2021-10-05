@@ -2,8 +2,6 @@ package com.elhadjium.PMBackend.integrationTests.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Arrays;
-
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -15,8 +13,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.elhadjium.PMBackend.Project;
+import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
-import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.service.UserService;
 
@@ -29,6 +27,9 @@ public class UserServiceITest {
 	
 	@Autowired
 	UserDAO userDAO;
+	
+	@Autowired
+	ProjectDAO projectDAO;
 
 	@Test
 	@DisplayName("createUserProject should: create a project + add the user to the project + set the user as manager")
@@ -67,5 +68,19 @@ public class UserServiceITest {
 		User invitedUser = userDAO.findById(2L).get();
 		assertEquals(0, invitedUser.getInvitationnToProject().size());
 		assertEquals(1, invitedUser.getProjects().size());
+	}
+	
+		@Test
+	@Sql("/acceptInvitationToProjectOk.sql")
+	@Transactional
+	public void cancelInvitation_ok() throws Exception {
+		// when
+		userService.cancelInvitationToProjects(new String[] {"1"}, 1L);
+		
+		// then
+		Project project = projectDAO.findById(1L).get();
+		User user = userDAO.findById(2L).get();
+		assertEquals(0, project.getInvitationsToProject().size());
+		assertEquals(0, user.getInvitationnToProject().size());
 	}
 }

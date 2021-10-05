@@ -2,6 +2,7 @@ package com.elhadjium.PMBackend.unitTests.services;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.any;
 
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import org.mockito.Mock;
 import org.springframework.context.MessageSource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.elhadjium.PMBackend.Project;
+import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.exception.PMEntityExistsException;
@@ -21,6 +24,9 @@ import com.elhadjium.PMBackend.service.UserServiceImpl;
 public class UserServiceTest {
 	@Mock
 	private UserDAO userDAO;
+	
+	@Mock
+	private ProjectDAO projectDAO;
 	
 	@Mock
 	private MessageSource messageSource;
@@ -55,6 +61,24 @@ public class UserServiceTest {
 			userService.signup(new User());
 		} catch (PMEntityExistsException e) {
 			
+		}
+	}
+	
+	@Test
+	public void createUserProject_shouldFailIFTheProjectAlreadyExists() throws Exception {
+		// prepare
+		Project project = new Project();
+		project.setName("xxxx");
+		
+		// mock
+		when(projectDAO.findByName(project.getName())).thenReturn(project);
+
+		try {
+			// when
+			userService.CreateUserProject(1L, project);
+			fail();
+		} catch (PMEntityExistsException e) {
+			// TODO: handle exception
 		}
 	}
 }

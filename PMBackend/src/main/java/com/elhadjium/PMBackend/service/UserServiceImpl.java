@@ -123,9 +123,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> getUsersByCriteria(GetUsersByCriteriaInputDTO input) {
-		// TODO replace by custom findbycriteria -> dao
-		// TODO Unit Test
-		return userDAO.findByPseudoOrFirstNameOrLastName(input.getPseudo(), input.getFirstname(), input.getLastname());
+		return userDAO.getUsersByCriteria(input.getPseudo(), input.getFirstname(), input.getLastname());
 	}
 
 	@Override

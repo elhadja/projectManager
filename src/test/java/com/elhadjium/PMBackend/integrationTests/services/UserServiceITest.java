@@ -1,6 +1,10 @@
 package com.elhadjium.PMBackend.integrationTests.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -15,6 +19,7 @@ import org.springframework.test.context.jdbc.Sql;
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
+import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.service.UserService;
 
@@ -70,7 +75,7 @@ public class UserServiceITest {
 		assertEquals(1, invitedUser.getProjects().size());
 	}
 	
-		@Test
+	@Test
 	@Sql("/acceptInvitationToProjectOk.sql")
 	@Transactional
 	public void cancelInvitation_ok() throws Exception {
@@ -83,4 +88,41 @@ public class UserServiceITest {
 		assertEquals(0, project.getInvitationsToProject().size());
 		assertEquals(0, user.getInvitationnToProject().size());
 	}
+	
+	@Test
+	@Sql("/getUsersByCriteriaOk.sql")
+	@Transactional
+	public void getUsersByCriteria_shouldFindByFirstNameAndLastName() throws Exception {
+		// prepare
+		GetUsersByCriteriaInputDTO input = new GetUsersByCriteriaInputDTO();
+		input.setPseudo(null);
+		input.setFirstname("toto");
+		input.setLastname("dupont");
+
+		// when
+		List<User> users = userService.getUsersByCriteria(input);
+		
+		// then
+		assertNotNull(users);
+		assertEquals(2, users.size());
+	}
+	
+	@Test
+	@Sql("/getUsersByCriteriaOk.sql")
+	@Transactional
+	public void getUsersByCriteria_shouldFindByPseudoAndFirstNameAndLastName() throws Exception {
+		// prepare
+		GetUsersByCriteriaInputDTO input = new GetUsersByCriteriaInputDTO();
+		input.setPseudo("elhadjx");
+		input.setFirstname("toto");
+		input.setLastname("dupont");
+
+		// when
+		List<User> users = userService.getUsersByCriteria(input);
+		
+		// then
+		assertNotNull(users);
+		assertEquals(1, users.size());
+	}
+
 }

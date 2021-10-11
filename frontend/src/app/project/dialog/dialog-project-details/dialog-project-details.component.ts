@@ -31,6 +31,8 @@ export class DialogProjectDetailsComponent implements OnInit {
   public userFirstName: FormControl;
   public userLastName: FormControl;
   public userPseudo: FormControl;
+  private removedUsersPseudos: Set<string>;
+  private currentManagersPseudos: Set<string>;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
             private dialogProjectDetailsService: DialogDetailsProjectService,
@@ -42,12 +44,15 @@ export class DialogProjectDetailsComponent implements OnInit {
     this.project = data.project;
     this.selectedUsers = [];
     this.users = [];
+    this.removedUsersPseudos = new Set();
+    this.currentManagersPseudos = new Set();
     this.userFirstName = new FormControl('');
     this.userLastName = new FormControl('');
     this.userPseudo = new FormControl('');
   }
 
   ngOnInit(): void {
+    this.project.projectManagers.forEach((manager) => this.currentManagersPseudos.add(manager.pseudo));
     this.initProjectInfos();
     this.initTableData();
   }
@@ -94,9 +99,10 @@ export class DialogProjectDetailsComponent implements OnInit {
   }
   
   public onSaveProjectDetails(): void {
+    this.synchronizeRealDataToDataTable();
+
     let managers: number[] = [];
     let users: number[] = [];
-
     this.project.projectManagers.forEach(manager => managers.push(manager.id));
     this.project.projectUsers.forEach(user => users.push(user.id));
 
@@ -107,34 +113,35 @@ export class DialogProjectDetailsComponent implements OnInit {
       projectUsersIds: users
     }
 
-    // TODO handle view actualization on errors
     this.dialogProjectDetailsService.updateProjectDetails(output, this.project.projectId).subscribe(() => {
       this.messageServcie.showSuccessMessage("Project update successfully");
-    })
+    });
+  }
+
+  private synchronizeRealDataToDataTable(): void {
+    this.actualizeManagers();
+    this.actulizeProjectUsers();
+  }
+
+  public actulizeProjectUsers(): void {
+    this.removedUsersPseudos.forEach((userPseudo) => {
+      this.project.projectUsers = this.project.projectUsers.filter(user => user.pseudo !== userPseudo);
+    });
+  }
+
+  private actualizeManagers(): void {
+    this.project.projectManagers = this.project.projectManagers.filter(manager => this.currentManagersPseudos.has(manager.pseudo));
   }
 
   public onDeleteUser(rowData: ProjectUsersTableRow): void {
-    console.log('clic')
+    this.removedUsersPseudos.add(rowData.pseudo);
+    this.currentManagersPseudos.delete(rowData.pseudo);
     this.projectUsersDataTable = this.projectUsersDataTable.filter(row => row.pseudo !== rowData.pseudo);
     this.projectUsersDataTable = [...this.projectUsersDataTable];
-    this.project.projectUsers = this.project.projectUsers.filter(user => user.pseudo !== rowData.pseudo);
-    if (rowData.isManager) {
-      this.project.projectManagers = this.project.projectManagers.filter(user => user.pseudo !== rowData.pseudo);
-    }
   }
 
   public onUpdateisManager(row: ProjectUsersTableRow): void {
     row.isManager = !row.isManager;
-      this.project.projectUsers.forEach(user => {
-        if (user.pseudo === row.pseudo) {
-          if (row.isManager) {
-            this.project.projectManagers.push({
-              ...user
-            });
-          } else {
-            this.project.projectManagers = this.project.projectManagers.filter(manager => manager.pseudo !== row.pseudo);
-          }
-        }
-      });
+    row.isManager ? this.currentManagersPseudos.add(row.pseudo) : this.currentManagersPseudos.delete(row.pseudo);
   }
 }

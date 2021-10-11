@@ -118,6 +118,7 @@ export class DialogProjectDetailsComponent implements OnInit {
     });
   }
 
+  // TODO use IDs to simplify the synchronization
   private synchronizeRealDataToDataTable(): void {
     this.actualizeManagers();
     this.actulizeProjectUsers();
@@ -131,6 +132,16 @@ export class DialogProjectDetailsComponent implements OnInit {
 
   private actualizeManagers(): void {
     this.project.projectManagers = this.project.projectManagers.filter(manager => this.currentManagersPseudos.has(manager.pseudo));
+    this.currentManagersPseudos.forEach(userPseudo => {
+      const id = this.project.projectManagers.findIndex(manager => manager.pseudo === userPseudo);
+      if (id === -1) {
+        const user = this.project.projectUsers.find(user => user.pseudo === userPseudo);
+        if (user != null) {
+          this.project.projectManagers.push({...user});
+        }
+      }
+  });
+
   }
 
   public onDeleteUser(rowData: ProjectUsersTableRow): void {

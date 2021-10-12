@@ -19,8 +19,9 @@ public class UserStory {
 	@ManyToOne
 	private Sprint sprint;
 	
+	private String summary;
 	private String description;
-	private String storyPoint;
+	private Long storyPoint;
 
 	public Long getId() {
 		return id;
@@ -54,12 +55,20 @@ public class UserStory {
 		this.description = description;
 	}
 
-	public String getStoryPoint() {
+	public Long getStoryPoint() {
 		return storyPoint;
 	}
 
-	public void setStoryPoint(String storyPoint) {
+	public void setStoryPoint(Long storyPoint) {
 		this.storyPoint = storyPoint;
+	}
+	
+	public String getSummary() {
+		return summary;
+	}
+
+	public void setSummary(String summary) {
+		this.summary = summary;
 	}
 
 	@Override

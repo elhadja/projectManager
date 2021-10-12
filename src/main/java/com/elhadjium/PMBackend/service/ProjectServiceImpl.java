@@ -16,10 +16,13 @@ import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.dao.InvitationToProjectDAO;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
+import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
+import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 
 @Service
@@ -108,5 +111,16 @@ public class ProjectServiceImpl implements ProjectService {
 		projectDao.findById(projectId).get().addInvitation(invitationToProject);
 		guest.addInvitationToProject(invitationToProject);
 	}
-
+	
+	@Transactional
+	@Override
+	public void addUserStrotyToBacklog(Long projectId, AddUserStoryDTO userStoryDTO) {
+		userStoryDTO.validate();
+		UserStory us = new UserStory();
+		us.setStoryPoint(userStoryDTO.getStorypoint());
+		us.setDescription(userStoryDTO.getDescription());
+		us.setSummary(userStoryDTO.getSummary());
+		Backlog backlog = projectDao.findById(projectId).get().getBacklog();
+		backlog.addUserStory(us);
+	}
 }

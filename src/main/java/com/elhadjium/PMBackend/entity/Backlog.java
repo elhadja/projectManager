@@ -48,7 +48,12 @@ public class Backlog {
 	public void setUserStories(List<UserStory> userStories) {
 		this.userStories = userStories;
 	}
-
+	
+	public void addUserStory(UserStory userStory) {
+		this.userStories.add(userStory);
+		userStory.setBacklog(this);
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

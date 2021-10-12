@@ -79,7 +79,9 @@ public class UserServiceImpl implements UserService {
 		try {
 			User user = userDAO.findById(userId).get();
 			project.addManager(user);
-			project.setBacklog(new Backlog());
+			Backlog backlog = new Backlog();
+			backlog.setProject(project);
+			project.setBacklog(backlog);
 			project = projectDAO.save(project);
 			user.addProject(project);
 		} catch (NoSuchElementException e) {

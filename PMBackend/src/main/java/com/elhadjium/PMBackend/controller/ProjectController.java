@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.elhadjium.PMBackend.common.PMConstants;
+import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
@@ -32,8 +33,12 @@ public class ProjectController {
 	public void inviteUsersToProject(@RequestBody InviteUsersToProjectInputDTO input, @PathVariable("id") String projectId) throws Exception {
 		projectService.addInvitations(Long.valueOf(projectId), input);
 	}
-
 	
+	@PostMapping("{project-id}/backlog/user-story")
+	public void createUserStory(@RequestBody AddUserStoryDTO input, @PathVariable("project-id") String projectId) throws Exception {
+		projectService.addUserStrotyToBacklog(Long.parseLong(projectId), input);
+	}
+
 	@ExceptionHandler({PMRuntimeException.class})
 	public ResponseEntity<?> handleException(PMRuntimeException ex) {
 		ErrorOutputDTO errorOutputDTO = new ErrorOutputDTO();
@@ -41,10 +46,5 @@ public class ProjectController {
 		errorOutputDTO.setMessageDescription(ex.getMessage());
 
 		return ResponseEntity.status(ex.getStatus()).body(errorOutputDTO);
-	}
-	
-	@PostMapping("{project-id}/backlog/user-story")
-	public Long addUserStoryToBacklog() throws Exception {
-		return 0L;
 	}
 }

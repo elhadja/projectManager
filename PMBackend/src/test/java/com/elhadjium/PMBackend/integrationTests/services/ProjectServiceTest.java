@@ -1,6 +1,7 @@
 package com.elhadjium.PMBackend.integrationTests.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
@@ -15,16 +16,22 @@ import org.springframework.test.context.jdbc.Sql;
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
+import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
+import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.service.ProjectService;
+import com.elhadjium.PMBackend.service.UserService;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ProjectServiceTest {
 	@Autowired
 	ProjectService projectService;
+	
+	@Autowired
+	UserService userService;
 	
 	@Autowired
 	UserDAO testDAO;
@@ -76,5 +83,27 @@ public class ProjectServiceTest {
 		List<InvitationToProject> invitations = userDAO.findById(guestId).get().getInvitationnToProject();
 		assertEquals(expectedNumberOfInvitations, invitations.size());
 		assertEquals(projectId, invitations.get(0).getProject().getId());
+	}
+	
+	@Test
+	@Transactional
+	public void addUserStoryToBacklog_ok() throws Exception {
+		// prepare
+		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		AddUserStoryDTO input = new AddUserStoryDTO();
+		input.setDescription("description");
+		input.setSummary("summary");
+		
+		// when
+		projectService.addUserStrotyToBacklog(projectId, input);
+		
+		// then
+		Project proejectTest = projectDAO.findById(projectId).get();
+		assertNotNull(proejectTest.getBacklog().getUserStories());
+		assertEquals(1, project.getBacklog().getUserStories().size());
 	}
 }

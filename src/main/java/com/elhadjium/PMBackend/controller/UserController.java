@@ -28,7 +28,6 @@ import com.elhadjium.PMBackend.dto.GetUserInvitationsOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserProjectOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
 import com.elhadjium.PMBackend.dto.GetUsersByCriteriaOutputDTO;
-import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.LoginInputDTO;
 import com.elhadjium.PMBackend.dto.LoginOutputDTO;
 import com.elhadjium.PMBackend.dto.ProjectManagerOutputDTO;

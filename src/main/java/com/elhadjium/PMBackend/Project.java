@@ -12,8 +12,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
+import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
+import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.User;
 
 @Entity
@@ -39,6 +42,12 @@ public class Project implements Serializable {
 	
 	@OneToMany(mappedBy = "project")
 	private List<InvitationToProject> invitationsToProject = new ArrayList<InvitationToProject>();
+	
+	@OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Backlog backlog;
+	
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Sprint> sprints = new ArrayList<>();
 	
 	public void addUser(User user) {
 		UserProject userProject = new UserProject();
@@ -136,6 +145,22 @@ public class Project implements Serializable {
 	public void setInvitationsToProject(List<InvitationToProject> invitationsToProject) {
 		this.invitationsToProject = invitationsToProject;
 	}
+	
+	public Backlog getBacklog() {
+		return backlog;
+	}
+
+	public void setBacklog(Backlog backlog) {
+		this.backlog = backlog;
+	}
+	
+	public List<Sprint> getSprints() {
+		return sprints;
+	}
+
+	public void setSprints(List<Sprint> sprints) {
+		this.sprints = sprints;
+	}
 
 	@Override
 	public int hashCode() {
@@ -153,6 +178,4 @@ public class Project implements Serializable {
 		Project other = (Project) obj;
 		return Objects.equals(description, other.description) && Objects.equals(name, other.name);
 	}
-	
-	
 }

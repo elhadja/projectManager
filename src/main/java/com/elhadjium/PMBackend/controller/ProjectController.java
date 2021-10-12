@@ -42,4 +42,9 @@ public class ProjectController {
 
 		return ResponseEntity.status(ex.getStatus()).body(errorOutputDTO);
 	}
+	
+	@PostMapping("{project-id}/backlog/user-story")
+	public Long addUserStoryToBacklog() throws Exception {
+		return 0L;
+	}
 }

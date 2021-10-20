@@ -15,6 +15,7 @@ import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.dao.InvitationToProjectDAO;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
+import com.elhadjium.PMBackend.dao.SprintDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
@@ -35,6 +36,9 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Autowired
 	private InvitationToProjectDAO invitationToProjectDAO;
+	
+	@Autowired
+	private SprintDAO sprintDAO;
 	
 	// TODO integration testing
 	@Transactional
@@ -122,5 +126,17 @@ public class ProjectServiceImpl implements ProjectService {
 		us.setSummary(userStoryDTO.getSummary());
 		Backlog backlog = projectDao.findById(projectId).get().getBacklog();
 		backlog.addUserStory(us);
+	}
+	
+	//TODO integration testing
+	@Override
+	@Transactional
+	public void addUserStoryToSprint(Long sprintId, AddUserStoryDTO userStoryDTO) {
+		userStoryDTO.validate();
+		UserStory us = new UserStory();
+		us.setSummary(userStoryDTO.getSummary());
+		us.setDescription(userStoryDTO.getDescription());
+		us.setStoryPoint(userStoryDTO.getStorypoint());
+		sprintDAO.findById(sprintId).get().addUserStory(us);
 	}
 }

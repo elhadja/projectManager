@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.elhadjium.PMBackend.entity.User;
-import com.elhadjium.PMBackend.service.UserDAOCustom;
 
 public interface UserDAO extends JpaRepository<User, Long>, UserDAOCustom {
 	User findByEmail(String email);

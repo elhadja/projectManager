@@ -49,6 +49,11 @@ public class Sprint {
 	public void setUserStories(List<UserStory> userStories) {
 		this.userStories = userStories;
 	}
+	
+	public void addUserStory(UserStory us) {
+		userStories.add(us);
+		us.setSprint(this);
+	}
 
 	@Override
 	public int hashCode() {

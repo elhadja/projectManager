@@ -35,8 +35,13 @@ public class ProjectController {
 	}
 	
 	@PostMapping("{project-id}/backlog/user-story")
-	public void createUserStory(@RequestBody AddUserStoryDTO input, @PathVariable("project-id") String projectId) throws Exception {
+	public void createUserStoryInBacklog(@RequestBody AddUserStoryDTO input, @PathVariable("project-id") String projectId) throws Exception {
 		projectService.addUserStrotyToBacklog(Long.parseLong(projectId), input);
+	}
+	
+	@PostMapping("{project-id}/sprint/{sprint-id}/user-story")
+	public void createUserStoryInSprint(@RequestBody AddUserStoryDTO input, @PathVariable("sprint-id") String sprintId) throws Exception {
+		projectService.addUserStoryToSprint(Long.parseLong(sprintId), input);
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

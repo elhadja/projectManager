@@ -6,7 +6,7 @@ import com.elhadjium.PMBackend.util.JavaUtil;
 public class AddUserStoryDTO implements DTOValidator{
 	private String summary;
 	private String description;
-	private Long storypoint;
+	private Long storyPoint;
 
 	public String getSummary() {
 		return summary;
@@ -24,12 +24,12 @@ public class AddUserStoryDTO implements DTOValidator{
 		this.description = description;
 	}
 
-	public Long getStorypoint() {
-		return storypoint;
+	public Long getStoryPoint() {
+		return storyPoint;
 	}
 
-	public void setStorypoint(Long storypoint) {
-		this.storypoint = storypoint;
+	public void setStoryPoint(Long storypoint) {
+		this.storyPoint = storypoint;
 	}
 
 	@Override

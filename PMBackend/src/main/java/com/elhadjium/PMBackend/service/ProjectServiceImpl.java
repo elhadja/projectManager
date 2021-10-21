@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
+import com.elhadjium.PMBackend.common.Mapping;
 import com.elhadjium.PMBackend.dao.InvitationToProjectDAO;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.SprintDAO;
@@ -25,6 +26,8 @@ import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
+
+import org.modelmapper.ModelMapper;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -119,11 +122,9 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	@Override
 	public void addUserStrotyToBacklog(Long projectId, AddUserStoryDTO userStoryDTO) {
+
 		userStoryDTO.validate();
-		UserStory us = new UserStory();
-		us.setStoryPoint(userStoryDTO.getStorypoint());
-		us.setDescription(userStoryDTO.getDescription());
-		us.setSummary(userStoryDTO.getSummary());
+		UserStory us = Mapping.mapTo(userStoryDTO, UserStory.class);
 		Backlog backlog = projectDao.findById(projectId).get().getBacklog();
 		backlog.addUserStory(us);
 	}
@@ -133,10 +134,7 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	public void addUserStoryToSprint(Long sprintId, AddUserStoryDTO userStoryDTO) {
 		userStoryDTO.validate();
-		UserStory us = new UserStory();
-		us.setSummary(userStoryDTO.getSummary());
-		us.setDescription(userStoryDTO.getDescription());
-		us.setStoryPoint(userStoryDTO.getStorypoint());
+		UserStory us = Mapping.mapTo(userStoryDTO, UserStory.class);
 		sprintDAO.findById(sprintId).get().addUserStory(us);
 	}
 }

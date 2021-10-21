@@ -4,5 +4,4 @@ public class JavaUtil {
 	public static boolean isNullOrEmpty(String string) {
 		return string == null || string.isEmpty();
 	}
-
 }

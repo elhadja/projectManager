@@ -2,6 +2,7 @@ package com.elhadjium.PMBackend.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,6 +43,11 @@ public class ProjectController {
 	@PostMapping("{project-id}/sprint/{sprint-id}/user-story")
 	public void createUserStoryInSprint(@RequestBody AddUserStoryDTO input, @PathVariable("sprint-id") String sprintId) throws Exception {
 		projectService.addUserStoryToSprint(Long.parseLong(sprintId), input);
+	}
+	
+	@DeleteMapping("{project-id}/user-story/{user-story-id}")
+	public void deleteUserStoryFromProject(@PathVariable("project-id") String projectId, @PathVariable("user-story-id") String userStoryId) throws Exception {
+		projectService.deleteUserStoryFromProject(Long.valueOf(projectId), Long.valueOf(userStoryId));
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

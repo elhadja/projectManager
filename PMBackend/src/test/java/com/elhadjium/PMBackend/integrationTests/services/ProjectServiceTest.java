@@ -2,9 +2,11 @@ package com.elhadjium.PMBackend.integrationTests.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,9 @@ public class ProjectServiceTest {
 	
 	@Autowired
 	UserDAO userDAO;
+	
+	@Autowired
+	EntityManager entityManager;
 	
 	@Test
 	@Sql("/data.sql")
@@ -105,5 +110,24 @@ public class ProjectServiceTest {
 		Project proejectTest = projectDAO.findById(projectId).get();
 		assertNotNull(proejectTest.getBacklog().getUserStories());
 		assertEquals(1, project.getBacklog().getUserStories().size());
+	}
+	
+	@Test
+	public void deleteUserStoryFromProject_ok() throws Exception {
+		// prepare
+		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		long usId = projectService.addUserStrotyToBacklog(projectId, new AddUserStoryDTO("a summary"));
+		
+		// when
+		projectService.deleteUserStoryFromProject(projectId, usId);
+		
+		// then
+		Project projectAssert = projectDAO.findById(projectId).get();
+		assertTrue(projectAssert.getBacklog().getUserStories().isEmpty());
 	}
 }

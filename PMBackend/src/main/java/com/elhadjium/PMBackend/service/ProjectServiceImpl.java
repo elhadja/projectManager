@@ -18,6 +18,7 @@ import com.elhadjium.PMBackend.dao.InvitationToProjectDAO;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.SprintDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
+import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
@@ -26,8 +27,6 @@ import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
-
-import org.modelmapper.ModelMapper;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -38,10 +37,10 @@ public class ProjectServiceImpl implements ProjectService {
 	private UserDAO userDAO;
 	
 	@Autowired
-	private InvitationToProjectDAO invitationToProjectDAO;
+	private SprintDAO sprintDAO;
 	
 	@Autowired
-	private SprintDAO sprintDAO;
+	private UserStoryDAO userStoryDAO;
 	
 	// TODO integration testing
 	@Transactional
@@ -121,12 +120,13 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Transactional
 	@Override
-	public void addUserStrotyToBacklog(Long projectId, AddUserStoryDTO userStoryDTO) {
-
+	public long addUserStrotyToBacklog(Long projectId, AddUserStoryDTO userStoryDTO) {
 		userStoryDTO.validate();
 		UserStory us = Mapping.mapTo(userStoryDTO, UserStory.class);
+		userStoryDAO.save(us);
 		Backlog backlog = projectDao.findById(projectId).get().getBacklog();
 		backlog.addUserStory(us);
+		return us.getId();
 	}
 	
 	//TODO integration testing
@@ -136,5 +136,11 @@ public class ProjectServiceImpl implements ProjectService {
 		userStoryDTO.validate();
 		UserStory us = Mapping.mapTo(userStoryDTO, UserStory.class);
 		sprintDAO.findById(sprintId).get().addUserStory(us);
+	}
+	
+	@Transactional
+	public void deleteUserStoryFromProject(long projectId, long userStoryId) {
+		Project project = projectDao.findById(projectId).get();
+		project.getBacklog().deleteUserStory(userStoryDAO.findById(userStoryId).get());
 	}
 }

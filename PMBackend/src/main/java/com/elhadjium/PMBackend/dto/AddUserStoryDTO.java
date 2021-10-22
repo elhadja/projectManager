@@ -7,6 +7,13 @@ public class AddUserStoryDTO implements DTOValidator{
 	private String summary;
 	private String description;
 	private Long storyPoint;
+	
+	public AddUserStoryDTO() {
+	}
+	
+	public AddUserStoryDTO(String summary) {
+		this.summary = summary;
+	}
 
 	public String getSummary() {
 		return summary;

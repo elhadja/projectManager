@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -22,7 +23,10 @@ public class Backlog {
 	@OneToOne
 	private Project project;
 	
-	@OneToMany(mappedBy = "backlog", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "backlog",
+				cascade = CascadeType.ALL,
+				orphanRemoval = true,
+				fetch = FetchType.EAGER)
 	private List<UserStory> userStories = new ArrayList<UserStory>();
 
 	public Long getId() {
@@ -52,6 +56,11 @@ public class Backlog {
 	public void addUserStory(UserStory userStory) {
 		this.userStories.add(userStory);
 		userStory.setBacklog(this);
+	}
+	
+	public void deleteUserStory(UserStory userStory) {
+		this.userStories.remove(userStory);
+		userStory.setBacklog(null);
 	}
 	
 	@Override

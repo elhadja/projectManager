@@ -1,4 +1,3 @@
-#mapping generalisé pour les cas simples
 #supprimer U.S
 #modifier U.S
 #récuperer les u.s d'un backlog

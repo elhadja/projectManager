@@ -14,6 +14,7 @@ import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.controller.ProjectController;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
+import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.service.ProjectService;
 import com.elhadjium.PMBackend.service.UserService;
@@ -52,5 +53,29 @@ public class ProjectControllerITest {
 		assertEquals(1, userStories.size());
 		assertEquals(dto.getSummary(), userStories.get(0).getSummary());
 		assertEquals(dto.getDescription(), userStories.get(0).getDescription());
+	}
+	
+	@Test
+	public void getSprintUserStories_shouldBeOk() throws Exception {
+		// prepare
+		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		Sprint sprintData = new Sprint();
+		Long sprintId = projectService.addSprintToProject(projectId, sprintData);
+		
+		projectService.addUserStoryToSprint(sprintId, new AddUserStoryDTO("a summary x"));
+		projectService.addUserStoryToSprint(sprintId, new AddUserStoryDTO("a summary y"));
+		projectService.addUserStoryToSprint(sprintId, new AddUserStoryDTO("a summary z"));
+
+		// when
+		List<GetUserStoryOutputDTO> userStories = projectController.getSprintUserStorires(String.valueOf(projectId), String.valueOf(sprintId));
+		
+		// then
+		assertNotNull(userStories);
+		assertEquals(3, userStories.size());
 	}
 }

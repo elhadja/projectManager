@@ -19,4 +19,5 @@ public interface ProjectService {
 	public List<UserStory> getSprintUserStories(Long parseId, Long parseId2);
 	public Long addSprintToProject(Long projectId, Sprint sprintData);
 	public void moveUserStoryToBacklog(Long projectId, Long userStoryId);
+	public void moveUserStoryToSprint(Long projectId, Long sprintId, Long userStoryId);
 }

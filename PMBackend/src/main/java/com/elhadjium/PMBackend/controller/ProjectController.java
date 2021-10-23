@@ -1,9 +1,13 @@
 package com.elhadjium.PMBackend.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +19,7 @@ import com.elhadjium.PMBackend.common.Mapping;
 import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
+import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
@@ -39,28 +44,41 @@ public class ProjectController {
 		projectService.addInvitations(Long.valueOf(projectId), input);
 	}
 	
-	@PostMapping("{project-id}/backlog/user-story")
+	@PostMapping("{project-id}/backlog/user-stories")
 	public void createUserStoryInBacklog(@RequestBody AddUserStoryDTO input, @PathVariable("project-id") String projectId) throws Exception {
 		projectService.addUserStrotyToBacklog(Long.parseLong(projectId), input);
 	}
 	
-	@PostMapping("{project-id}/sprint/{sprint-id}/user-story")
+	@PostMapping("{project-id}/sprints/{sprint-id}/user-stories")
 	public void createUserStoryInSprint(@RequestBody AddUserStoryDTO input, @PathVariable("sprint-id") String sprintId) throws Exception {
 		projectService.addUserStoryToSprint(Long.parseLong(sprintId), input);
 	}
 	
-	@DeleteMapping("{project-id}/user-story/{user-story-id}")
+	@DeleteMapping("{project-id}/user-stories/{user-story-id}")
 	public void deleteUserStoryFromProject(@PathVariable("project-id") String projectId, @PathVariable("user-story-id") String userStoryId) throws Exception {
 		projectService.deleteUserStoryFromProject(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId));
 	}
 	
-	@PutMapping("{project-id}/user-story/{user-story-id}")
+	@PutMapping("{project-id}/user-stories/{user-story-id}")
 	public void updateUserStory(@PathVariable("project-id") String projectId,
 								@PathVariable("user-story-id") String userStoryId,
 								@RequestBody UpdateUsertStoryInputDTO inputDTO) {
 		UserStory userStoryData = Mapping.mapTo(inputDTO, UserStory.class);
 		
 		projectService.updateUserStory(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId), userStoryData);
+	}
+	
+	@GetMapping("{project-id}/backlog/user-stories")
+	public List<GetUserStoryOutputDTO> getBacklogUserStorires(@PathVariable("project-id") String projectId) {
+		List<UserStory> userStoryDataList = projectService.getBacklogUserStories(JavaUtil.parseId(projectId));
+
+		List<GetUserStoryOutputDTO> outputList = new ArrayList<GetUserStoryOutputDTO>();
+		userStoryDataList.forEach(userStory -> {
+			GetUserStoryOutputDTO output = Mapping.mapTo(userStory, GetUserStoryOutputDTO.class);
+			outputList.add(output);
+		});
+
+		return outputList;
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

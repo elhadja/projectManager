@@ -1,0 +1,56 @@
+package com.elhadjium.PMBackend.integrationTests.services;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+
+import com.elhadjium.PMBackend.Project;
+import com.elhadjium.PMBackend.controller.ProjectController;
+import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
+import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
+import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.service.ProjectService;
+import com.elhadjium.PMBackend.service.UserService;
+
+@SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+public class ProjectControllerITest {
+	@Autowired
+	private ProjectController projectController;
+	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private ProjectService projectService;
+	
+	@Test
+	public void getBacklogUserStories_shouldBeOk() throws Exception {
+		// prepare
+		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		AddUserStoryDTO dto = new AddUserStoryDTO();
+		dto.setSummary("summary");
+		dto.setDescription("descritpion");
+		projectService.addUserStrotyToBacklog(projectId, dto);
+
+		// when
+		List<GetUserStoryOutputDTO> userStories = projectController.getBacklogUserStorires(String.valueOf(projectId));
+		
+		// then
+		assertNotNull(userStories);
+		assertEquals(1, userStories.size());
+		assertEquals(dto.getSummary(), userStories.get(0).getSummary());
+		assertEquals(dto.getDescription(), userStories.get(0).getDescription());
+	}
+}

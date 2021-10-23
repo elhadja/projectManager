@@ -14,15 +14,14 @@ import org.springframework.stereotype.Service;
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.common.Mapping;
-import com.elhadjium.PMBackend.dao.InvitationToProjectDAO;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.SprintDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
+import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
-import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.User;
@@ -154,5 +153,10 @@ public class ProjectServiceImpl implements ProjectService {
 		userStoryToUpdate.setStoryPoint(userStoryData.getStoryPoint());
 
 		userStoryDAO.save(userStoryToUpdate);
+	}
+
+	@Override
+	public List<UserStory> getBacklogUserStories(Long projectId) {
+		return projectDao.findById(projectId).get().getBacklog().getUserStories();
 	}
 }

@@ -1,4 +1,3 @@
-#modifier U.S
 #récuperer les u.s d'un backlog
 #récuperer les u.s d'un sprint
 #create sprint

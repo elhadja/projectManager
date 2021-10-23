@@ -222,4 +222,11 @@ public class ProjectServiceImpl implements ProjectService {
 		
 		return taskData.getId();
 	}
+
+	@Override
+	@Transactional
+	public void removeTask(Long userStoryId, Long taskId) {
+		Task task = taskDAO.findById(taskId).get();
+		userStoryDAO.findById(userStoryId).get().removeTask(task);
+	}
 }

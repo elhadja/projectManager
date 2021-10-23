@@ -22,4 +22,5 @@ public interface ProjectService {
 	public void moveUserStoryToBacklog(Long projectId, Long userStoryId);
 	public void moveUserStoryToSprint(Long projectId, Long sprintId, Long userStoryId);
 	public Long createTask(Long userStoryId, Task taskData);
+	public void removeTask(Long userStoryId, Long taskId);
 }

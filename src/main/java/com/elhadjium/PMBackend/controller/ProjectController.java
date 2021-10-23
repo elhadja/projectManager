@@ -122,7 +122,15 @@ public class ProjectController {
 	public Long createTask(@PathVariable("project-id") String projectId,
 							@PathVariable("user-story-id") String userStoryId,
 							@RequestBody AddTaskInputDTO input) {
+		input.validate();
 		return projectService.createTask(JavaUtil.parseId(userStoryId), Mapping.mapTo(input, Task.class));
+	}
+	
+	@DeleteMapping("{project-id}/user-stories/{user-story-id}/tasks/{task-id}")
+	public void removeTask(@PathVariable("project-id") String projectId,
+							@PathVariable("user-story-id") String userStoryId,
+							@PathVariable("task-id") String taskId) {
+		projectService.removeTask(JavaUtil.parseId(userStoryId), JavaUtil.parseId(taskId));
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

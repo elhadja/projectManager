@@ -215,4 +215,27 @@ public class ProjectServiceITest {
 		assertTrue(taskId > 0);
 		assertNotNull(taskDAO.findById(taskId));
 	}
+	
+	@Test
+	public void deleteTask_shouldBeOk() throws Exception {
+		// prepare
+		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		long usId = projectService.addUserStrotyToBacklog(projectId, new AddUserStoryDTO("a summary"));
+		
+		Task taskData = new Task();
+		taskData.setDescription("desc");
+		
+		long taskId = projectService.createTask(usId, taskData);
+		
+		// when
+		projectService.removeTask(usId, taskId);
+		
+		// then
+		assertTrue(taskDAO.findById(taskId).isEmpty());
+	}
 }

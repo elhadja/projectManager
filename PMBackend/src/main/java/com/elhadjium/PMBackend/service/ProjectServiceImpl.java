@@ -190,4 +190,20 @@ public class ProjectServiceImpl implements ProjectService {
 			project.getBacklog().addUserStory(us);
 		}
 	}
+
+	@Override
+	@Transactional
+	public void moveUserStoryToSprint(Long projectId, Long sprintId, Long userStoryId) {
+		Project project = projectDao.findById(projectId).get();
+		UserStory us = userStoryDAO.findById(userStoryId).get();
+		
+		if (us.getSprint() != null) {
+			us.getSprint().removeUserStory(us);
+		} else if (us.getBacklog() != null) {
+			us.getBacklog().deleteUserStory(us);
+		}
+		
+		Sprint sprint = sprintDAO.findById(sprintId).get();
+		sprint.addUserStory(us);
+	}
 }

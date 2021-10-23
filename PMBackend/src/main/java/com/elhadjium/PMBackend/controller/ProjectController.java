@@ -103,10 +103,17 @@ public class ProjectController {
 		return projectService.addSprintToProject(projectId, Mapping.mapTo(dto, Sprint.class));
 	}
 	
-	@PostMapping("{project-id}/user-stories/{user-story-id}/moveToBacklog")
+	@PostMapping("{project-id}/backlog/user-stories/{user-story-id}")
 	public void moveUserStoryFromSprintToBacklog(@PathVariable("project-id") String projectId,
 												@PathVariable("user-story-id") String userStoryId) {
 		projectService.moveUserStoryToBacklog(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId));
+	}
+	
+	@PostMapping("{project-id}/sprints/{sprint-id}/user-stories/{user-story-id}")
+	public void moveUserStoryToSprint(@PathVariable("project-id") String projectId,
+												@PathVariable("user-story-id") String userStoryId,
+												@PathVariable("sprint-id") String sprintId) {
+		projectService.moveUserStoryToSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId), JavaUtil.parseId(userStoryId));
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

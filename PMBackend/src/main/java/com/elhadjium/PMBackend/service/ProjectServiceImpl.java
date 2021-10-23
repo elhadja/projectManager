@@ -133,10 +133,12 @@ public class ProjectServiceImpl implements ProjectService {
 	//TODO integration testing
 	@Override
 	@Transactional
-	public void addUserStoryToSprint(Long sprintId, AddUserStoryDTO userStoryDTO) {
+	public long addUserStoryToSprint(Long sprintId, AddUserStoryDTO userStoryDTO) {
 		userStoryDTO.validate();
 		UserStory us = Mapping.mapTo(userStoryDTO, UserStory.class);
 		sprintDAO.findById(sprintId).get().addUserStory(us);
+		userStoryDAO.save(us);
+		return us.getId();
 	}
 	
 	// FIXME US Could be in sprint and not in backlog
@@ -175,5 +177,17 @@ public class ProjectServiceImpl implements ProjectService {
 		sprintDAO.save(sprint);
 
 		return sprint.getId();
+	}
+
+	@Override
+	@Transactional
+	public void moveUserStoryToBacklog(Long projectId, Long userStoryId) {
+		Project project = projectDao.findById(projectId).get();
+		UserStory us = userStoryDAO.findById(userStoryId).get();
+
+		if (us.getBacklog() == null && us.getSprint() != null) {
+			us.getSprint().removeUserStory(us);
+			project.getBacklog().addUserStory(us);
+		}
 	}
 }

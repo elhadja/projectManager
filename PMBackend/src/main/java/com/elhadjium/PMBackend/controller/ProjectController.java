@@ -98,6 +98,17 @@ public class ProjectController {
 		return outputList;
 	}
 
+	@PostMapping("{project-id}/sprints")
+	public Long addSprintToProject(Long projectId, AddSprintToProjectInputDTO dto) {
+		return projectService.addSprintToProject(projectId, Mapping.mapTo(dto, Sprint.class));
+	}
+	
+	@PostMapping("{project-id}/user-stories/{user-story-id}/moveToBacklog")
+	public void moveUserStoryFromSprintToBacklog(@PathVariable("project-id") String projectId,
+												@PathVariable("user-story-id") String userStoryId) {
+		projectService.moveUserStoryToBacklog(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId));
+	}
+
 	@ExceptionHandler({PMRuntimeException.class})
 	public ResponseEntity<?> handleException(PMRuntimeException ex) {
 		ErrorOutputDTO errorOutputDTO = new ErrorOutputDTO();
@@ -105,9 +116,5 @@ public class ProjectController {
 		errorOutputDTO.setMessageDescription(ex.getMessage());
 
 		return ResponseEntity.status(ex.getStatus()).body(errorOutputDTO);
-	}
-
-	public Long addSprintToProject(Long projectId, AddSprintToProjectInputDTO dto) {
-		return projectService.addSprintToProject(projectId, Mapping.mapTo(dto, Sprint.class));
 	}
 }

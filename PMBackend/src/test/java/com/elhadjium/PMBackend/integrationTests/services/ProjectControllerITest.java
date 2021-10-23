@@ -2,6 +2,7 @@ package com.elhadjium.PMBackend.integrationTests.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.controller.ProjectController;
+import com.elhadjium.PMBackend.dao.SprintDAO;
+import com.elhadjium.PMBackend.dto.AddSprintToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
@@ -30,7 +33,10 @@ public class ProjectControllerITest {
 	
 	@Autowired
 	private ProjectService projectService;
-	
+
+	@Autowired
+	private SprintDAO sprintDAO;
+
 	@Test
 	public void getBacklogUserStories_shouldBeOk() throws Exception {
 		// prepare
@@ -77,5 +83,27 @@ public class ProjectControllerITest {
 		// then
 		assertNotNull(userStories);
 		assertEquals(3, userStories.size());
+	}
+	
+	@Test
+	public void addSprintToProject_shoulbeOk() throws Exception {
+		// prepare
+		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		AddSprintToProjectInputDTO dto = new AddSprintToProjectInputDTO();
+		dto.setName("sprint name");
+		
+		// when
+		Long sprintId = projectController.addSprintToProject(projectId, dto);
+		
+		// then
+		Sprint sprint = sprintDAO.findById(sprintId).get();
+		assertTrue(sprintId > 0);
+		assertNotNull(sprint);
+		assertEquals(dto.getName(), sprint.getName());
 	}
 }

@@ -25,7 +25,7 @@ public class Sprint {
 	private Project project;
 	
 	// TODO think about us removal
-	@OneToMany(mappedBy = "sprint", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "sprint", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<UserStory> userStories = new ArrayList<UserStory>();
 
 	public Long getId() {
@@ -55,6 +55,11 @@ public class Sprint {
 	public void addUserStory(UserStory us) {
 		userStories.add(us);
 		us.setSprint(this);
+	}
+	
+	public void removeUserStory(UserStory us) {
+		userStories.remove(us);
+		us.setSprint(null);
 	}
 
 	public String getName() {

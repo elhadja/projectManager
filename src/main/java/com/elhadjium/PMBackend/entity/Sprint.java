@@ -19,6 +19,8 @@ public class Sprint {
 	@GeneratedValue
 	private Long id;
 	
+	private String name;
+	
 	@ManyToOne
 	private Project project;
 	
@@ -53,6 +55,14 @@ public class Sprint {
 	public void addUserStory(UserStory us) {
 		userStories.add(us);
 		us.setSprint(this);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override

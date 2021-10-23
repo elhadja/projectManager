@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.elhadjium.PMBackend.common.Mapping;
 import com.elhadjium.PMBackend.common.PMConstants;
+import com.elhadjium.PMBackend.dto.AddSprintToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
+import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.ProjectService;
@@ -103,5 +105,9 @@ public class ProjectController {
 		errorOutputDTO.setMessageDescription(ex.getMessage());
 
 		return ResponseEntity.status(ex.getStatus()).body(errorOutputDTO);
+	}
+
+	public Long addSprintToProject(Long projectId, AddSprintToProjectInputDTO dto) {
+		return projectService.addSprintToProject(projectId, Mapping.mapTo(dto, Sprint.class));
 	}
 }

@@ -97,6 +97,16 @@ public class Project implements Serializable {
 		invitationsToProject.add(invitation);
 		invitation.setProject(this);
 	}
+	
+	public void addSprint(Sprint sprint) {
+		this.sprints.add(sprint);
+		sprint.setProject(this);
+	}
+	
+	public void removeSprint(Sprint sprint) {
+		this.sprints.remove(sprint);
+		sprint.setProject(null);
+	}
 
 	public Long getId() {
 		return id;

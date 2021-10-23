@@ -80,6 +80,21 @@ public class ProjectController {
 
 		return outputList;
 	}
+	
+	@GetMapping("{project-id}/sprints/{sprint-id}/user-stories")
+	public List<GetUserStoryOutputDTO> getSprintUserStorires(@PathVariable("project-id") String projectId,
+															@PathVariable("project-id") String sprintId) {
+		List<UserStory> userStoryDataList = projectService.getSprintUserStories(JavaUtil.parseId(projectId),
+																			    JavaUtil.parseId(sprintId));
+
+		List<GetUserStoryOutputDTO> outputList = new ArrayList<GetUserStoryOutputDTO>();
+		userStoryDataList.forEach(userStory -> {
+			GetUserStoryOutputDTO output = Mapping.mapTo(userStory, GetUserStoryOutputDTO.class);
+			outputList.add(output);
+		});
+
+		return outputList;
+	}
 
 	@ExceptionHandler({PMRuntimeException.class})
 	public ResponseEntity<?> handleException(PMRuntimeException ex) {

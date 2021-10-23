@@ -24,6 +24,7 @@ import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
+import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
@@ -158,5 +159,21 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public List<UserStory> getBacklogUserStories(Long projectId) {
 		return projectDao.findById(projectId).get().getBacklog().getUserStories();
+	}
+
+	@Override
+	public List<UserStory> getSprintUserStories(Long parseId, Long sprintId) {
+		return userStoryDAO.findBySprintId(sprintId);
+	}
+
+	@Override
+	@Transactional
+	public Long addSprintToProject(Long projectId, Sprint sprintData) {
+		Sprint sprint = Mapping.mapTo(sprintData, Sprint.class);
+		Project project = projectDao.findById(projectId).get();
+		project.addSprint(sprint);
+		sprintDAO.save(sprint);
+
+		return sprint.getId();
 	}
 }

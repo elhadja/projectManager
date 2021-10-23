@@ -6,6 +6,7 @@ import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
+import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.UserStory;
 
 public interface ProjectService {
@@ -20,4 +21,5 @@ public interface ProjectService {
 	public Long addSprintToProject(Long projectId, Sprint sprintData);
 	public void moveUserStoryToBacklog(Long projectId, Long userStoryId);
 	public void moveUserStoryToSprint(Long projectId, Long sprintId, Long userStoryId);
+	public Long createTask(Long userStoryId, Task taskData);
 }

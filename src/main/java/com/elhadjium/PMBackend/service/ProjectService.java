@@ -1,5 +1,7 @@
 package com.elhadjium.PMBackend.service;
 
+import java.util.List;
+
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
@@ -12,4 +14,5 @@ public interface ProjectService {
 	public void addUserStoryToSprint(Long projectId, AddUserStoryDTO userStoryDTO);
 	public void deleteUserStoryFromProject(long projectId, long userStoryId);
 	public void updateUserStory(Long projectId, Long userStoryId, UserStory userStoryData);
+	public List<UserStory> getBacklogUserStories(Long projectId);
 }

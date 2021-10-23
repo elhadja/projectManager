@@ -18,6 +18,7 @@ import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.ProjectService;
+import com.elhadjium.PMBackend.util.JavaUtil;
 
 @RestController
 @RequestMapping(PMConstants.PMBaseUri + "/projects")
@@ -47,7 +48,7 @@ public class ProjectController {
 	
 	@DeleteMapping("{project-id}/user-story/{user-story-id}")
 	public void deleteUserStoryFromProject(@PathVariable("project-id") String projectId, @PathVariable("user-story-id") String userStoryId) throws Exception {
-		projectService.deleteUserStoryFromProject(Long.valueOf(projectId), Long.valueOf(userStoryId));
+		projectService.deleteUserStoryFromProject(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId));
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

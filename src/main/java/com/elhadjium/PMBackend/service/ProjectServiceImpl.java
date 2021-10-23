@@ -22,6 +22,7 @@ import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
+import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.User;
@@ -138,9 +139,20 @@ public class ProjectServiceImpl implements ProjectService {
 		sprintDAO.findById(sprintId).get().addUserStory(us);
 	}
 	
+	// FIXME US Could be in sprint and not in backlog
 	@Transactional
 	public void deleteUserStoryFromProject(long projectId, long userStoryId) {
 		Project project = projectDao.findById(projectId).get();
 		project.getBacklog().deleteUserStory(userStoryDAO.findById(userStoryId).get());
+	}
+
+	@Override
+	public void updateUserStory(Long projectId, Long userStoryId, UserStory userStoryData) {
+		UserStory userStoryToUpdate = userStoryDAO.findById(userStoryId).get();
+		userStoryToUpdate.setSummary(userStoryData.getSummary());
+		userStoryToUpdate.setDescription(userStoryData.getDescription());
+		userStoryToUpdate.setStoryPoint(userStoryData.getStoryPoint());
+
+		userStoryDAO.save(userStoryToUpdate);
 	}
 }

@@ -16,13 +16,16 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.elhadjium.PMBackend.Project;
+import com.elhadjium.PMBackend.controller.ProjectController;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
+import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.service.ProjectService;
 import com.elhadjium.PMBackend.service.UserService;
 
@@ -45,7 +48,7 @@ public class ProjectServiceTest {
 	UserDAO userDAO;
 	
 	@Autowired
-	EntityManager entityManager;
+	UserStoryDAO userStoryDAO;
 	
 	@Test
 	@Sql("/data.sql")
@@ -129,5 +132,32 @@ public class ProjectServiceTest {
 		// then
 		Project projectAssert = projectDAO.findById(projectId).get();
 		assertTrue(projectAssert.getBacklog().getUserStories().isEmpty());
+	}
+	
+	@Test
+	public void updateUserStory_shouldBeOk() throws Exception {
+		// prepare
+		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		long usId = projectService.addUserStrotyToBacklog(projectId, new AddUserStoryDTO("a summary"));
+		
+		UserStory input = new UserStory();
+		input.setSummary("new summary");
+		input.setDescription("new description");
+		input.setStoryPoint(6L);
+		
+		// when
+		projectService.updateUserStory(projectId, usId, input);
+		
+		// then
+		UserStory us = userStoryDAO.findById(usId).get();
+		assertNotNull(us);
+		assertTrue(input.getSummary().equals(us.getSummary()));
+		assertTrue(input.getDescription().equals(us.getDescription()));
+		assertTrue(input.getStoryPoint().equals(us.getStoryPoint()));
 	}
 }

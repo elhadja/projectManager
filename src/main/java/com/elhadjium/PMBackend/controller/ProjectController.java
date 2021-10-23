@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.elhadjium.PMBackend.common.Mapping;
 import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
+import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
+import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.ProjectService;
 import com.elhadjium.PMBackend.util.JavaUtil;
@@ -49,6 +52,15 @@ public class ProjectController {
 	@DeleteMapping("{project-id}/user-story/{user-story-id}")
 	public void deleteUserStoryFromProject(@PathVariable("project-id") String projectId, @PathVariable("user-story-id") String userStoryId) throws Exception {
 		projectService.deleteUserStoryFromProject(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId));
+	}
+	
+	@PutMapping("{project-id}/user-story/{user-story-id}")
+	public void updateUserStory(@PathVariable("project-id") String projectId,
+								@PathVariable("user-story-id") String userStoryId,
+								@RequestBody UpdateUsertStoryInputDTO inputDTO) {
+		UserStory userStoryData = Mapping.mapTo(inputDTO, UserStory.class);
+		
+		projectService.updateUserStory(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId), userStoryData);
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

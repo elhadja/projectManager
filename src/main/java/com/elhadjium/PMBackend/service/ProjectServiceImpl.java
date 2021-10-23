@@ -16,6 +16,7 @@ import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.common.Mapping;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.SprintDAO;
+import com.elhadjium.PMBackend.dao.TaskDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
@@ -25,6 +26,7 @@ import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.Sprint;
+import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
@@ -42,6 +44,9 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Autowired
 	private UserStoryDAO userStoryDAO;
+	
+	@Autowired
+	private TaskDAO taskDAO;
 	
 	// TODO integration testing
 	@Transactional
@@ -205,5 +210,16 @@ public class ProjectServiceImpl implements ProjectService {
 		
 		Sprint sprint = sprintDAO.findById(sprintId).get();
 		sprint.addUserStory(us);
+	}
+
+	@Override
+	@Transactional
+	public Long createTask(Long userStoryId, Task taskData) {
+		Task task = Mapping.mapTo(taskData, Task.class);
+		UserStory us = userStoryDAO.findById(userStoryId).get();
+		us.addTask(taskData);
+		taskDAO.save(taskData);
+		
+		return taskData.getId();
 	}
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.elhadjium.PMBackend.common.Mapping;
 import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.dto.AddSprintToProjectInputDTO;
+import com.elhadjium.PMBackend.dto.AddTaskInputDTO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
@@ -25,6 +26,7 @@ import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
+import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.ProjectService;
@@ -114,6 +116,13 @@ public class ProjectController {
 												@PathVariable("user-story-id") String userStoryId,
 												@PathVariable("sprint-id") String sprintId) {
 		projectService.moveUserStoryToSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId), JavaUtil.parseId(userStoryId));
+	}
+	
+	@PostMapping("{project-id}/user-stories/{user-story-id}/tasks")
+	public Long createTask(@PathVariable("project-id") String projectId,
+							@PathVariable("user-story-id") String userStoryId,
+							@RequestBody AddTaskInputDTO input) {
+		return projectService.createTask(JavaUtil.parseId(userStoryId), Mapping.mapTo(input, Task.class));
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

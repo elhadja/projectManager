@@ -19,6 +19,7 @@ import org.springframework.test.context.jdbc.Sql;
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.controller.ProjectController;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
+import com.elhadjium.PMBackend.dao.TaskDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
@@ -26,6 +27,7 @@ import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.Sprint;
+import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.service.ProjectService;
@@ -51,6 +53,9 @@ public class ProjectServiceITest {
 	
 	@Autowired
 	UserStoryDAO userStoryDAO;
+	
+	@Autowired
+	TaskDAO taskDAO;
 	
 	@Test
 	@Sql("/data.sql")
@@ -188,5 +193,26 @@ public class ProjectServiceITest {
 		assertNull(usToCheck.getBacklog());
 		assertEquals(usId, usToCheck.getId());
 	}
-
+	
+	@Test
+	public void addTask_shouldBeOk() throws Exception {
+		// prepare
+		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		long usId = projectService.addUserStrotyToBacklog(projectId, new AddUserStoryDTO("a summary"));
+		
+		Task taskData = new Task();
+		taskData.setDescription("desc");
+	
+		// when
+		long taskId = projectService.createTask(usId, taskData);
+		
+		// then
+		assertTrue(taskId > 0);
+		assertNotNull(taskDAO.findById(taskId));
+	}
 }

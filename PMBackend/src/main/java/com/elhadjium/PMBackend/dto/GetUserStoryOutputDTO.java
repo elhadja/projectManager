@@ -1,15 +1,15 @@
 package com.elhadjium.PMBackend.dto;
 
 public class GetUserStoryOutputDTO {
-	private String id;
+	private Long id;
 	private String summary;
 	private String description;
 	private Long storyPoint;
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getSummary() {

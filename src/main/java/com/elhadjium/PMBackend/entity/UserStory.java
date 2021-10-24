@@ -49,7 +49,7 @@ public class UserStory implements Serializable {
 		usTask.setTask(null);
 		usTask.setUserStory(null);
 	}
-
+	
 	public Long getId() {
 		return id;
 	}

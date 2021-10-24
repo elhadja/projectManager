@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
@@ -237,5 +238,36 @@ public class ProjectServiceITest {
 		
 		// then
 		assertTrue(taskDAO.findById(taskId).isEmpty());
+	}
+	
+	@Test
+	public void getSprintTasks_shouldBeOk() throws Exception {
+		// prepare
+		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		Sprint sprintData = new Sprint();
+		sprintData.setName("sprint name");
+		Long sprintId = projectService.addSprintToProject(projectId, sprintData);
+
+		long usId = projectService.addUserStoryToSprint(sprintId, new AddUserStoryDTO("a summary 1"));
+		
+		Task taskData1 = new Task();
+		taskData1.setDescription("desc");
+		long taskId1 = projectService.createTask(usId, taskData1);
+		
+		Task taskData2 = new Task();
+		taskData2.setDescription("desc 2");
+		long taskId2 = projectService.createTask(usId, taskData2);
+		
+		// when
+		Set<Task> tasks = projectService.getSprintTasks(sprintId);
+		
+		// then
+		assertNotNull(tasks);
+		assertEquals(2, tasks.size());
 	}
 }

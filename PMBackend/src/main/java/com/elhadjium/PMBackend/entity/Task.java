@@ -1,14 +1,25 @@
 package com.elhadjium.PMBackend.entity;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
-public class Task {
+public class Task implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -16,11 +27,32 @@ public class Task {
 	@ManyToOne
 	private User user;
 	
-	@ManyToOne
-	private UserStory userStory;
+	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<UserStoryTasK> taskUserStories = new HashSet<UserStoryTasK>();
 	
 	private String description;
 	private float duration;
+	
+	public void addUserStory(UserStory us) {
+		UserStoryTasK usTask = new UserStoryTasK(us, this);
+		this.taskUserStories.add(usTask);
+		us.getUserStoryTasks().add(usTask);
+	}
+	
+	public void removeUserStory(UserStory us) {
+		UserStoryTasK usTask = new UserStoryTasK(us, this);
+		this.taskUserStories.remove(usTask);
+		us.getUserStoryTasks().remove(usTask);
+		usTask.setTask(null);
+		usTask.setUserStory(null);
+	}
+	
+	public void removeAllUserStory() {
+		Iterator<UserStoryTasK> it = taskUserStories.iterator();
+		while (it.hasNext()) {
+			removeUserStory(it.next().getUserStory());
+		}
+	}
 
 	public Long getId() {
 		return id;
@@ -38,12 +70,12 @@ public class Task {
 		this.user = user;
 	}
 
-	public UserStory getUserStory() {
-		return userStory;
+	public Set<UserStoryTasK> getTaskUserStories() {
+		return taskUserStories;
 	}
 
-	public void setUserStory(UserStory userStory) {
-		this.userStory = userStory;
+	public void setTaskUserStories(Set<UserStoryTasK> taskUserStories) {
+		this.taskUserStories = taskUserStories;
 	}
 
 	public String getDescription() {

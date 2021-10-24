@@ -1,6 +1,7 @@
 package com.elhadjium.PMBackend.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
@@ -23,4 +24,5 @@ public interface ProjectService {
 	public void moveUserStoryToSprint(Long projectId, Long sprintId, Long userStoryId);
 	public Long createTask(Long userStoryId, Task taskData);
 	public void removeTask(Long userStoryId, Long taskId);
+	public Set<Task> getSprintTasks(Long sprintId);
 }

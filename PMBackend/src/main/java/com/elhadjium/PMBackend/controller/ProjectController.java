@@ -1,6 +1,7 @@
 package com.elhadjium.PMBackend.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -136,9 +137,16 @@ public class ProjectController {
 		projectService.removeTask(JavaUtil.parseId(userStoryId), JavaUtil.parseId(taskId));
 	}
 	
-	@GetMapping("{project-id}/user-stories/{user-story-id}/tasks")
-	public Set<GetTaskOutputDTO> getUserstoryTasks() {
-		return null;
+	@GetMapping("{project-id}/sprints/{sprint-id}/tasks")
+	public Set<GetTaskOutputDTO> getUserstoryTasks(@PathVariable("sprint-id") String sprintId) {
+		Set<Task> tasks = projectService.getSprintTasks(JavaUtil.parseId(sprintId));
+		Set<GetTaskOutputDTO> outputList = new HashSet<GetTaskOutputDTO>();
+		tasks.forEach(task -> {
+			GetTaskOutputDTO output = Mapping.mapTo(task, GetTaskOutputDTO.class);
+			outputList.add(output);
+		});
+		
+		return outputList;
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

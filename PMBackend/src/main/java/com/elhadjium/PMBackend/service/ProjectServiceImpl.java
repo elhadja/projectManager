@@ -2,9 +2,13 @@ package com.elhadjium.PMBackend.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -218,9 +222,9 @@ public class ProjectServiceImpl implements ProjectService {
 		Task task = Mapping.mapTo(taskData, Task.class);
 		UserStory us = userStoryDAO.findById(userStoryId).get();
 		task.addUserStory(us);
-		taskDAO.save(taskData);
+		taskDAO.save(task);
 		
-		return taskData.getId();
+		return task.getId();
 	}
 
 	@Override
@@ -229,5 +233,20 @@ public class ProjectServiceImpl implements ProjectService {
 		Task task = taskDAO.findById(taskId).get();
 		task.removeUserStory(userStoryDAO.findById(userStoryId).get());
 		taskDAO.delete(task);
+	}
+
+	@Override
+	@Transactional
+	public Set<Task> getSprintTasks(Long sprintId) {
+		Sprint sprint = sprintDAO.findById(sprintId).get();
+		Set<Task> tasks = new HashSet<Task>();
+		Iterator<UserStory> it = sprint.getUserStories().iterator();
+		while(it.hasNext()) {
+			tasks.addAll(it.next().getUserStoryTasks().stream()
+														.map(userStoryMap -> userStoryMap.getTask())
+														.collect(Collectors.toSet()));
+		}
+
+		return tasks;
 	}
 }

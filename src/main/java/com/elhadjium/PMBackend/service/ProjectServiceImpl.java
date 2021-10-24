@@ -217,7 +217,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public Long createTask(Long userStoryId, Task taskData) {
 		Task task = Mapping.mapTo(taskData, Task.class);
 		UserStory us = userStoryDAO.findById(userStoryId).get();
-		us.addTask(taskData);
+		task.addUserStory(us);
 		taskDAO.save(taskData);
 		
 		return taskData.getId();
@@ -227,6 +227,7 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	public void removeTask(Long userStoryId, Long taskId) {
 		Task task = taskDAO.findById(taskId).get();
-		userStoryDAO.findById(userStoryId).get().removeTask(task);
+		task.removeUserStory(userStoryDAO.findById(userStoryId).get());
+		taskDAO.delete(task);
 	}
 }

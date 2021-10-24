@@ -2,6 +2,7 @@ package com.elhadjium.PMBackend.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import com.elhadjium.PMBackend.dto.AddSprintToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.AddTaskInputDTO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
+import com.elhadjium.PMBackend.dto.GetTaskOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
@@ -123,6 +125,7 @@ public class ProjectController {
 							@PathVariable("user-story-id") String userStoryId,
 							@RequestBody AddTaskInputDTO input) {
 		input.validate();
+		// TODO test mapping
 		return projectService.createTask(JavaUtil.parseId(userStoryId), Mapping.mapTo(input, Task.class));
 	}
 	
@@ -131,6 +134,11 @@ public class ProjectController {
 							@PathVariable("user-story-id") String userStoryId,
 							@PathVariable("task-id") String taskId) {
 		projectService.removeTask(JavaUtil.parseId(userStoryId), JavaUtil.parseId(taskId));
+	}
+	
+	@GetMapping("{project-id}/user-stories/{user-story-id}/tasks")
+	public Set<GetTaskOutputDTO> getUserstoryTasks() {
+		return null;
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

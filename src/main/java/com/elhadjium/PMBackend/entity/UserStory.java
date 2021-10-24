@@ -1,5 +1,6 @@
 package com.elhadjium.PMBackend.entity;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -12,7 +13,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class UserStory {
+public class UserStory implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -24,20 +30,24 @@ public class UserStory {
 	private Sprint sprint;
 	
 	@OneToMany(mappedBy = "userStory" , cascade = CascadeType.ALL, orphanRemoval = true)
-	private Set<Task> tasks = new HashSet<Task>();
+	private Set<UserStoryTasK> userStoryTasks = new HashSet<UserStoryTasK>();
 	
 	private String summary;
 	private String description;
 	private Long storyPoint;
 	
 	public void addTask(Task task) {
-		this.tasks.add(task);
-		task.setUserStory(this);
+		UserStoryTasK usTask = new UserStoryTasK(this, task);
+		this.userStoryTasks.add(usTask);
+		task.getTaskUserStories().add(usTask);
 	}
 	
 	public void removeTask(Task task) {
-		this.tasks.remove(task);
-		task.setUserStory(null);
+		UserStoryTasK usTask = new UserStoryTasK(this, task);
+		this.userStoryTasks.remove(usTask);
+		task.getTaskUserStories().remove(usTask);
+		usTask.setTask(null);
+		usTask.setUserStory(null);
 	}
 
 	public Long getId() {
@@ -88,12 +98,12 @@ public class UserStory {
 		this.summary = summary;
 	}
 	
-	public Set<Task> getTasks() {
-		return tasks;
+	public Set<UserStoryTasK> getUserStoryTasks() {
+		return userStoryTasks;
 	}
 
-	public void setTasks(Set<Task> tasks) {
-		this.tasks = tasks;
+	public void setUserStoryTasks(Set<UserStoryTasK> userStoryTasks) {
+		this.userStoryTasks = userStoryTasks;
 	}
 
 	@Override

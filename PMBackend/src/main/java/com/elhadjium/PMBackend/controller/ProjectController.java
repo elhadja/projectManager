@@ -23,6 +23,7 @@ import com.elhadjium.PMBackend.dto.AddSprintToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.AddTaskInputDTO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
+import com.elhadjium.PMBackend.dto.GetSprintOutputDTO;
 import com.elhadjium.PMBackend.dto.GetTaskOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
@@ -103,9 +104,11 @@ public class ProjectController {
 		return outputList;
 	}
 
+	// TODO to test
 	@PostMapping("{project-id}/sprints")
-	public Long addSprintToProject(Long projectId, AddSprintToProjectInputDTO dto) {
-		return projectService.addSprintToProject(projectId, Mapping.mapTo(dto, Sprint.class));
+	public Long addSprintToProject(@PathVariable("project-id") String projectId,@RequestBody AddSprintToProjectInputDTO dto) {
+		dto.validate();
+		return projectService.addSprintToProject(JavaUtil.parseId(projectId), Mapping.mapTo(dto, Sprint.class));
 	}
 	
 	@PostMapping("{project-id}/backlog/user-stories/{user-story-id}")
@@ -146,6 +149,17 @@ public class ProjectController {
 			outputList.add(output);
 		});
 		
+		return outputList;
+	}
+	
+	@GetMapping("{project-id}/sprints")
+	public List<GetSprintOutputDTO> getProjectSprints(@PathVariable("project-id") String projectId) {
+		List<GetSprintOutputDTO> outputList = new ArrayList<GetSprintOutputDTO>();
+		List<Sprint> sprints = projectService.getProjectSprints(JavaUtil.parseId(projectId));
+		sprints.forEach(sprint -> {
+			outputList.add(Mapping.mapTo(sprint, GetSprintOutputDTO.class));
+		});
+
 		return outputList;
 	}
 

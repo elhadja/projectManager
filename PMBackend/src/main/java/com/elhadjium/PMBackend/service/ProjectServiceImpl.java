@@ -249,4 +249,10 @@ public class ProjectServiceImpl implements ProjectService {
 
 		return tasks;
 	}
+
+	@Override
+	@Transactional
+	public List<Sprint> getProjectSprints(Long projectId) {
+		return projectDao.findById(projectId).get().getSprints();
+	}
 }

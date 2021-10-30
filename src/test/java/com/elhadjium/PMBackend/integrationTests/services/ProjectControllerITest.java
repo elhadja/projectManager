@@ -104,7 +104,7 @@ public class ProjectControllerITest {
 		dto.setName("sprint name");
 		
 		// when
-		Long sprintId = projectController.addSprintToProject(projectId, dto);
+		Long sprintId = projectController.addSprintToProject(String.valueOf(projectId), dto);
 		
 		// then
 		Sprint sprint = sprintDAO.findById(sprintId).get();

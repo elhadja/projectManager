@@ -5,6 +5,8 @@ import java.util.List;
 public class GetSprintOutputDTO {
 	private long id;
 	private String name;
+	private String startDate;
+	private String endDate;
 	private List<GetUserStoryOutputDTO> userStories;
 
 	public long getId() {
@@ -29,5 +31,21 @@ public class GetSprintOutputDTO {
 
 	public void setUserStories(List<GetUserStoryOutputDTO> userStories) {
 		this.userStories = userStories;
+	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 }

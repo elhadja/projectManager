@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -35,15 +37,19 @@ public class UserStory implements Serializable {
 	
 	@Column(nullable = false)
 	private String summary;
+	
+	@Enumerated(EnumType.STRING)
+	private UserStoryStatus status;
+
 	private String description;
 	private Long storyPoint;
 	
 	public UserStory() {
-		
+		this.status = UserStoryStatus.OPEN;
 	}
 	
 	public UserStory(String summary) {
-		super();
+		this();
 		this.summary = summary;
 	}
 
@@ -115,6 +121,14 @@ public class UserStory implements Serializable {
 
 	public void setUserStoryTasks(Set<UserStoryTasK> userStoryTasks) {
 		this.userStoryTasks = userStoryTasks;
+	}
+	
+	public UserStoryStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(UserStoryStatus status) {
+		this.status = status;
 	}
 
 	@Override

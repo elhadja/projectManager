@@ -41,6 +41,7 @@ import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
+import com.elhadjium.PMBackend.entity.UserStoryStatus;
 import com.elhadjium.PMBackend.service.ProjectService;
 import com.elhadjium.PMBackend.service.UserService;
 import com.elhadjium.PMBackend.util.JwtToken;
@@ -135,6 +136,7 @@ public class ProjectControllerTest {
 		
 		UpdateUsertStoryInputDTO input = new UpdateUsertStoryInputDTO();
 		input.setSummary("summary");
+		input.setStatus(UserStoryStatus.CLOSE);
 
 		// when
 		this.mockMvc.perform(put("/pm-api/projects/" + projectId + "/user-stories/" + userStoryId).contentType(MediaType.APPLICATION_JSON).content(stringify(input)))

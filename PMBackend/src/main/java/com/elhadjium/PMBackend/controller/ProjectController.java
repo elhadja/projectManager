@@ -42,13 +42,16 @@ public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
 	
+	// TODO to test
 	@PutMapping("{id}")
 	public void updateProject(@RequestBody UpdateProjectInputDTO input, @PathVariable("id") String projectId) {
 		projectService.updateProject(Long.valueOf(projectId), input);
 	}
 	
+	// TODO to test
 	@PostMapping("{id}/inviteUsers")
-	public void inviteUsersToProject(@RequestBody InviteUsersToProjectInputDTO input, @PathVariable("id") String projectId) throws Exception {
+	public void inviteUsersToProject(@RequestBody InviteUsersToProjectInputDTO input,
+									@PathVariable("id") String projectId) throws Exception {
 		projectService.addInvitations(Long.valueOf(projectId), input);
 	}
 	

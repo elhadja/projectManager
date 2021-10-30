@@ -3,6 +3,7 @@ package com.elhadjium.PMBackend.unitTests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -20,28 +21,36 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.elhadjium.PMBackend.controller.ProjectController;
 import com.elhadjium.PMBackend.dto.AddSprintToProjectInputDTO;
+import com.elhadjium.PMBackend.dto.AddTaskInputDTO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
+import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetSprintOutputDTO;
 import com.elhadjium.PMBackend.dto.GetTaskOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
+import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
+import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
+import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
+import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.ProjectService;
 import com.elhadjium.PMBackend.service.UserService;
 import com.elhadjium.PMBackend.util.JwtToken;
@@ -62,6 +71,8 @@ public class ProjectControllerTest {
 	
 	@MockBean
 	private UserService userService;
+	
+	private ProjectController projectController = new ProjectController();
 	
 	@Test
 	public void getSprintTasks_shouldBeOk() throws Exception {
@@ -250,6 +261,119 @@ public class ProjectControllerTest {
 		assertEquals(1, output.size());
 		assertEquals(sprint.getName(), output.get(0).getName());
 		assertEquals(sprint.getStartDate(), output.get(0).getStartDate());
+	}
+	
+	@Test
+	public void updateProject_shouldBeOk() throws Exception {
+		// prepare
+		final long projectId = 1L;
+		
+		UpdateProjectInputDTO input = new UpdateProjectInputDTO();
+		input.setProjectName("project name");
+		input.setProjectManagersIds(List.of(1L));
+		
+		// when
+		this.mockMvc.perform(put("/pm-api/projects/" + projectId)
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(stringify(input)))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andReturn();
+
+		// then
+		verify(projectService).updateProject(Mockito.eq(projectId), Mockito.any(UpdateProjectInputDTO.class));
+	}
+	
+	@Test
+	public void inviteUserToProject_shouldBeOk() throws Exception {
+		// prepare
+		final long projectId = 1L;
+		
+		InviteUsersToProjectInputDTO input = new InviteUsersToProjectInputDTO();
+		
+		// when
+		this.mockMvc.perform(post("/pm-api/projects/" + projectId + "/inviteUsers")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(stringify(input)))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andReturn();
+
+		// then
+		verify(projectService).addInvitations(Mockito.eq(projectId), Mockito.any(InviteUsersToProjectInputDTO.class));
+	}
+	
+	@Test
+	public void moveUserStoryToSprint_shouldBeOk() throws Exception {
+		// prepare
+		final long projectId = 1;
+		final long sprintId = 2;
+		final long userStoryId = 3;
+
+		// when
+		this.mockMvc.perform(post("/pm-api/projects/" + projectId + "/sprints/" + sprintId + "/user-stories/" + userStoryId)
+						.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andReturn();
+		
+		// then 
+		verify(projectService).moveUserStoryToSprint(Mockito.eq(projectId), Mockito.eq(sprintId), Mockito.eq(userStoryId));
+	}
+	
+	@Test
+	public void createTask_shouldBeOk() throws Exception {
+		// prepare
+		final long projectId = 1;
+		final long userStoryId = 2;
+		
+		AddTaskInputDTO input = new AddTaskInputDTO();
+		input.setDescription("task description");
+		input.setUserId(1);
+		input.setUserStoryId(2);
+
+		// when
+		this.mockMvc.perform(post("/pm-api/projects/" + projectId + "/user-stories/" + userStoryId + "/tasks")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(stringify(input)))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andReturn();
+		
+		// then 
+		verify(projectService).createTask(Mockito.eq(userStoryId), Mockito.any(Task.class));
+	}
+	
+	@Test
+	public void deleteTask_shouldBeOk() throws Exception {
+		// prepare
+		final long projectId = 1;
+		final long userStoryId = 2;
+		final long taskId = 3;
+		
+		AddTaskInputDTO input = new AddTaskInputDTO();
+		input.setDescription("task description");
+		input.setUserId(1);
+		input.setUserStoryId(2);
+
+		// when
+		this.mockMvc.perform(delete("/pm-api/projects/" + projectId + "/user-stories/" + userStoryId + "/tasks/" + taskId)
+						.contentType(MediaType.APPLICATION_JSON))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andReturn();
+		
+		// then 
+		verify(projectService).removeTask(Mockito.eq(userStoryId), Mockito.eq(taskId));
+	}
+	
+	@Test
+	public void handleException_shouldBeOk() throws Exception {
+		// when
+		ResponseEntity<?> response = projectController.handleException(new PMInvalidInputDTO(""));
+		
+		// then
+		assertEquals(400, response.getStatusCodeValue());
 	}
 	
 	private <T> T getObject(MvcResult mvcResult, Class<T> targetClass) throws Exception {

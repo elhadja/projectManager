@@ -8,6 +8,38 @@ public class AddTaskInputDTO implements DTOValidator {
 	private long userStoryId;
 	private String description;
 	private float duration;
+	
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
+	public long getUserStoryId() {
+		return userStoryId;
+	}
+
+	public void setUserStoryId(long userStoryId) {
+		this.userStoryId = userStoryId;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public float getDuration() {
+		return duration;
+	}
+
+	public void setDuration(float duration) {
+		this.duration = duration;
+	}
 
 	@Override
 	public void validate() {

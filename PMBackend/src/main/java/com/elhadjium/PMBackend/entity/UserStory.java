@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -32,10 +33,20 @@ public class UserStory implements Serializable {
 	@OneToMany(mappedBy = "userStory" , cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<UserStoryTasK> userStoryTasks = new HashSet<UserStoryTasK>();
 	
+	@Column(nullable = false)
 	private String summary;
 	private String description;
 	private Long storyPoint;
 	
+	public UserStory() {
+		
+	}
+	
+	public UserStory(String summary) {
+		super();
+		this.summary = summary;
+	}
+
 	public void addTask(Task task) {
 		UserStoryTasK usTask = new UserStoryTasK(this, task);
 		this.userStoryTasks.add(usTask);

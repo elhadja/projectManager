@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -11,15 +12,19 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.elhadjium.PMBackend.Project;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "project_id"})})
 public class Sprint {
 	@Id
 	@GeneratedValue
 	private Long id;
 	
+	@Basic(optional = false)
 	private String name;
 	
 	@Convert(converter = LocalDateTimeStringConverter.class)
@@ -28,7 +33,7 @@ public class Sprint {
 	@Convert(converter = LocalDateTimeStringConverter.class)
 	private String endDate;
 	
-	@ManyToOne
+	@ManyToOne(optional = false)
 	private Project project;
 	
 	// TODO think about us removal

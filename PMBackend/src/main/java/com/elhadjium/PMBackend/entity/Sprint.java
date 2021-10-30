@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -20,6 +21,12 @@ public class Sprint {
 	private Long id;
 	
 	private String name;
+	
+	@Convert(converter = LocalDateTimeStringConverter.class)
+	private String startDate;
+	
+	@Convert(converter = LocalDateTimeStringConverter.class)
+	private String endDate;
 	
 	@ManyToOne
 	private Project project;
@@ -68,6 +75,22 @@ public class Sprint {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
 	}
 
 	@Override

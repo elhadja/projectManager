@@ -2,6 +2,7 @@ package com.elhadjium.PMBackend.unitTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -11,6 +12,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -28,10 +31,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.elhadjium.PMBackend.controller.ProjectController;
+import com.elhadjium.PMBackend.dto.AddSprintToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
+import com.elhadjium.PMBackend.dto.GetSprintOutputDTO;
 import com.elhadjium.PMBackend.dto.GetTaskOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
+import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
@@ -193,6 +199,55 @@ public class ProjectControllerTest {
 	
 		// then
 		verify(projectService).addUserStrotyToBacklog(Mockito.eq(projectId), Mockito.any(AddUserStoryDTO.class));
+	}
+	
+	@Test
+	public void addSprintToProject_shoulbeOk() throws Exception {
+		// prepare
+		final long projectId = 1L;
+		
+		AddSprintToProjectInputDTO input = new AddSprintToProjectInputDTO();
+		input.setName("sprint name");
+		input.setStartDate("2021-10-30 16:27");
+		input.setEndDate("2021-11-30 16:27");
+		
+		// when
+		this.mockMvc.perform(post("/pm-api/projects/" + projectId + "/sprints")
+							.contentType(MediaType.APPLICATION_JSON)
+							.content(stringify(input)))
+					.andDo(print())
+					.andExpect(status().isOk())
+					.andReturn();
+	
+		// then
+		verify(projectService).addSprintToProject(Mockito.eq(projectId), Mockito.any(Sprint.class));
+	}
+	
+	@Test
+	public void getProjectSprint_shouldBeOk() throws Exception {
+		// prepare
+		final long projectId = 1L;
+		
+		Sprint sprint = new Sprint();
+		sprint.setName("sprint name");
+		sprint.setStartDate("2021-10-30 16:27");
+		sprint.setEndDate("2021-11-30 16:27");
+
+		when(projectService.getProjectSprints(projectId)).thenReturn(List.of(sprint));
+
+		// when
+		MvcResult res = this.mockMvc.perform(get("/pm-api/projects/" + projectId + "/sprints")
+							.contentType(MediaType.APPLICATION_JSON))
+					.andDo(print())
+					.andExpect(status().isOk())
+					.andReturn();
+		
+		// then
+		List<GetSprintOutputDTO> output = Arrays.asList(getObject(res, GetSprintOutputDTO[].class));
+		assertNotNull(output);
+		assertEquals(1, output.size());
+		assertEquals(sprint.getName(), output.get(0).getName());
+		assertEquals(sprint.getStartDate(), output.get(0).getStartDate());
 	}
 	
 	private <T> T getObject(MvcResult mvcResult, Class<T> targetClass) throws Exception {

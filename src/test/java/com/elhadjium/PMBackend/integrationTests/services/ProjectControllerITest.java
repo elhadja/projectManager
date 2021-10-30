@@ -77,6 +77,7 @@ public class ProjectControllerITest {
 		Long projectId = userService.CreateUserProject(userId, project);
 		
 		Sprint sprintData = new Sprint();
+		sprintData.setName("sprint name");
 		Long sprintId = projectService.addSprintToProject(projectId, sprintData);
 		
 		projectService.addUserStoryToSprint(sprintId, new AddUserStoryDTO("a summary x"));

@@ -25,6 +25,8 @@ import { BacklogComponent } from './backlog/backlog.component';
 import { DialogCreateUerStoryComponent } from './dialog/dialog-create-uer-story/dialog-create-uer-story.component';
 import { BacklogService } from './services/backlog.service';
 import { DialogCreateSprintComponent } from './dialog/dialog-create-sprint/dialog-create-sprint.component';
+import { DialogUserStoryDetailsComponent } from './dialog/dialog-user-story-details/dialog-user-story-details.component';
+import {BadgeModule} from 'primeng/badge';
 
 
 const routes: Routes = [
@@ -33,7 +35,8 @@ const routes: Routes = [
 ]
 
 const PRIME_NG_MODULES = [
-  TableModule
+  TableModule,
+  BadgeModule
 ]
 
 const MAT_MODULES = [
@@ -54,7 +57,8 @@ const MAT_MODULES = [
     DialogProjectDetailsComponent,
     BacklogComponent,
     DialogCreateUerStoryComponent,
-    DialogCreateSprintComponent
+    DialogCreateSprintComponent,
+    DialogUserStoryDetailsComponent
   ],
   imports: [
     CommonModule,

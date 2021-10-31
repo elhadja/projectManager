@@ -1,17 +1,39 @@
 <div class="container">
     <!-- sprints -->
-     <div class="row" *ngFor="let sprint of sprints">
+     <div class="row my-5" *ngFor="let sprintWrapper of sprintWrappers">
         <div class="col">
-            <h3> {{ sprint.name }}</h3>
-            <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromSprint(sprint.id)>create U.S</button>
-            <p-table [value]="sprint.userStories" 
+            <p-table [value]="sprintWrapper.sprint.userStories" 
                     responsiveLayout="scroll"
                     styleClass="p-datatable-striped">
+                <ng-template pTemplate="caption">
+                    <div class="d-flex flex-row justify-content-between">
+                        <div>
+                            <span class="mx-1"> {{ sprintWrapper.sprint.name }}</span>
+                            <p-badge severity="info" styleClass="p-mr-2" [value]="sprintWrapper.totalStoryPoints"></p-badge>
+                            <p-badge class="mx-1" severity="success" styleClass="p-mr-2" [value]="sprintWrapper.totalClosedUserStoriesStoryPoints"></p-badge>
+                            <p-badge severity="danger" styleClass="p-mr-2" [value]="sprintWrapper.totalOpenedUserStoriesStoryPoints"></p-badge>
+                        </div>
+                        <div>
+                            <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromSprint(sprintWrapper.sprint.id)>create U.S</button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="colgroup">
+                    <colgroup>
+                        <col style="width:10%">
+                        <col style="width:60%">
+                        <col style="width:10%">
+                        <col style="width:10%">
+                        <col style="width:10%">
+                    </colgroup>
+                </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th>ID</th>
                         <th>summary</th>
                         <th>storyPoint</th>
+                        <th>Importance</th>
+                        <th>Status</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
@@ -19,6 +41,8 @@
                         <td>{{row.id}}</td>
                         <td>{{row.summary}}</td>
                         <td>{{row.storyPoint}}</td>
+                        <td>Normale</td>
+                        <td>Ouvert</td>
                 </tr>
                 </ng-template>
             </p-table>
@@ -27,26 +51,52 @@
    
 
     <!-- backlog -->
-    <div class="row">
+    <div class="row my-5">
         <div class="col">
-            <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromBacklog()>create U.S</button>
-            <button mat-stroked-button (click)=onOpenCreateSprintDialog()>create sprint</button>
-            <p-table [value]="userStories" 
-                    responsiveLayout="scroll"
-                    styleClass="p-datatable-striped">
+            <p-table [value]="userStories">
+                <ng-template pTemplate="caption">
+                    <div class="d-flex flex-row justify-content-between">
+                        <div>
+                            <span style="vertical-align:baseline;">Backlog</span>
+                        </div>
+                        <div>
+                            <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromBacklog()>create U.S</button>
+                            <button mat-stroked-button (click)=onOpenCreateSprintDialog()>create sprint</button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="colgroup">
+                    <colgroup>
+                        <col style="width:10%">
+                        <col style="width:65%">
+                        <col style="width:15%">
+                        <col style="width:10%">
+                    </colgroup>
+                </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th>ID</th>
                         <th>summary</th>
-                        <th>storyPoint</th>
+                        <th class="d-flex justify-content-between">
+                            storyPoint
+                            <p-badge severity="success" styleClass="p-mr-2" [value]="backlogTotalStoryPoints"></p-badge></th>
+                        <th>Importance</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
-                    <tr>
+                    <tr (click)="onOpenUserStory(row)">
                         <td>{{row.id}}</td>
                         <td>{{row.summary}}</td>
                         <td>{{row.storyPoint}}</td>
-                </tr>
+                        <td>Normale</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td colspan = "3">
+                            No records found
+                        </td>
+                    </tr>
                 </ng-template>
             </p-table>
         </div>

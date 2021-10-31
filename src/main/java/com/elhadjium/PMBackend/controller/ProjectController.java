@@ -56,13 +56,13 @@ public class ProjectController {
 	}
 	
 	@PostMapping("{project-id}/backlog/user-stories")
-	public void createUserStoryInBacklog(@RequestBody AddUserStoryDTO input, @PathVariable("project-id") String projectId) throws Exception {
-		projectService.addUserStrotyToBacklog(Long.parseLong(projectId), input);
+	public long createUserStoryInBacklog(@RequestBody AddUserStoryDTO input, @PathVariable("project-id") String projectId) throws Exception {
+		return projectService.addUserStrotyToBacklog(Long.parseLong(projectId), input);
 	}
 	
 	@PostMapping("{project-id}/sprints/{sprint-id}/user-stories")
-	public void createUserStoryInSprint(@RequestBody AddUserStoryDTO input, @PathVariable("sprint-id") String sprintId) throws Exception {
-		projectService.addUserStoryToSprint(Long.parseLong(sprintId), input);
+	public long createUserStoryInSprint(@RequestBody AddUserStoryDTO input, @PathVariable("sprint-id") String sprintId) throws Exception {
+		return projectService.addUserStoryToSprint(Long.parseLong(sprintId), input);
 	}
 	
 	@DeleteMapping("{project-id}/user-stories/{user-story-id}")

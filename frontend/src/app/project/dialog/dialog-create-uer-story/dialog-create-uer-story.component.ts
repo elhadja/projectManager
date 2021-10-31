@@ -14,7 +14,7 @@ export class DialogCreateUerStoryComponent implements OnInit {
   constructor(private fb: FormBuilder,
              private matDialogRef: MatDialogRef<DialogCreateUerStoryComponent, AddUserStoryOutputDTO>) {
     this.userStoryForm = fb.group({
-      "summary": fb.control('', [Validators.required, Validators.maxLength(100)]),
+      "summary": fb.control('', [Validators.required, Validators.maxLength(200)]),
       "description": fb.control(''),
       "storyPoint": fb.control('')
     });

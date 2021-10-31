@@ -4,5 +4,6 @@ export interface GetUserStoriesInputDTO {
     id: number,
     summary: string,
     description?: string,
-    storyPoint?: string
+    storyPoint?: number
+    status?: string
 }

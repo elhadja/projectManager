@@ -21,10 +21,15 @@ import { DialogProjectDetailsComponent } from './dialog/dialog-project-details/d
 import {TableModule} from 'primeng/table';
 import { DialogDetailsProjectService } from './services/dialogProjectDetails.service';
 import {MatTabsModule} from '@angular/material/tabs';
+import { BacklogComponent } from './backlog/backlog.component';
+import { DialogCreateUerStoryComponent } from './dialog/dialog-create-uer-story/dialog-create-uer-story.component';
+import { BacklogService } from './services/backlog.service';
+import { DialogCreateSprintComponent } from './dialog/dialog-create-sprint/dialog-create-sprint.component';
 
 
 const routes: Routes = [
-  {path: '', canActivate: [RouteSecureService], component: HomeComponent}
+  {path: '', canActivate: [RouteSecureService], component: HomeComponent},
+  {path: 'backlog/:backlog-id', canActivate: [RouteSecureService], component: BacklogComponent}
 ]
 
 const PRIME_NG_MODULES = [
@@ -46,7 +51,10 @@ const MAT_MODULES = [
   declarations: [
     HomeComponent,
     CreateProjectComponent,
-    DialogProjectDetailsComponent
+    DialogProjectDetailsComponent,
+    BacklogComponent,
+    DialogCreateUerStoryComponent,
+    DialogCreateSprintComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +72,8 @@ const MAT_MODULES = [
   providers: [
     HomeService,
     DialogCreateProjectService,
-    DialogDetailsProjectService
+    DialogDetailsProjectService,
+    BacklogService
   ]
 })
 export class ProjectModule { }

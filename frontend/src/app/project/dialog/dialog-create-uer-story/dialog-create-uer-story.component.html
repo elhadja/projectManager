@@ -1,0 +1,29 @@
+<div class="ng-container">
+    <div class="row">
+        <div class="col">
+            <form [formGroup]="userStoryForm" (ngSubmit)="onValidate()">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Summary</mat-label>
+                    <input type="text" matInput formControlName="summary" required minlength="2">
+                    <mat-error *ngIf="summary != null && summary.hasError('required')">
+                        this field is <strong>required</strong>
+                    </mat-error>
+                    <mat-error *ngIf="summary != null && summary.hasError('minlength')">
+                        2 characteres <strong>minimum</strong>
+                    </mat-error>
+                </mat-form-field >
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Description</mat-label>
+                    <textarea type="text" matInput formControlName="description"></textarea>
+                </mat-form-field >
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Story points</mat-label>
+                    <textarea type="text" matInput formControlName="storyPoint"></textarea>
+                </mat-form-field >
+ 
+                <button type="submit" [disabled]="userStoryForm.invalid">valider</button>
+                <button (click)="onCancel()">annuler</button>
+            </form>
+        </div>
+    </div>
+</div>

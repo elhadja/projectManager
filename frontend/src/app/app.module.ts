@@ -13,8 +13,14 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { sessionManagerService } from './services/sessionManager.service';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader'
+import { ProjectApiService } from './PMApi/project.api';
 
-const SERVICES = [API, MessageService, RouteSecureService, sessionManagerService];
+const SERVICES = [API, 
+                  MessageService,
+                  RouteSecureService,
+                  sessionManagerService,
+                  ProjectApiService
+                ];
 
 @NgModule({
   declarations: [

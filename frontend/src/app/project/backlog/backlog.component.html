@@ -1,0 +1,54 @@
+<div class="container">
+    <!-- sprints -->
+     <div class="row" *ngFor="let sprint of sprints">
+        <div class="col">
+            <h3> {{ sprint.name }}</h3>
+            <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromSprint(sprint.id)>create U.S</button>
+            <p-table [value]="sprint.userStories" 
+                    responsiveLayout="scroll"
+                    styleClass="p-datatable-striped">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>ID</th>
+                        <th>summary</th>
+                        <th>storyPoint</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td>{{row.id}}</td>
+                        <td>{{row.summary}}</td>
+                        <td>{{row.storyPoint}}</td>
+                </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+   
+
+    <!-- backlog -->
+    <div class="row">
+        <div class="col">
+            <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromBacklog()>create U.S</button>
+            <button mat-stroked-button (click)=onOpenCreateSprintDialog()>create sprint</button>
+            <p-table [value]="userStories" 
+                    responsiveLayout="scroll"
+                    styleClass="p-datatable-striped">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>ID</th>
+                        <th>summary</th>
+                        <th>storyPoint</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td>{{row.id}}</td>
+                        <td>{{row.summary}}</td>
+                        <td>{{row.storyPoint}}</td>
+                </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

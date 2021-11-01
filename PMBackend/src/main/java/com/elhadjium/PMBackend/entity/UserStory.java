@@ -41,6 +41,9 @@ public class UserStory implements Serializable {
 	@Enumerated(EnumType.STRING)
 	private UserStoryStatus status;
 
+	@Enumerated(EnumType.STRING)
+	private UserStoryImportance importance;
+
 	private String description;
 	private Long storyPoint;
 	
@@ -129,6 +132,14 @@ public class UserStory implements Serializable {
 
 	public void setStatus(UserStoryStatus status) {
 		this.status = status;
+	}
+	
+	public UserStoryImportance getImportance() {
+		return importance;
+	}
+
+	public void setImportance(UserStoryImportance importance) {
+		this.importance = importance;
 	}
 
 	@Override

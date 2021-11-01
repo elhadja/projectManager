@@ -27,6 +27,7 @@ import { BacklogService } from './services/backlog.service';
 import { DialogCreateSprintComponent } from './dialog/dialog-create-sprint/dialog-create-sprint.component';
 import { DialogUserStoryDetailsComponent } from './dialog/dialog-user-story-details/dialog-user-story-details.component';
 import {BadgeModule} from 'primeng/badge';
+import { MatSelectModule } from '@angular/material/select';
 
 
 const routes: Routes = [
@@ -47,7 +48,8 @@ const MAT_MODULES = [
     MatButtonModule,
     MatMenuModule,
     MatIconModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSelectModule
 ]
 
 @NgModule({

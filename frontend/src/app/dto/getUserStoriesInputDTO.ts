@@ -5,5 +5,6 @@ export interface GetUserStoriesInputDTO {
     summary: string,
     description?: string,
     storyPoint?: number
-    status?: string
+    status?: string,
+    importance?: string
 }

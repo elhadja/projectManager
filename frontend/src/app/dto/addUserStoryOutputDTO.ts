@@ -1,5 +1,6 @@
 export interface AddUserStoryOutputDTO {
     summary: string,
     description?: string,
-    storyPoint?: number
+    storyPoint?: number,
+    importance?: string
 }

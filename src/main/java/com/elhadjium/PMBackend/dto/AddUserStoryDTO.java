@@ -1,5 +1,6 @@
 package com.elhadjium.PMBackend.dto;
 
+import com.elhadjium.PMBackend.entity.UserStoryImportance;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
 import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.util.JavaUtil;
@@ -9,6 +10,7 @@ public class AddUserStoryDTO implements DTOValidator{
 	private String description;
 	private Long storyPoint;
 	private UserStoryStatus status;
+	private UserStoryImportance importance;
 	
 	public AddUserStoryDTO() {
 	}
@@ -47,6 +49,14 @@ public class AddUserStoryDTO implements DTOValidator{
 
 	public void setStatus(UserStoryStatus status) {
 		this.status = status;
+	}
+	
+	public UserStoryImportance getImportance() {
+		return importance;
+	}
+
+	public void setImportance(UserStoryImportance importance) {
+		this.importance = importance;
 	}
 
 	@Override

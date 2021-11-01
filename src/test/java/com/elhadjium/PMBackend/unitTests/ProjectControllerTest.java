@@ -48,6 +48,7 @@ import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
+import com.elhadjium.PMBackend.entity.UserStoryImportance;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
 import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
@@ -120,6 +121,8 @@ public class ProjectControllerTest {
 		us1.setId(2L);
 		us1.setSummary("summary 2");
 		us1.setDescription("desc 2");
+		us1.setStatus(UserStoryStatus.CLOSE);
+		us1.setImportance(UserStoryImportance.HIGHT);
 	
 		when(projectService.getBacklogUserStories(projectId)).thenReturn(List.of(us1, us2));
 		
@@ -137,6 +140,8 @@ public class ProjectControllerTest {
 		assertEquals(us1.getId(), usToCheck.getId());
 		assertEquals(us1.getSummary(), usToCheck.getSummary());
 		assertEquals(us1.getDescription(), usToCheck.getDescription());
+		assertEquals(us1.getStatus().CLOSE, usToCheck.getStatus());
+		assertEquals(us1.getImportance(), usToCheck.getImportance());
 	}
 	
 	@Test

@@ -1,5 +1,6 @@
 package com.elhadjium.PMBackend.dto;
 
+import com.elhadjium.PMBackend.entity.UserStoryImportance;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
 
 public class GetUserStoryOutputDTO {
@@ -8,6 +9,7 @@ public class GetUserStoryOutputDTO {
 	private String description;
 	private Long storyPoint;
 	private UserStoryStatus status;
+	private UserStoryImportance importance;
 
 	public Long getId() {
 		return id;
@@ -47,5 +49,13 @@ public class GetUserStoryOutputDTO {
 
 	public void setStatus(UserStoryStatus status) {
 		this.status = status;
+	}
+
+	public UserStoryImportance getImportance() {
+		return importance;
+	}
+
+	public void setImportance(UserStoryImportance importance) {
+		this.importance = importance;
 	}
 }

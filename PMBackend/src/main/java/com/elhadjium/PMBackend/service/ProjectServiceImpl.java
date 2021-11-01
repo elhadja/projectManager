@@ -33,6 +33,7 @@ import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
+import com.elhadjium.PMBackend.entity.UserStoryStatus;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 
 @Service
@@ -133,6 +134,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public long addUserStrotyToBacklog(Long projectId, AddUserStoryDTO userStoryDTO) {
 		userStoryDTO.validate();
 		UserStory us = Mapping.mapTo(userStoryDTO, UserStory.class);
+		us.setStatus(UserStoryStatus.OPEN);
 		userStoryDAO.save(us);
 		Backlog backlog = projectDao.findById(projectId).get().getBacklog();
 		backlog.addUserStory(us);
@@ -145,6 +147,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public long addUserStoryToSprint(Long sprintId, AddUserStoryDTO userStoryDTO) {
 		userStoryDTO.validate();
 		UserStory us = Mapping.mapTo(userStoryDTO, UserStory.class);
+		us.setStatus(UserStoryStatus.OPEN);
 		sprintDAO.findById(sprintId).get().addUserStory(us);
 		userStoryDAO.save(us);
 		return us.getId();

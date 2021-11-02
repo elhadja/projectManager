@@ -1,4 +1,4 @@
-package com.elhadjium.PMBackend.service;
+package com.elhadjium.PMBackend.dao;
 
 import java.util.List;
 

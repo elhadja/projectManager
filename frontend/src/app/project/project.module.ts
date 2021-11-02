@@ -21,14 +21,23 @@ import { DialogProjectDetailsComponent } from './dialog/dialog-project-details/d
 import {TableModule} from 'primeng/table';
 import { DialogDetailsProjectService } from './services/dialogProjectDetails.service';
 import {MatTabsModule} from '@angular/material/tabs';
+import { BacklogComponent } from './backlog/backlog.component';
+import { DialogCreateUerStoryComponent } from './dialog/dialog-create-uer-story/dialog-create-uer-story.component';
+import { BacklogService } from './services/backlog.service';
+import { DialogCreateSprintComponent } from './dialog/dialog-create-sprint/dialog-create-sprint.component';
+import { DialogUserStoryDetailsComponent } from './dialog/dialog-user-story-details/dialog-user-story-details.component';
+import {BadgeModule} from 'primeng/badge';
+import { MatSelectModule } from '@angular/material/select';
 
 
 const routes: Routes = [
-  {path: '', canActivate: [RouteSecureService], component: HomeComponent}
+  {path: '', canActivate: [RouteSecureService], component: HomeComponent},
+  {path: 'backlog/:backlog-id', canActivate: [RouteSecureService], component: BacklogComponent}
 ]
 
 const PRIME_NG_MODULES = [
-  TableModule
+  TableModule,
+  BadgeModule
 ]
 
 const MAT_MODULES = [
@@ -39,14 +48,19 @@ const MAT_MODULES = [
     MatButtonModule,
     MatMenuModule,
     MatIconModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSelectModule
 ]
 
 @NgModule({
   declarations: [
     HomeComponent,
     CreateProjectComponent,
-    DialogProjectDetailsComponent
+    DialogProjectDetailsComponent,
+    BacklogComponent,
+    DialogCreateUerStoryComponent,
+    DialogCreateSprintComponent,
+    DialogUserStoryDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -64,7 +78,8 @@ const MAT_MODULES = [
   providers: [
     HomeService,
     DialogCreateProjectService,
-    DialogDetailsProjectService
+    DialogDetailsProjectService,
+    BacklogService
   ]
 })
 export class ProjectModule { }

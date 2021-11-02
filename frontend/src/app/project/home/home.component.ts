@@ -64,8 +64,7 @@ export class HomeComponent implements OnInit {
   }
 
   public onClickOnProject(projectId: number): void{
-    // TODO manage page loading
-    this.router.navigateByUrl('/notFound');
+    this.router.navigateByUrl('/project/backlog/' + projectId);
   }
 
   public onOpenProjectDetails(project: projectInputDTO): void {

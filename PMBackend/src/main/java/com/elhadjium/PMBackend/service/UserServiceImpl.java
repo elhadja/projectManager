@@ -22,6 +22,7 @@ import com.elhadjium.PMBackend.dao.InvitationToProjectDAO;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
+import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.CustomUserDetailsImpl;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.User;
@@ -78,6 +79,9 @@ public class UserServiceImpl implements UserService {
 		try {
 			User user = userDAO.findById(userId).get();
 			project.addManager(user);
+			Backlog backlog = new Backlog();
+			backlog.setProject(project);
+			project.setBacklog(backlog);
 			project = projectDAO.save(project);
 			user.addProject(project);
 		} catch (NoSuchElementException e) {

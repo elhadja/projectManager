@@ -266,4 +266,20 @@ public class ProjectServiceImpl implements ProjectService {
 	public List<Sprint> getProjectSprints(Long projectId) {
 		return projectDao.findById(projectId).get().getSprints();
 	}
+
+	@Override
+	@Transactional
+	public void deleteSprint(long projectId, long sprintId) {
+		Project project = projectDao.findById(projectId).get();
+		Sprint sprintToDelete = sprintDAO.findById(sprintId).get();
+		Iterator<UserStory> it = sprintToDelete.getUserStories().iterator();
+		while (it.hasNext()) {
+			UserStory us = it.next();
+			project.getBacklog().addUserStory(us);
+			us.setSprint(null);
+		}
+		sprintToDelete.getUserStories().clear();
+		
+		project.removeSprint(sprintToDelete);
+	}
 }

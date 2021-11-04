@@ -156,8 +156,14 @@ public class ProjectServiceImpl implements ProjectService {
 	// FIXME US Could be in sprint and not in backlog
 	@Transactional
 	public void deleteUserStoryFromProject(long projectId, long userStoryId) {
-		Project project = projectDao.findById(projectId).get();
-		project.getBacklog().deleteUserStory(userStoryDAO.findById(userStoryId).get());
+		UserStory userStoryToDelete = userStoryDAO.findById(userStoryId).get();
+		if (userStoryToDelete.getBacklog() != null) {
+			userStoryToDelete.getBacklog().deleteUserStory(userStoryToDelete);
+		} else {
+			userStoryToDelete.getSprint().removeUserStory(userStoryToDelete);
+		}
+		
+		userStoryDAO.delete(userStoryToDelete);
 	}
 
 	@Override

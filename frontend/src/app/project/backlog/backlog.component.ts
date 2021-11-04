@@ -143,12 +143,16 @@ export class BacklogComponent implements OnInit {
   }
 
   public onOpenUserStory(row: GetUserStoriesInputDTO): void {
-    const dialogRef = this.materialDialogservice.open(DialogUserStoryDetailsComponent, {
+    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {
       data: row
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log("dialog closed");
+    dialogRef.afterClosed().subscribe((userStoryToUpdate) => {
+      if (userStoryToUpdate != null) {
+        this.projectApiService.updateUserStory(this.projectId, row.id, userStoryToUpdate).subscribe(() => {
+          this.ngOnInit();
+        });
+      }
     });
   }
 

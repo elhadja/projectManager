@@ -27,7 +27,9 @@
                         <mat-option *ngFor="let option of userStoryImportanceValues" [value]="option.value">{{option.label}}</mat-option>
                     </mat-select>
                 </mat-form-field >
-                <button mat-stroked-button class="mr-2" type="submit" [disabled]="userStoryForm.invalid">valider</button>
+                <button mat-stroked-button class="mr-2" type="submit"
+                       [disabled]="userStoryForm.invalid">{{ isUpdateMode ? 'Update' : 'Create' }}
+                </button>
                 <button mat-stroked-button (click)="onCancel()">annuler</button>
             </form>
         </div>

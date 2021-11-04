@@ -37,7 +37,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
-                    <tr>
+                    <tr (click)="onOpenUserStory(row)">
                         <td>{{row.id}}</td>
                         <td>{{row.summary}}</td>
                         <td>{{row.storyPoint}}</td>

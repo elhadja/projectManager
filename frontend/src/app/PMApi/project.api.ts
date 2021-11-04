@@ -31,4 +31,12 @@ export class ProjectApiService {
     public addUserStoryToSprint(projectId: number, sprintId: number, input: AddUserStoryOutputDTO): Observable<void> {
         return this.api.post(this.baseURI + '/' + projectId + '/' + this.sprint + '/' + sprintId + '/' + this.userStories, input);
     }
+
+    public updateUserStory(projectId: number, userStoryId: number, input: AddUserStoryOutputDTO): Observable<void> {
+        return this.api.put(this.baseURI + '/' + projectId + '/user-stories/' + userStoryId, input);
+    }
+
+    public deleteUserStory(projectId: number, userStoryId: number): Observable<void> {
+        return this.api.delete(this.baseURI + '/' + projectId + '/user-stories/' + userStoryId);
+    }
 }

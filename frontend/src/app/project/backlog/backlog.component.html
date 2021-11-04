@@ -3,6 +3,7 @@
      <div class="row my-5" *ngFor="let sprintWrapper of sprintWrappers">
         <div class="col">
             <p-table [value]="sprintWrapper.sprint.userStories" 
+                    [(selection)]="selectedUserStoriesForSprintTables"
                     responsiveLayout="scroll"
                     styleClass="p-datatable-striped">
                 <ng-template pTemplate="caption">
@@ -20,7 +21,8 @@
                 </ng-template>
                 <ng-template pTemplate="colgroup">
                     <colgroup>
-                        <col style="width:10%">
+                        <col style="width:5%">
+                        <col style="width:5%">
                         <col style="width:60%">
                         <col style="width:10%">
                         <col style="width:10%">
@@ -29,6 +31,9 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
                         <th>ID</th>
                         <th>summary</th>
                         <th>storyPoint</th>
@@ -37,13 +42,16 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
-                    <tr (click)="onOpenUserStory(row)">
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                        </td>
                         <td>{{row.id}}</td>
-                        <td>{{row.summary}}</td>
+                        <td (click)="onOpenUserStory(row)">{{row.summary}}</td>
                         <td>{{row.storyPoint}}</td>
                         <td>{{row.importance}}</td>
                         <td>{{row.status}}</td>
-                </tr>
+                    </tr>
                 </ng-template>
             </p-table>
         </div>
@@ -53,7 +61,7 @@
     <!-- backlog -->
     <div class="row my-5">
         <div class="col">
-            <p-table [value]="userStories">
+            <p-table [value]="userStories" [(selection)]="selectedUserStoriesFromBacklog">
                 <ng-template pTemplate="caption">
                     <div class="d-flex flex-row justify-content-between">
                         <div>
@@ -67,7 +75,8 @@
                 </ng-template>
                 <ng-template pTemplate="colgroup">
                     <colgroup>
-                        <col style="width:10%">
+                        <col style="width:5%">
+                        <col style="width:5%">
                         <col style="width:65%">
                         <col style="width:15%">
                         <col style="width:10%">
@@ -75,6 +84,9 @@
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
                         <th>ID</th>
                         <th>summary</th>
                         <th class="d-flex justify-content-between">
@@ -84,9 +96,12 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
-                    <tr (click)="onOpenUserStory(row)">
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                        </td>
                         <td>{{row.id}}</td>
-                        <td>{{row.summary}}</td>
+                        <td (click)="onOpenUserStory(row)">{{row.summary}}</td>
                         <td>{{row.storyPoint}}</td>
                         <td>{{row.importance}}</td>
                     </tr>

@@ -26,6 +26,8 @@ export class BacklogComponent implements OnInit {
   public readonly projectId: number;
   public backlogTotalStoryPoints: string;
   public sprintWrappers: SprintWrapper[];
+  public selectedUserStoriesForSprintTables: GetUserStoriesInputDTO[];
+  public selectedUserStoriesFromBacklog: GetUserStoriesInputDTO[];
 
   constructor(private materialDialogservice: MatDialog,
               private backlogService: BacklogService,
@@ -42,6 +44,8 @@ export class BacklogComponent implements OnInit {
     this.userStories = [];
     this.backlogTotalStoryPoints = '0'
     this.sprintWrappers = [];
+    this.selectedUserStoriesForSprintTables = [];
+    this.selectedUserStoriesFromBacklog = [];
   }
 
   ngOnInit(): void {

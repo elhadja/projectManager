@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -20,6 +22,7 @@ import org.springframework.test.context.jdbc.Sql;
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.controller.ProjectController;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
+import com.elhadjium.PMBackend.dao.SprintDAO;
 import com.elhadjium.PMBackend.dao.TaskDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dao.UserStoryDAO;
@@ -57,6 +60,9 @@ public class ProjectServiceITest {
 	
 	@Autowired
 	TaskDAO taskDAO;
+	
+	@Autowired
+	SprintDAO sprintDAO;
 	
 	@Test
 	@Sql("/data.sql")
@@ -124,7 +130,40 @@ public class ProjectServiceITest {
 	}
 	
 	@Test
-	public void deleteUserStoryFromProject_ok() throws Exception {
+	public void deleteUserStoryFromProject_shouldRemoveUserStoryFromSprint() throws Exception {
+		// prepare
+		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		Sprint sprintData = new Sprint();
+		sprintData.setName("sprint name");
+		Long sprintId = projectService.addSprintToProject(projectId, sprintData);
+
+		
+		long usId = projectService.addUserStoryToSprint(sprintId, new AddUserStoryDTO("a summary"));
+		
+		// when
+		projectService.deleteUserStoryFromProject(projectId, usId);
+		
+		// then
+		// user story should not exists in sprint
+		List<UserStory> userStories = projectService.getSprintUserStories(projectId, sprintId);
+		assertTrue(userStories.isEmpty());
+		
+		// user story should not exists in database
+		try {
+			UserStory us = userStoryDAO.findById(usId).get();
+			fail();
+		} catch (NoSuchElementException e) {
+			
+		}
+	}
+	
+	@Test
+	public void deleteUserStoryFromProject_shouldRemoveUserStoryFromBacklog() throws Exception {
 		// prepare
 		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
@@ -138,8 +177,16 @@ public class ProjectServiceITest {
 		projectService.deleteUserStoryFromProject(projectId, usId);
 		
 		// then
+		// us should not exist in backlog
 		Project projectAssert = projectDAO.findById(projectId).get();
 		assertTrue(projectAssert.getBacklog().getUserStories().isEmpty());
+		// us should not exist in database
+		try {
+			userStoryDAO.findById(usId).get();
+			fail();
+		} catch (NoSuchElementException e) {
+			// TODO: handle exception
+		}
 	}
 	
 	@Test

@@ -160,4 +160,17 @@ export class BacklogComponent implements OnInit {
     });
   }
 
+  public onDeleteSelectedBacklogUserStories(): void {
+    this.selectedUserStoriesFromBacklog.forEach(us => {
+      this.projectApiService.deleteUserStory(this.projectId, us.id).subscribe(() => {
+        this.userStories = this.userStories.filter(usToCheck => usToCheck.id !== us.id);
+        this.selectedUserStoriesFromBacklog = this.selectedUserStoriesFromBacklog.filter(usToCheck => usToCheck.id !== us.id)
+
+        if (this.selectedUserStoriesFromBacklog.length === 0) {
+          this.messageService.showSuccessMessage("All selected user stories are deleted from backlog");
+        }
+      });
+    });
+  }
+
 }

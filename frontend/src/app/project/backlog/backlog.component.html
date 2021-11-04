@@ -68,6 +68,7 @@
                             <span style="vertical-align:baseline;">Backlog</span>
                         </div>
                         <div>
+                            <button *ngIf="selectedUserStoriesFromBacklog.length > 0" mat-stroked-button (click)=onDeleteSelectedBacklogUserStories()>delete U.S</button>
                             <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromBacklog()>create U.S</button>
                             <button mat-stroked-button (click)=onOpenCreateSprintDialog()>create sprint</button>
                         </div>

@@ -1,6 +1,7 @@
 package com.elhadjium.PMBackend.integrationTests.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -316,5 +317,37 @@ public class ProjectServiceITest {
 		// then
 		assertNotNull(tasks);
 		assertEquals(2, tasks.size());
+	}
+	
+	@Test
+	public void deleteSprint_shouldMoveAllUserStoriesToBacklogBeforeDeleting() throws Exception {
+		// prepare
+		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		Sprint sprintData = new Sprint();
+		sprintData.setName("sprint name");
+		Long sprintId = projectService.addSprintToProject(projectId, sprintData);
+		
+		long usId = projectService.addUserStoryToSprint(sprintId, new AddUserStoryDTO("a summary 1"));
+		
+		// when
+		projectService.deleteSprint(projectId, sprintId);
+		
+		// then
+		// all sprint's user stories should be moved from sprint to backlog
+		Project projectToCheck = projectDAO.findById(projectId).get();
+		assertEquals(1, projectToCheck.getBacklog().getUserStories().size());
+		
+		// sprint should no exists in database
+		try {
+			sprintDAO.findById(sprintId).get();
+			fail();
+		} catch (NoSuchElementException e) {
+			// TODO: handle exception
+		}
 	}
 }

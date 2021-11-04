@@ -165,6 +165,11 @@ public class ProjectController {
 
 		return outputList;
 	}
+	
+	@DeleteMapping("{project-id}/sprints/{sprint-id}")
+	public void deleteSprint(@PathVariable("") String projectId, @PathVariable("") String sprintId) {
+		projectService.deleteSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId));
+	}
 
 	@ExceptionHandler({PMRuntimeException.class})
 	public ResponseEntity<?> handleException(PMRuntimeException ex) {

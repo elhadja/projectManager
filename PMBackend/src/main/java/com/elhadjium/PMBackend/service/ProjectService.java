@@ -26,4 +26,5 @@ public interface ProjectService {
 	public void removeTask(Long userStoryId, Long taskId);
 	public Set<Task> getSprintTasks(Long sprintId);
 	public List<Sprint> getProjectSprints(Long projectId);
+	public void deleteSprint(long projectId, long sprintId);
 }

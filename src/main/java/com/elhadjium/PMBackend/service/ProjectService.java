@@ -31,4 +31,5 @@ public interface ProjectService {
 	public void deleteSprint(long projectId, long sprintId);
 	public void startSprint(Long projectId, Long sprintId, StartSprintDTO input);
 	public void terminateSprint(Long projectId, Long sprintId);
+	public void closeUserStory(Long projectId, Long userStoryId);
 }

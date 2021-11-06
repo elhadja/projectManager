@@ -318,4 +318,11 @@ public class ProjectServiceImpl implements ProjectService {
 													 .filter(us -> us.getStatus() == UserStoryStatus.CLOSE)
 													 .collect(Collectors.toList()));
 	}
+
+	@Override
+	@Transactional
+	public void closeUserStory(Long projectId, Long userStoryId) {
+		UserStory us = userStoryDAO.findById(userStoryId).get();
+		us.setStatus(UserStoryStatus.CLOSE);
+	}
 }

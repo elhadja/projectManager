@@ -394,6 +394,19 @@ public class ProjectControllerTest {
 		verify(projectService).startSprint(Mockito.eq(projectId), Mockito.eq(sprintId));
 	}
 	
+	@Test
+	public void terminateSprint_shouldBeOK() throws Exception {
+		// prepare
+		final long projectId = 1;
+		final long sprintId = 2;
+
+		// when
+		putRequest("/pm-api/projects/" + projectId + "/sprints/" + sprintId + "/terminate", null);
+		
+		// then
+		verify(projectService).terminateSprint(Mockito.eq(projectId), Mockito.eq(sprintId));
+	}
+	
 	private <T> T getObject(MvcResult mvcResult, Class<T> targetClass) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(mvcResult.getResponse().getContentAsString(), targetClass);

@@ -32,9 +32,11 @@ import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.Sprint;
+import com.elhadjium.PMBackend.entity.SprintStatus;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
+import com.elhadjium.PMBackend.entity.UserStoryStatus;
 import com.elhadjium.PMBackend.service.ProjectService;
 import com.elhadjium.PMBackend.service.UserService;
 
@@ -349,5 +351,31 @@ public class ProjectServiceITest {
 		} catch (NoSuchElementException e) {
 			// TODO: handle exception
 		}
+	}
+	
+	@Test
+	@Transactional
+	public void terminateSprint_shouldBeOk() throws Exception {
+		// prepare
+		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		Sprint sprintData = new Sprint();
+		sprintData.setName("sprint name");
+		Long sprintId = projectService.addSprintToProject(projectId, sprintData);
+		
+		long usId = projectService.addUserStoryToSprint(sprintId, new AddUserStoryDTO("a summary 1"));
+		
+		// when
+		projectService.terminateSprint(projectId, sprintId);
+		
+		// then
+		List<Sprint> list = projectService.getProjectSprints(projectId);
+		Sprint sprintToCheck = list.get(0);
+		assertEquals(SprintStatus.CLOSED, sprintToCheck.getStatus());
+		sprintToCheck.getUserStories().forEach(us -> assertEquals(UserStoryStatus.CLOSE, sprintToCheck.getStatus()));
 	}
 }

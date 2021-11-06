@@ -284,11 +284,35 @@ public class ProjectServiceImpl implements ProjectService {
 		
 		project.removeSprint(sprintToDelete);
 	}
-
+	
 	@Override
 	@Transactional
 	public void startSprint(Long projectId, Long sprintId) {
 		Sprint sprint = sprintDAO.findById(sprintId).get();
 		sprint.setStatus(SprintStatus.STARTED);
+	}
+
+	@Override
+	@Transactional
+	public void terminateSprint(Long projectId, Long sprintId) {
+		Sprint sprint = sprintDAO.findById(sprintId).get();
+		if (sprint.getStatus() == SprintStatus.STARTED || sprint.getStatus() == SprintStatus.CREATED) {
+			moveSprintClosedUserStoriesToBacklog(sprint);
+			sprint.setStatus(SprintStatus.CLOSED);
+		}
+	}
+	
+	private void moveSprintClosedUserStoriesToBacklog(Sprint sprint) {
+		Iterator<UserStory> it = sprint.getUserStories().iterator();
+		while (it.hasNext()) {
+			UserStory us = it.next();
+			if (us.getStatus() == UserStoryStatus.OPEN) {
+				sprint.getProject().getBacklog().addUserStory(us);
+				us.setSprint(null);
+			}
+		}
+		sprint.setUserStories(sprint.getUserStories().stream()
+													 .filter(us -> us.getStatus() == UserStoryStatus.CLOSE)
+													 .collect(Collectors.toList()));
 	}
 }

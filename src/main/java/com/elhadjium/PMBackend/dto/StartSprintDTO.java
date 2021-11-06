@@ -9,7 +9,7 @@ public class StartSprintDTO {
 	}
 
 	public void setStartDate(String startDate) {
-		this.startDate = startDate;
+		this.startDate = startDate.replace("T", " ").replace("Z", "");
 	}
 
 	public String getEndDate() {
@@ -17,6 +17,6 @@ public class StartSprintDTO {
 	}
 
 	public void setEndDate(String endDate) {
-		this.endDate = endDate;
+		this.endDate = endDate.replace("T", " ").replace("Z", "");
 	}
 }

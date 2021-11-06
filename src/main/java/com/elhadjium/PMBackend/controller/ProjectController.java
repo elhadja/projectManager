@@ -189,7 +189,10 @@ public class ProjectController {
 		projectService.closeUserStory(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId));
 	}
 
-
+	@PutMapping("{project-id}/user-stories/{user-story-id}/open")
+	public void openUserStory(@PathVariable("project-id") String projectId, @PathVariable("user-story-id") String userStoryId) {
+		projectService.openUserStory(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId));
+	}
 
 	@ExceptionHandler({PMRuntimeException.class})
 	public ResponseEntity<?> handleException(PMRuntimeException ex) {

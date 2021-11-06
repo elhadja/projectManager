@@ -325,4 +325,11 @@ public class ProjectServiceImpl implements ProjectService {
 		UserStory us = userStoryDAO.findById(userStoryId).get();
 		us.setStatus(UserStoryStatus.CLOSE);
 	}
+
+	@Override
+	@Transactional
+	public void openUserStory(Long projectId, Long userStoryId) {
+		UserStory us = userStoryDAO.findById(userStoryId).get();
+		us.setStatus(UserStoryStatus.OPEN);
+	}
 }

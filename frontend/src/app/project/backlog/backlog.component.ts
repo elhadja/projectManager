@@ -51,11 +51,7 @@ export class BacklogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.projectApiService.getBacklogUserStories(this.projectId).subscribe((userStories) => {
-      this.userStories = [...userStories];
-      this.backlogTotalStoryPoints = `${this.getTotalStoryPoints(this.userStories)}`;
-    });
-
+    this.initializeBacklog();
     this.projectApiService.getProjectSprints(this.projectId).subscribe((sprints) => {
       sprints.forEach(sprint => {
         this.sprintWrappers.push({
@@ -67,6 +63,13 @@ export class BacklogComponent implements OnInit {
                              sprint.endDate !== null ? new Date(Date.parse(sprint.endDate)) : null]
         });
       });
+    });
+  }
+
+  private initializeBacklog(): void {
+    this.projectApiService.getBacklogUserStories(this.projectId).subscribe((userStories) => {
+      this.userStories = [...userStories];
+      this.backlogTotalStoryPoints = `${this.getTotalStoryPoints(this.userStories)}`;
     });
   }
 
@@ -207,6 +210,7 @@ export class BacklogComponent implements OnInit {
     this.projectApiService.terminateSprint(this.projectId, sprintWrapper.sprint.id).subscribe(() => {
       sprintWrapper.sprint.status = 'CLOSED';
       this.sprintWrappers = [...this.sprintWrappers];
+      this.initializeBacklog();
     });
   }
 

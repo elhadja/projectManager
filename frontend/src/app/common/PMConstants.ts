@@ -14,4 +14,9 @@ export class PMConstants {
     public static USER_STORY_STATUS_IMPORTANCE_HIGHT = 'HIGHT';
     public static USER_STORY_STATUS_IMPORTANCE_NORMAL = 'NORMAL';
     public static USER_STORY_STATUS_IMPORTANCE_LOW = 'LOW';
+
+    // session keys
+    public static SESSION_USER_ID_KEY = "USER_ID";
+    public static SESSION_PROJECT_ID_KEY = "PROJECT_ID";
+    public static SESSION_TOKEN_ID_KEY = "TOKEN";
 }

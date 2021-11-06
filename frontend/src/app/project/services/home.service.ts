@@ -11,7 +11,7 @@ import { sessionManagerService } from "src/app/services/sessionManager.service";
 export class HomeService {
     public constructor(private api: API,
                         public sessionManager: sessionManagerService) {
-
+                            
     }
 
     public getUserProjects(): Observable<projectInputDTO[]> {

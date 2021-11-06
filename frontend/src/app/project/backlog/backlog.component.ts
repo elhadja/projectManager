@@ -41,6 +41,9 @@ export class BacklogComponent implements OnInit {
     const help = this.route.snapshot.paramMap.get('backlog-id');
     if (help != null) {
       this.projectId = +(help);
+    } else {
+      const id = localStorage.getItem('projectId');
+      this.projectId = id != null ? +id : this.projectId;
     }
 
     this.backlogTotalStoryPoints = '0'

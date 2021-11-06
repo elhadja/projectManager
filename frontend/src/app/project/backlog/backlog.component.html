@@ -18,6 +18,7 @@
                             </div>
                             <div>
                                 <button *ngIf="selectedUserStoriesFromSprint.length > 0" mat-stroked-button (click)=onDeleteSelectedSprintsUserStories(sprintWrapper)>delete U.S</button>
+                                <button *ngIf="selectedUserStoriesFromSprint.length > 0" mat-stroked-button (click)=onCloseSelectedSprintsUserStories()>Close U.S</button>
                                 <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromSprint(sprintWrapper.sprint.id)>create U.S</button>
                                 <button *ngIf="sprintWrapper.sprint.status === 'CREATED'" mat-stroked-button (click)="onStartSprint(sprintWrapper)">Start</button>
                                 <button *ngIf="sprintWrapper.sprint.status !== 'CREATED'" mat-stroked-button (click)="onTerminateSprint(sprintWrapper)">Terminate</button>

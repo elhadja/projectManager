@@ -53,4 +53,7 @@ export class ProjectApiService {
         return this.api.put(this.baseURI + '/' + projectId + '/sprints/' + sprintId + '/terminate', null);
     }
 
+    public closeUserStories(projectId: number, userStoryId: number): Observable<void> {
+        return this.api.put(this.baseURI + '/' + projectId + '/user-stories/' + userStoryId + '/close', null);
+    }
 }

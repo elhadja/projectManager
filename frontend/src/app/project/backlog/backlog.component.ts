@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { PMConstants } from 'src/app/common/PMConstants';
 import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
 import { MessageService } from 'src/app/services/message.service';
@@ -116,6 +117,7 @@ export class BacklogComponent implements OnInit {
       if (result != null) {
         this.projectApiService.addUserStoryToSprint(this.projectId, sprintId, result).subscribe((userStoryId) => {
           result.id = userStoryId;
+          result.status = PMConstants.USER_STORY_STATUS_OPENED;
           const sprintWrapper = this.sprintWrappers.find(sprintWrapper => sprintWrapper.sprint.id === sprintId);
           if (sprintWrapper != null) {
             sprintWrapper.sprint.userStories = [...sprintWrapper.sprint.userStories, result];
@@ -206,5 +208,15 @@ export class BacklogComponent implements OnInit {
       sprintWrapper.sprint.status = 'CLOSED';
       this.sprintWrappers = [...this.sprintWrappers];
     });
+  }
+
+  public onCloseSelectedSprintsUserStories(): void {
+    this.selectedUserStoriesFromSprint.forEach(selectedUs => {
+      this.projectApiService.closeUserStories(this.projectId, selectedUs.id).subscribe(() => {
+        this.selectedUserStoriesFromSprint = this.selectedUserStoriesFromSprint.filter(us => us.id !== selectedUs.id);
+        selectedUs.status = PMConstants.USER_STORY_STATUS_CLOSED;
+        this.sprintWrappers = [...this.sprintWrappers];
+      });
+    })
   }
 }

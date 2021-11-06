@@ -183,6 +183,12 @@ public class ProjectController {
 	public void terminateSprint(@PathVariable("project-id") String projectId, @PathVariable("sprint-id") String sprintId) {
 		projectService.terminateSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId));
 	}
+	
+	@PutMapping("{project-id}/user-stories/{user-story-id}/close")
+	public void closeUserStory(@PathVariable("project-id") String projectId, @PathVariable("user-story-id") String userStoryId) {
+		projectService.closeUserStory(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId));
+	}
+
 
 
 	@ExceptionHandler({PMRuntimeException.class})

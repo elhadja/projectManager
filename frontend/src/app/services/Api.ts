@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http
 import { Injectable } from "@angular/core";
 import { Observable, ObservableInput, throwError } from "rxjs";
 import { catchError } from 'rxjs/operators'
+import { PMConstants } from "../common/PMConstants";
 import { MessageService } from "./message.service";
 
 @Injectable()
@@ -20,7 +21,7 @@ export class API {
                 'Authorization': ''
             })
         };
-        let token = localStorage.getItem('token');
+        let token = localStorage.getItem(PMConstants.SESSION_TOKEN_ID_KEY);
         if (token !== null) {
             this.setHttpOptions(token);
         }

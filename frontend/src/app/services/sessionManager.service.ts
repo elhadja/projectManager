@@ -7,17 +7,20 @@ export class sessionManagerService {
     private userId: number
     private projectId: number;
     public userLoggedEmitter: Subject<boolean>;
+    public projectSelectedSubject: Subject<void>;
 
     constructor() {
         this.userId = -1;
         this.projectId = -1;
         this.userLoggedEmitter = new Subject<boolean>();
+        this.projectSelectedSubject = new Subject<void>();
     }
 
     public setUserid(id: number): void {
-        this.userLoggedEmitter.next(true);
+        sessionStorage.setItem(PMConstants.SESSION_USER_ID_KEY, `${id}`);
         this.userId = id;
         localStorage.setItem(PMConstants.SESSION_USER_ID_KEY, `${id}`);
+        this.userLoggedEmitter.next(true);
     }
 
     public getUserId(): number {
@@ -34,6 +37,7 @@ export class sessionManagerService {
     public setProjectId(id: number): void {
         this.projectId = id;
         localStorage.setItem(PMConstants.SESSION_PROJECT_ID_KEY, `${id}`);
+        this.projectSelectedSubject.next();
     }
 
     public getProjectId(): number {

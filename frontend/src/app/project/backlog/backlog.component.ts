@@ -219,4 +219,15 @@ export class BacklogComponent implements OnInit {
       });
     })
   }
+
+  public onOpenSelectedSprintsUserStories(): void {
+    this.selectedUserStoriesFromSprint.forEach(selectedUs => {
+      this.projectApiService.openUserStories(this.projectId, selectedUs.id).subscribe(() => {
+        this.selectedUserStoriesFromSprint = this.selectedUserStoriesFromSprint.filter(us => us.id !== selectedUs.id);
+        selectedUs.status = PMConstants.USER_STORY_STATUS_OPENED;
+        this.sprintWrappers = [...this.sprintWrappers];
+      });
+    })
+  }
+
 }

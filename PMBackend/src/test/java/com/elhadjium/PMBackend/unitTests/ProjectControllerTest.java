@@ -42,6 +42,7 @@ import com.elhadjium.PMBackend.dto.GetSprintOutputDTO;
 import com.elhadjium.PMBackend.dto.GetTaskOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
+import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
@@ -388,10 +389,10 @@ public class ProjectControllerTest {
 		final long sprintId = 2;
 
 		// when
-		putRequest("/pm-api/projects/" + projectId + "/sprints/" + sprintId + "/start", null);
+		putRequest("/pm-api/projects/" + projectId + "/sprints/" + sprintId + "/start", new StartSprintDTO());
 		
 		// then
-		verify(projectService).startSprint(Mockito.eq(projectId), Mockito.eq(sprintId));
+		verify(projectService).startSprint(Mockito.eq(projectId), Mockito.eq(sprintId), Mockito.any(StartSprintDTO.class));
 	}
 	
 	@Test

@@ -8,6 +8,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -27,6 +29,9 @@ public class Sprint {
 	@Basic(optional = false)
 	private String name;
 	
+	@Enumerated(EnumType.STRING)
+	private SprintStatus status;
+	
 	@Convert(converter = LocalDateTimeStringConverter.class)
 	private String startDate;
 	
@@ -36,7 +41,6 @@ public class Sprint {
 	@ManyToOne(optional = false)
 	private Project project;
 	
-	// TODO think about us removal
 	@OneToMany(mappedBy = "sprint", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<UserStory> userStories = new ArrayList<UserStory>();
 
@@ -96,6 +100,14 @@ public class Sprint {
 
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+
+	public SprintStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(SprintStatus status) {
+		this.status = status;
 	}
 
 	@Override

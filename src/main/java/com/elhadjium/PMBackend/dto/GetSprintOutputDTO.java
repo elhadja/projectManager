@@ -2,9 +2,12 @@ package com.elhadjium.PMBackend.dto;
 
 import java.util.List;
 
+import com.elhadjium.PMBackend.entity.SprintStatus;
+
 public class GetSprintOutputDTO {
 	private long id;
 	private String name;
+	private SprintStatus status;
 	private String startDate;
 	private String endDate;
 	private List<GetUserStoryOutputDTO> userStories;
@@ -47,5 +50,13 @@ public class GetSprintOutputDTO {
 
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+
+	public SprintStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(SprintStatus status) {
+		this.status = status;
 	}
 }

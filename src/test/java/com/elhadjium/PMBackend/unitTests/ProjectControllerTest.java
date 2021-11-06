@@ -381,6 +381,19 @@ public class ProjectControllerTest {
 		assertEquals(400, response.getStatusCodeValue());
 	}
 	
+	@Test
+	public void startSprint_shouldBeOK() throws Exception {
+		// prepare
+		final long projectId = 1;
+		final long sprintId = 2;
+
+		// when
+		putRequest("/pm-api/projects/" + projectId + "/sprints/" + sprintId + "/start", null);
+		
+		// then
+		verify(projectService).startSprint(Mockito.eq(projectId), Mockito.eq(sprintId));
+	}
+	
 	private <T> T getObject(MvcResult mvcResult, Class<T> targetClass) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(mvcResult.getResponse().getContentAsString(), targetClass);
@@ -389,5 +402,14 @@ public class ProjectControllerTest {
 	private String stringify(Object object) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(object);
+	}
+	
+	private <T> MvcResult putRequest (String uri, T input) throws Exception {
+		return this.mockMvc.perform(put(uri)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(stringify(input)))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andReturn();
 	}
 }

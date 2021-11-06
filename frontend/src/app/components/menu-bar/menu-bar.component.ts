@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { Subscriber, Subscription } from 'rxjs';
+import { SubjectSubscriber } from 'rxjs/internal/Subject';
 import { PMConstants } from 'src/app/common/PMConstants';
+import { sessionManagerService } from 'src/app/services/sessionManager.service';
 
 @Component({
   selector: 'app-menu-bar',
@@ -10,9 +13,15 @@ import { PMConstants } from 'src/app/common/PMConstants';
 })
 export class MenuBarComponent implements OnInit {
   public items: MenuItem[];
+  public isVisible: boolean;
 
-  constructor(private router: Router) { 
+  constructor(private router: Router,
+             private sessionService: sessionManagerService) { 
     this.items = [];
+    this.isVisible = false;
+    this.sessionService.userLoggedEmitter.subscribe((isUserLogged) => {
+      this.isVisible = isUserLogged;
+    })
   }
 
   ngOnInit(): void {
@@ -33,7 +42,7 @@ export class MenuBarComponent implements OnInit {
           {
             label: 'quitter',
             command: () => { 
-              localStorage.clear;
+              this.sessionService.closeSession();
               this.router.navigateByUrl(PMConstants.AUTHENTICATION_MODULE_BASE_URI) ;
             }
           }
@@ -41,5 +50,4 @@ export class MenuBarComponent implements OnInit {
       }
     ]
   }
-
 }

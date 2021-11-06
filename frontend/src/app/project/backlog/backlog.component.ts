@@ -14,6 +14,7 @@ interface SprintWrapper {
   totalStoryPoints: string,
   totalClosedUserStoriesStoryPoints: string,
   totalOpenedUserStoriesStoryPoints: string
+  sprintRangeDates: Array<Date|null>;
 }
 
 @Component({
@@ -41,8 +42,8 @@ export class BacklogComponent implements OnInit {
       this.projectId = +(help);
     }
 
-    this.userStories = [];
     this.backlogTotalStoryPoints = '0'
+    this.userStories = [];
     this.sprintWrappers = [];
     this.selectedUserStoriesFromSprint = [];
     this.selectedUserStoriesFromBacklog = [];
@@ -60,7 +61,9 @@ export class BacklogComponent implements OnInit {
           sprint: sprint,
           totalClosedUserStoriesStoryPoints: this.getClosedUserStorytTotalStoryPoints(sprint.userStories),
           totalOpenedUserStoriesStoryPoints: this.getOpenedUserStorytTotalStoryPoints(sprint.userStories),
-          totalStoryPoints: `${this.getTotalStoryPoints(sprint.userStories)}`
+          totalStoryPoints: `${this.getTotalStoryPoints(sprint.userStories)}`,
+          sprintRangeDates: [sprint.startDate !== null ? new Date(Date.parse(sprint.startDate)): null,
+                             sprint.endDate !== null ? new Date(Date.parse(sprint.endDate)) : null]
         });
       });
     });
@@ -137,7 +140,8 @@ export class BacklogComponent implements OnInit {
             sprint: result,
             totalClosedUserStoriesStoryPoints: '0',
             totalOpenedUserStoriesStoryPoints: '0',
-            totalStoryPoints: '0'
+            totalStoryPoints: '0',
+            sprintRangeDates: []
           }];
           this.messageService.showSuccessMessage("sprint created with success");
         })
@@ -180,10 +184,16 @@ export class BacklogComponent implements OnInit {
         this.selectedUserStoriesFromSprint = this.selectedUserStoriesFromSprint.filter(usToCheck => usToCheck.id !== us.id)
 
         if (this.selectedUserStoriesFromSprint.length === 0) {
-          this.messageService.showSuccessMessage("All selected user stories are deleted from backlog");
+          this.messageService.showSuccessMessage("All selected user stories are deleted from sprint");
         }
       });
     });
   }
 
+  public onStartSprint(sprintWrapper: any): void {
+    this.projectApiService.startSprint(this.projectId, sprintWrapper.sprint.id, {
+      startDate: sprintWrapper.sprintRangeDates[0],
+      endDate: sprintWrapper.sprintRangeDates[1]
+    }).subscribe();
+  }
 }

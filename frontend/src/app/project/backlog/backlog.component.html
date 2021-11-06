@@ -10,6 +10,7 @@
                     <div class="d-flex flex-row justify-content-between">
                         <div>
                             <span class="mx-1"> {{ sprintWrapper.sprint.name }}</span>
+                            <p-calendar [(ngModel)]="sprintWrapper.sprintRangeDates" [showTime]="true" [showButtonBar]="true" selectionMode="range" dataFormat="yyyy-mm-dd"></p-calendar>
                             <p-badge severity="info" styleClass="p-mr-2" [value]="sprintWrapper.totalStoryPoints"></p-badge>
                             <p-badge class="mx-1" severity="success" styleClass="p-mr-2" [value]="sprintWrapper.totalClosedUserStoriesStoryPoints"></p-badge>
                             <p-badge severity="danger" styleClass="p-mr-2" [value]="sprintWrapper.totalOpenedUserStoriesStoryPoints"></p-badge>
@@ -17,6 +18,7 @@
                         <div>
                             <button *ngIf="selectedUserStoriesFromSprint.length > 0" mat-stroked-button (click)=onDeleteSelectedSprintsUserStories(sprintWrapper)>delete U.S</button>
                             <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromSprint(sprintWrapper.sprint.id)>create U.S</button>
+                            <button mat-stroked-button (click)="onStartSprint(sprintWrapper)">Start</button>
                         </div>
                     </div>
                 </ng-template>

@@ -4,6 +4,7 @@ import { ApiConstant } from "../common/ApiConstant";
 import { AddSprintToProjectOutputDTO } from "../dto/addSprintToProjectOutputDTO";
 import { AddUserStoryOutputDTO } from "../dto/addUserStoryOutputDTO";
 import { GetUserStoriesInputDTO } from "../dto/getUserStoriesInputDTO";
+import { StartSprintOutputDTO } from "../dto/startSprintOutputDTO";
 import { API } from "../services/Api";
 
 @Injectable()
@@ -38,5 +39,13 @@ export class ProjectApiService {
 
     public deleteUserStory(projectId: number, userStoryId: number): Observable<void> {
         return this.api.delete(this.baseURI + '/' + projectId + '/user-stories/' + userStoryId);
+    }
+
+    public deleteSprint(projectId: number, sprintId: number): Observable<void> {
+        return this.api.delete(this.baseURI + '/' + projectId + '/sprints/' + sprintId);
+    }
+
+    public startSprint(projectId: number, sprintId: number, input: StartSprintOutputDTO): Observable<void> {
+        return this.api.put(this.baseURI + '/' + projectId + '/sprints/' + sprintId + '/start', input);
     }
 }

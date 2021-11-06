@@ -27,6 +27,7 @@ import com.elhadjium.PMBackend.dto.GetSprintOutputDTO;
 import com.elhadjium.PMBackend.dto.GetTaskOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
+import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
@@ -172,8 +173,10 @@ public class ProjectController {
 	}
 	
 	@PutMapping("{project-id}/sprints/{sprint-id}/start")
-	public void startSprint(@PathVariable("project-id") String projectId, @PathVariable("sprint-id") String sprintId) {
-		projectService.startSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId));
+	public void startSprint(@PathVariable("project-id") String projectId,
+							@PathVariable("sprint-id") String sprintId,
+							@RequestBody StartSprintDTO input) {
+		projectService.startSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId), input);
 	}
 	
 	@PutMapping("{project-id}/sprints/{sprint-id}/terminate")

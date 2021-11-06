@@ -26,6 +26,7 @@ import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
+import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
@@ -287,9 +288,11 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Override
 	@Transactional
-	public void startSprint(Long projectId, Long sprintId) {
+	public void startSprint(Long projectId, Long sprintId, StartSprintDTO input) {
 		Sprint sprint = sprintDAO.findById(sprintId).get();
 		sprint.setStatus(SprintStatus.STARTED);
+		sprint.setStartDate(input.getStartDate());
+		sprint.setEndDate(input.getEndDate());
 	}
 
 	@Override

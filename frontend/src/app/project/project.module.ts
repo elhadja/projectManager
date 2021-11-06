@@ -28,6 +28,8 @@ import { DialogCreateSprintComponent } from './dialog/dialog-create-sprint/dialo
 import { DialogUserStoryDetailsComponent } from './dialog/dialog-user-story-details/dialog-user-story-details.component';
 import {BadgeModule} from 'primeng/badge';
 import { MatSelectModule } from '@angular/material/select';
+import { CalendarModule } from 'primeng/calendar';
+import { OverlayPanelModule } from 'primeng/overlaypanel'
 
 
 const routes: Routes = [
@@ -37,7 +39,9 @@ const routes: Routes = [
 
 const PRIME_NG_MODULES = [
   TableModule,
-  BadgeModule
+  BadgeModule,
+  CalendarModule,
+  OverlayPanelModule
 ]
 
 const MAT_MODULES = [
@@ -60,7 +64,7 @@ const MAT_MODULES = [
     BacklogComponent,
     DialogCreateUerStoryComponent,
     DialogCreateSprintComponent,
-    DialogUserStoryDetailsComponent
+    DialogUserStoryDetailsComponent,
   ],
   imports: [
     CommonModule,

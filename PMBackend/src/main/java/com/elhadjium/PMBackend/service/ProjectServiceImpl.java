@@ -26,10 +26,12 @@ import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
+import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.Sprint;
+import com.elhadjium.PMBackend.entity.SprintStatus;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
@@ -156,8 +158,14 @@ public class ProjectServiceImpl implements ProjectService {
 	// FIXME US Could be in sprint and not in backlog
 	@Transactional
 	public void deleteUserStoryFromProject(long projectId, long userStoryId) {
-		Project project = projectDao.findById(projectId).get();
-		project.getBacklog().deleteUserStory(userStoryDAO.findById(userStoryId).get());
+		UserStory userStoryToDelete = userStoryDAO.findById(userStoryId).get();
+		if (userStoryToDelete.getBacklog() != null) {
+			userStoryToDelete.getBacklog().deleteUserStory(userStoryToDelete);
+		} else {
+			userStoryToDelete.getSprint().removeUserStory(userStoryToDelete);
+		}
+		
+		userStoryDAO.delete(userStoryToDelete);
 	}
 
 	@Override
@@ -166,6 +174,8 @@ public class ProjectServiceImpl implements ProjectService {
 		userStoryToUpdate.setSummary(userStoryData.getSummary());
 		userStoryToUpdate.setDescription(userStoryData.getDescription());
 		userStoryToUpdate.setStoryPoint(userStoryData.getStoryPoint());
+		userStoryToUpdate.setStatus(userStoryData.getStatus());
+		userStoryToUpdate.setImportance(userStoryData.getImportance());
 
 		userStoryDAO.save(userStoryToUpdate);
 	}
@@ -184,6 +194,7 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	public Long addSprintToProject(Long projectId, Sprint sprintData) {
 		Sprint sprint = Mapping.mapTo(sprintData, Sprint.class);
+		sprint.setStatus(SprintStatus.CREATED);
 		Project project = projectDao.findById(projectId).get();
 		project.addSprint(sprint);
 		sprintDAO.save(sprint);
@@ -257,5 +268,68 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	public List<Sprint> getProjectSprints(Long projectId) {
 		return projectDao.findById(projectId).get().getSprints();
+	}
+
+	@Override
+	@Transactional
+	public void deleteSprint(long projectId, long sprintId) {
+		Project project = projectDao.findById(projectId).get();
+		Sprint sprintToDelete = sprintDAO.findById(sprintId).get();
+		Iterator<UserStory> it = sprintToDelete.getUserStories().iterator();
+		while (it.hasNext()) {
+			UserStory us = it.next();
+			project.getBacklog().addUserStory(us);
+			us.setSprint(null);
+		}
+		sprintToDelete.getUserStories().clear();
+		
+		project.removeSprint(sprintToDelete);
+	}
+	
+	@Override
+	@Transactional
+	public void startSprint(Long projectId, Long sprintId, StartSprintDTO input) {
+		Sprint sprint = sprintDAO.findById(sprintId).get();
+		sprint.setStatus(SprintStatus.STARTED);
+		sprint.setStartDate(input.getStartDate());
+		sprint.setEndDate(input.getEndDate());
+	}
+
+	@Override
+	@Transactional
+	public void terminateSprint(Long projectId, Long sprintId) {
+		Sprint sprint = sprintDAO.findById(sprintId).get();
+		if (sprint.getStatus() == SprintStatus.STARTED || sprint.getStatus() == SprintStatus.CREATED) {
+			moveSprintClosedUserStoriesToBacklog(sprint);
+			sprint.setStatus(SprintStatus.CLOSED);
+		}
+	}
+	
+	private void moveSprintClosedUserStoriesToBacklog(Sprint sprint) {
+		Iterator<UserStory> it = sprint.getUserStories().iterator();
+		while (it.hasNext()) {
+			UserStory us = it.next();
+			if (us.getStatus() == UserStoryStatus.OPEN) {
+				sprint.getProject().getBacklog().addUserStory(us);
+				us.setSprint(null);
+			}
+		}
+		sprint.setUserStories(sprint.getUserStories().stream()
+													 .filter(us -> us.getStatus() == UserStoryStatus.CLOSE)
+													 .collect(Collectors.toList()));
+	}
+
+	@Override
+	@Transactional
+	public void closeUserStory(Long projectId, Long userStoryId) {
+		UserStory us = userStoryDAO.findById(userStoryId).get();
+		us.setStatus(UserStoryStatus.CLOSE);
+	}
+
+	@Override
+	@Transactional
+	public void openUserStory(Long projectId, Long userStoryId) {
+		UserStory us = userStoryDAO.findById(userStoryId).get();
+		us.setStatus(UserStoryStatus.OPEN);
 	}
 }

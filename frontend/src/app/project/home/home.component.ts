@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { PMConstants } from 'src/app/common/PMConstants';
 import { GetUserInvitationsInputDTO } from 'src/app/dto/GetUserInvitationInputDTO';
 import { projectInputDTO } from 'src/app/dto/project.input.dto';
+import { sessionManagerService } from 'src/app/services/sessionManager.service';
 import { CreateProjectComponent } from '../dialog/create-project/create-project.component';
 import { DialogProjectDetailsComponent } from '../dialog/dialog-project-details/dialog-project-details.component';
 import { DialogCreateProjectService } from '../services/dialogCreateProject.service';
@@ -23,7 +24,8 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router,
               private homeService: HomeService,
               private addProjectDialog: MatDialog,
-              private dialogCreateProjectService: DialogCreateProjectService) {
+              private dialogCreateProjectService: DialogCreateProjectService,
+              private sessionService: sessionManagerService) {
     this.projects = [];
     this.invitations = [];
     this.selectedInvitations = [];
@@ -54,16 +56,12 @@ export class HomeComponent implements OnInit {
     return 'HomeComponent';
   }
 
-  public onLogout(): void {
-    localStorage.removeItem('token');
-    this.router.navigateByUrl(PMConstants.AUTHENTICATION_MODULE_BASE_URI);
-  }
-
   public onOpenAddProjectDialog(): void {
     this.addProjectDialog.open(CreateProjectComponent);
   }
 
   public onClickOnProject(projectId: number): void{
+    this.sessionService.setProjectId(projectId);
     this.router.navigateByUrl('/project/backlog/' + projectId);
   }
 

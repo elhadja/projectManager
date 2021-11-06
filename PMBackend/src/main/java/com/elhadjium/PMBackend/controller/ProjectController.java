@@ -27,6 +27,7 @@ import com.elhadjium.PMBackend.dto.GetSprintOutputDTO;
 import com.elhadjium.PMBackend.dto.GetTaskOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
+import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
@@ -164,6 +165,33 @@ public class ProjectController {
 		});
 
 		return outputList;
+	}
+	
+	@DeleteMapping("{project-id}/sprints/{sprint-id}")
+	public void deleteSprint(@PathVariable("") String projectId, @PathVariable("") String sprintId) {
+		projectService.deleteSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId));
+	}
+	
+	@PutMapping("{project-id}/sprints/{sprint-id}/start")
+	public void startSprint(@PathVariable("project-id") String projectId,
+							@PathVariable("sprint-id") String sprintId,
+							@RequestBody StartSprintDTO input) {
+		projectService.startSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId), input);
+	}
+	
+	@PutMapping("{project-id}/sprints/{sprint-id}/terminate")
+	public void terminateSprint(@PathVariable("project-id") String projectId, @PathVariable("sprint-id") String sprintId) {
+		projectService.terminateSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId));
+	}
+	
+	@PutMapping("{project-id}/user-stories/{user-story-id}/close")
+	public void closeUserStory(@PathVariable("project-id") String projectId, @PathVariable("user-story-id") String userStoryId) {
+		projectService.closeUserStory(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId));
+	}
+
+	@PutMapping("{project-id}/user-stories/{user-story-id}/open")
+	public void openUserStory(@PathVariable("project-id") String projectId, @PathVariable("user-story-id") String userStoryId) {
+		projectService.openUserStory(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId));
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

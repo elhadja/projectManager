@@ -17,7 +17,7 @@ export class LoginService {
         this.api.postWithoutHeaders(ApiConstant.USERS_BASE_URI + '/' + ApiConstant.LOGIN_URI, output)
                     .subscribe((response) => {
                         this.sessionManager.setUserid(response.id);
-                        localStorage.setItem('token', response.token);
+                        localStorage.setItem(PMConstants.SESSION_TOKEN_ID_KEY, response.token);
                         this.api.setHttpOptions(response.token);
 
                         this.router.navigate(["/" + PMConstants.PROJECT_MODULE_BASE_URI]);

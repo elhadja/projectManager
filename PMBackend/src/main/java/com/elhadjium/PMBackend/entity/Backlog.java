@@ -25,7 +25,6 @@ public class Backlog {
 	
 	@OneToMany(mappedBy = "backlog",
 				cascade = CascadeType.ALL,
-				orphanRemoval = true,
 				fetch = FetchType.EAGER)
 	private List<UserStory> userStories = new ArrayList<UserStory>();
 

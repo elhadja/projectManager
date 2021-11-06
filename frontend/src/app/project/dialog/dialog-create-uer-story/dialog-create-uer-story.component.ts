@@ -1,8 +1,10 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PMConstants } from 'src/app/common/PMConstants';
 import { AddUserStoryOutputDTO } from 'src/app/dto/addUserStoryOutputDTO';
+import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
+import { ProjectApiService } from 'src/app/PMApi/project.api';
 
 interface LabelValue {
   value: string,
@@ -17,9 +19,12 @@ interface LabelValue {
 export class DialogCreateUerStoryComponent implements OnInit {
   public userStoryForm: FormGroup;
   public userStoryImportanceValues: LabelValue[];
+  public isUpdateMode: boolean;
 
   constructor(private fb: FormBuilder,
-             private matDialogRef: MatDialogRef<DialogCreateUerStoryComponent, AddUserStoryOutputDTO>) {
+             private matDialogRef: MatDialogRef<DialogCreateUerStoryComponent, AddUserStoryOutputDTO>,
+             @Inject(MAT_DIALOG_DATA) public dialogData: GetUserStoriesInputDTO,
+             private projectApiService: ProjectApiService) {
     this.userStoryForm = fb.group({
       "summary": fb.control('', [Validators.required, Validators.maxLength(200)]),
       "description": fb.control(''),
@@ -27,6 +32,7 @@ export class DialogCreateUerStoryComponent implements OnInit {
       "importance": fb.control('')
     });
     this.userStoryImportanceValues = [];
+    this.isUpdateMode = dialogData != null;
   }
 
   ngOnInit(): void {
@@ -35,6 +41,17 @@ export class DialogCreateUerStoryComponent implements OnInit {
       {value: PMConstants.USER_STORY_STATUS_IMPORTANCE_NORMAL, label: 'normal'},
       {value: PMConstants.USER_STORY_STATUS_IMPORTANCE_LOW, label: 'low'}
     ]
+
+    if (this.isUpdateMode) {
+      this.initializeUserStoryForm();
+    }
+  }
+
+  private initializeUserStoryForm(): void {
+      this.summary?.setValue(this.dialogData.summary);
+      this.description?.setValue(this.dialogData.description);
+      this.storyPoint?.setValue(this.dialogData.storyPoint);
+      this.importance?.setValue(this.dialogData.importance);
   }
 
   public onValidate(): void {
@@ -47,7 +64,7 @@ export class DialogCreateUerStoryComponent implements OnInit {
   }
 
   public onCancel(): void {
-
+    this.matDialogRef.close(undefined);
   }
 
   public get summary () {

@@ -42,6 +42,7 @@ import com.elhadjium.PMBackend.dto.GetSprintOutputDTO;
 import com.elhadjium.PMBackend.dto.GetTaskOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
+import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
@@ -381,6 +382,32 @@ public class ProjectControllerTest {
 		assertEquals(400, response.getStatusCodeValue());
 	}
 	
+	@Test
+	public void startSprint_shouldBeOK() throws Exception {
+		// prepare
+		final long projectId = 1;
+		final long sprintId = 2;
+
+		// when
+		putRequest("/pm-api/projects/" + projectId + "/sprints/" + sprintId + "/start", new StartSprintDTO());
+		
+		// then
+		verify(projectService).startSprint(Mockito.eq(projectId), Mockito.eq(sprintId), Mockito.any(StartSprintDTO.class));
+	}
+	
+	@Test
+	public void terminateSprint_shouldBeOK() throws Exception {
+		// prepare
+		final long projectId = 1;
+		final long sprintId = 2;
+
+		// when
+		putRequest("/pm-api/projects/" + projectId + "/sprints/" + sprintId + "/terminate", null);
+		
+		// then
+		verify(projectService).terminateSprint(Mockito.eq(projectId), Mockito.eq(sprintId));
+	}
+	
 	private <T> T getObject(MvcResult mvcResult, Class<T> targetClass) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(mvcResult.getResponse().getContentAsString(), targetClass);
@@ -389,5 +416,14 @@ public class ProjectControllerTest {
 	private String stringify(Object object) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(object);
+	}
+	
+	private <T> MvcResult putRequest (String uri, T input) throws Exception {
+		return this.mockMvc.perform(put(uri)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(stringify(input)))
+		.andDo(print())
+		.andExpect(status().isOk())
+		.andReturn();
 	}
 }

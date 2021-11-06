@@ -14,6 +14,9 @@ import { sessionManagerService } from './services/sessionManager.service';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader'
 import { ProjectApiService } from './PMApi/project.api';
+import { MenubarModule } from 'primeng/menubar'
+import { MenuItem } from 'primeng/api';
+import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 
 const SERVICES = [API, 
                   MessageService,
@@ -26,13 +29,15 @@ const SERVICES = [API,
   declarations: [
     AppComponent,
     MessageComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    MenuBarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    MenubarModule,
     TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

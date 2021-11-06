@@ -135,6 +135,7 @@ export class BacklogComponent implements OnInit {
       if (result != null) {
         this.projectApiService.addSprintToProject(this.projectId, result).subscribe((createdSprintId) => {
           result.id = createdSprintId;
+          result.status = 'CREATED';
           result.userStories = [];
           this.sprintWrappers = [...this.sprintWrappers, {
             sprint: result,
@@ -194,6 +195,16 @@ export class BacklogComponent implements OnInit {
     this.projectApiService.startSprint(this.projectId, sprintWrapper.sprint.id, {
       startDate: sprintWrapper.sprintRangeDates[0],
       endDate: sprintWrapper.sprintRangeDates[1]
-    }).subscribe();
+    }).subscribe(() => {
+      sprintWrapper.sprint.status = 'STARTED';
+      this.sprintWrappers = [...this.sprintWrappers]
+    });
+  }
+
+  public onTerminateSprint(sprintWrapper: SprintWrapper) {
+    this.projectApiService.terminateSprint(this.projectId, sprintWrapper.sprint.id).subscribe(() => {
+      sprintWrapper.sprint.status = 'CLOSED';
+      this.sprintWrappers = [...this.sprintWrappers];
+    });
   }
 }

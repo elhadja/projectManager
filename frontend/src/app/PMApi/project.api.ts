@@ -48,4 +48,9 @@ export class ProjectApiService {
     public startSprint(projectId: number, sprintId: number, input: StartSprintOutputDTO): Observable<void> {
         return this.api.put(this.baseURI + '/' + projectId + '/sprints/' + sprintId + '/start', input);
     }
+
+    public terminateSprint(projectId: number, sprintId: number): Observable<void> {
+        return this.api.put(this.baseURI + '/' + projectId + '/sprints/' + sprintId + '/terminate', null);
+    }
+
 }

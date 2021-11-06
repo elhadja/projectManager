@@ -30,6 +30,7 @@ import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.Sprint;
+import com.elhadjium.PMBackend.entity.SprintStatus;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
@@ -192,6 +193,7 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	public Long addSprintToProject(Long projectId, Sprint sprintData) {
 		Sprint sprint = Mapping.mapTo(sprintData, Sprint.class);
+		sprint.setStatus(SprintStatus.CREATED);
 		Project project = projectDao.findById(projectId).get();
 		project.addSprint(sprint);
 		sprintDAO.save(sprint);
@@ -281,5 +283,12 @@ public class ProjectServiceImpl implements ProjectService {
 		sprintToDelete.getUserStories().clear();
 		
 		project.removeSprint(sprintToDelete);
+	}
+
+	@Override
+	@Transactional
+	public void startSprint(Long projectId, Long sprintId) {
+		Sprint sprint = sprintDAO.findById(sprintId).get();
+		sprint.setStatus(SprintStatus.STARTED);
 	}
 }

@@ -172,11 +172,15 @@ public class ProjectController {
 	}
 	
 	@PutMapping("{project-id}/sprints/{sprint-id}/start")
-	public void updateSprintStatus(@PathVariable("project-id") String projectId,
-									@PathVariable("sprint-id") String sprintId,
-									@RequestBody String input) {
+	public void startSprint(@PathVariable("project-id") String projectId, @PathVariable("sprint-id") String sprintId) {
 		projectService.startSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId));
 	}
+	
+	@PutMapping("{project-id}/sprints/{sprint-id}/terminate")
+	public void terminateSprint(@PathVariable("project-id") String projectId, @PathVariable("sprint-id") String sprintId) {
+		projectService.terminateSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId));
+	}
+
 
 	@ExceptionHandler({PMRuntimeException.class})
 	public ResponseEntity<?> handleException(PMRuntimeException ex) {

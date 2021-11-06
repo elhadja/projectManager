@@ -29,4 +29,5 @@ public interface ProjectService {
 	public List<Sprint> getProjectSprints(Long projectId);
 	public void deleteSprint(long projectId, long sprintId);
 	public void startSprint(Long projectId, Long sprintId);
+	public void terminateSprint(Long projectId, Long sprintId);
 }

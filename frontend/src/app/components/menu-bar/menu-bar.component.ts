@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import { Subscriber, Subscription } from 'rxjs';
-import { SubjectSubscriber } from 'rxjs/internal/Subject';
-import { PMConstants } from 'src/app/common/PMConstants';
+import { RoutingService } from 'src/app/services/routing.service';
 import { sessionManagerService } from 'src/app/services/sessionManager.service';
 
 @Component({
@@ -14,35 +12,41 @@ import { sessionManagerService } from 'src/app/services/sessionManager.service';
 export class MenuBarComponent implements OnInit {
   public items: MenuItem[];
   public isVisible: boolean;
-  public isProjectSelected: boolean;
 
   constructor(private router: Router,
-             private sessionService: sessionManagerService) { 
+             private sessionService: sessionManagerService,
+             private routingService: RoutingService) { 
     this.items = [];
-    this.isVisible = sessionService.getUserId != null;
-    this.isProjectSelected = false;
+    this.isVisible = sessionService.getUserId() > 0;
 
     this.sessionService.userLoggedEmitter.subscribe((isUserLogged) => {
       this.isVisible = isUserLogged;
+      this.initializeMenu();
     });
 
     this.sessionService.projectSelectedSubject.subscribe(() => {
-      this.isProjectSelected = true;
-      this.items = [...this.items];
+      this.initializeMenu();
     });
   }
 
   ngOnInit(): void {
+    this.initializeMenu();
+  }
+
+  private initializeMenu(): void {
     this.items = [
       {
         label: 'Project',
-        command: () => {this.router.navigate(["/" + PMConstants.PROJECT_MODULE_BASE_URI])},
+        command: () => { this.routingService.gotoProjectComponent(); },
       },
       {
         label: 'User Stories',
+        command: () => { this.routingService.gotoBacklogComponent( +this.sessionService.getProjectId()); },
+        visible: this.isProjectSelected()
       },
       {
         label: 'Tasks',
+        visible: this.isProjectSelected()
       },
       {
         label: 'user name',
@@ -51,11 +55,15 @@ export class MenuBarComponent implements OnInit {
             label: 'quitter',
             command: () => { 
               this.sessionService.closeSession();
-              this.router.navigateByUrl(PMConstants.AUTHENTICATION_MODULE_BASE_URI) ;
+              this.routingService.gotoLoginComponent();
             }
           }
         ]
       }
     ]
+  }
+
+  private isProjectSelected(): boolean {
+    return this.sessionService.getProjectId() > 0;
   }
 }

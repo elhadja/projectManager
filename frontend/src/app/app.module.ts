@@ -17,12 +17,14 @@ import { ProjectApiService } from './PMApi/project.api';
 import { MenubarModule } from 'primeng/menubar'
 import { MenuItem } from 'primeng/api';
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
+import { RoutingService } from './services/routing.service';
 
 const SERVICES = [API, 
                   MessageService,
                   RouteSecureService,
                   sessionManagerService,
-                  ProjectApiService
+                  ProjectApiService,
+                  RoutingService
                 ];
 
 @NgModule({

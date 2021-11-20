@@ -3,13 +3,13 @@ package com.elhadjium.PMBackend.dto;
 import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.util.JavaUtil;
 
-public class AddTaskInputDTO implements DTOValidator {
+public class UpdateTaskDTO implements DTOValidator {
 	private long userId;
 	private long userStoryId;
 	private String description;
 	private float duration;
 	private String definitionOfDone;
-	
+
 	public long getUserId() {
 		return userId;
 	}
@@ -41,7 +41,7 @@ public class AddTaskInputDTO implements DTOValidator {
 	public void setDuration(float duration) {
 		this.duration = duration;
 	}
-	
+
 	public String getDefinitionOfDone() {
 		return definitionOfDone;
 	}

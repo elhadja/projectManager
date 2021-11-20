@@ -1,5 +1,7 @@
 package com.elhadjium.PMBackend.service;
 
+import static org.mockito.Mockito.description;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -331,5 +333,14 @@ public class ProjectServiceImpl implements ProjectService {
 	public void openUserStory(Long projectId, Long userStoryId) {
 		UserStory us = userStoryDAO.findById(userStoryId).get();
 		us.setStatus(UserStoryStatus.OPEN);
+	}
+
+	@Override
+	public Task updateTask(long taskId, Task taskData) {
+		Task taskToUpdate = taskDAO.findById(taskId).get();
+		taskData.setId(taskToUpdate.getId());
+		taskToUpdate = Mapping.mapTo(taskData, Task.class);
+
+		return taskToUpdate;
 	}
 }

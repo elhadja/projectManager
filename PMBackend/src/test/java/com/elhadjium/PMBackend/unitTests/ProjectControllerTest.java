@@ -44,9 +44,11 @@ import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
+import com.elhadjium.PMBackend.dto.UpdateTaskDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
+import com.elhadjium.PMBackend.entity.TaskTask;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.entity.UserStoryImportance;
@@ -82,6 +84,13 @@ public class ProjectControllerTest {
 		task.setId(1L);
 		task.setDescription("mqlksdjfqmlkdf");
 		task.setDuration(1.5f);
+		task.setDefinitionOfDone("dod");
+		Task dependency1 = new Task();
+		Task dependency2 = new Task();
+		dependency1.setId(2L);
+		dependency2.setId(3L);
+		task.addDependency(dependency1);
+		task.addDependency(dependency2);
 		User user = new User();
 		user.setId(1L);
 		user.setPseudo("pseudo");
@@ -106,6 +115,8 @@ public class ProjectControllerTest {
 		assertEquals(task.getDescription(), output.getDescription());
 		assertEquals(task.getDuration(), output.getDuration());
 		assertEquals(task.getUser().getPseudo(), output.getUserPseudo());
+		assertEquals(task.getDefinitionOfDone(), output.getDefinitionOfDone());
+		assertEquals(2, output.getDependencies().size());
 	}
 	
 	@Test
@@ -406,6 +417,23 @@ public class ProjectControllerTest {
 		
 		// then
 		verify(projectService).terminateSprint(Mockito.eq(projectId), Mockito.eq(sprintId));
+	}
+	
+	@Test
+	public void updateTask_shouldBeOk() throws Exception {
+		// prepare
+		final long projectId = 1;
+		final long userStoryId = 2;
+		final long taskId = 3;
+		
+		UpdateTaskDTO input = new UpdateTaskDTO();
+		input.setDescription("desc");
+
+		// when
+		putRequest("/pm-api/projects/" + projectId + "/user-stories/" + userStoryId + "/tasks/" + taskId, input);
+		
+		// then
+		verify(projectService).updateTask(Mockito.eq(taskId), Mockito.any(Task.class));
 	}
 	
 	private <T> T getObject(MvcResult mvcResult, Class<T> targetClass) throws Exception {

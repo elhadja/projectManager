@@ -1,9 +1,11 @@
 package com.elhadjium.PMBackend.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +30,13 @@ import com.elhadjium.PMBackend.dto.GetTaskOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.StartSprintDTO;
+import com.elhadjium.PMBackend.dto.TaskDepencieOutputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
+import com.elhadjium.PMBackend.dto.UpdateTaskDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
+import com.elhadjium.PMBackend.entity.TaskTask;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.ProjectService;
@@ -133,7 +138,6 @@ public class ProjectController {
 							@PathVariable("user-story-id") String userStoryId,
 							@RequestBody AddTaskInputDTO input) {
 		input.validate();
-		// TODO test mapping
 		return projectService.createTask(JavaUtil.parseId(userStoryId), Mapping.mapTo(input, Task.class));
 	}
 	
@@ -150,6 +154,12 @@ public class ProjectController {
 		Set<GetTaskOutputDTO> outputList = new HashSet<GetTaskOutputDTO>();
 		tasks.forEach(task -> {
 			GetTaskOutputDTO output = Mapping.mapTo(task, GetTaskOutputDTO.class);
+			// TODO to refactor
+			Set<TaskDepencieOutputDTO> dependenciesOutputDTO = Arrays.asList(Mapping.mapTo(task.getDependencies(), TaskDepencieOutputDTO[].class))
+										.stream()
+										.map(taskDependendyOutptuDTO -> (TaskDepencieOutputDTO)taskDependendyOutptuDTO)
+										.collect(Collectors.toSet());
+			output.setDependencies(dependenciesOutputDTO);
 			outputList.add(output);
 		});
 		
@@ -192,6 +202,14 @@ public class ProjectController {
 	@PutMapping("{project-id}/user-stories/{user-story-id}/open")
 	public void openUserStory(@PathVariable("project-id") String projectId, @PathVariable("user-story-id") String userStoryId) {
 		projectService.openUserStory(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId));
+	}
+	
+	@PutMapping("{project-id}/user-stories/{user-story-id}/tasks/{task-id}")
+	public Task updateTask(@PathVariable("project-id") String projectId, 
+						   @PathVariable("user-story-id") String userStoryId,
+						   @PathVariable("task-id") String taskId,
+						   @RequestBody UpdateTaskDTO input) throws Exception {
+		return projectService.updateTask(JavaUtil.parseId(taskId), Mapping.mapTo(input, Task.class));
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

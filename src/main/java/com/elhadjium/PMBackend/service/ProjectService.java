@@ -33,4 +33,5 @@ public interface ProjectService {
 	public void terminateSprint(Long projectId, Long sprintId);
 	public void closeUserStory(Long projectId, Long userStoryId);
 	public void openUserStory(Long projectId, Long userStoryId);
+	public Task updateTask(long taskId, Task taskData);
 }

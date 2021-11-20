@@ -36,6 +36,7 @@ import com.elhadjium.PMBackend.dto.UpdateTaskDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
+import com.elhadjium.PMBackend.entity.TaskStatus;
 import com.elhadjium.PMBackend.entity.TaskTask;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
@@ -210,6 +211,11 @@ public class ProjectController {
 						   @PathVariable("task-id") String taskId,
 						   @RequestBody UpdateTaskDTO input) throws Exception {
 		return projectService.updateTask(JavaUtil.parseId(taskId), Mapping.mapTo(input, Task.class));
+	}
+	
+	@PutMapping("{project-id}/tasks/{task-id}/")
+	public void setTaskStatus(@PathVariable("task-id") String taskId, @RequestBody TaskStatus status) throws Exception {
+		projectService.setTaskStatus(JavaUtil.parseId(taskId),status);
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

@@ -1,7 +1,5 @@
 package com.elhadjium.PMBackend.service;
 
-import static org.mockito.Mockito.description;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +24,6 @@ import com.elhadjium.PMBackend.dao.TaskDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
-import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
@@ -35,6 +32,7 @@ import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.SprintStatus;
 import com.elhadjium.PMBackend.entity.Task;
+import com.elhadjium.PMBackend.entity.TaskStatus;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
@@ -336,11 +334,31 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
+	@Transactional
 	public Task updateTask(long taskId, Task taskData) {
 		Task taskToUpdate = taskDAO.findById(taskId).get();
 		taskData.setId(taskToUpdate.getId());
 		taskToUpdate = Mapping.mapTo(taskData, Task.class);
 
 		return taskToUpdate;
+	}
+
+	@Override
+	@Transactional
+	public void setTaskStatus(Long taskId, TaskStatus status) {
+		Task task = taskDAO.findById(taskId).get();
+		switch (status) {
+		case TODO:
+			// TODO
+			break;
+		case DOING:
+			// TODO
+			break;
+		case DONE:
+			// TODO
+			break;
+		}
+		
+		task.setStatus(status);
 	}
 }

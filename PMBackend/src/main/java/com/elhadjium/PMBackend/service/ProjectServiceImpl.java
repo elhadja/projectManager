@@ -36,10 +36,16 @@ import com.elhadjium.PMBackend.entity.TaskStatus;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
+import com.elhadjium.PMBackend.entity.UserStoryTasK;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
+	@Autowired
+	private UserStoryService userStoryService;
+	
+	@Autowired TaskService taskService;
+	
 	@Autowired
 	private ProjectDAO projectDao;
 	
@@ -347,18 +353,23 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	public void setTaskStatus(Long taskId, TaskStatus status) {
 		Task task = taskDAO.findById(taskId).get();
+		task.setStatus(status);
 		switch (status) {
 		case TODO:
-			// TODO
-			break;
 		case DOING:
-			// TODO
+			taskService.openTaskUserStories(task);
 			break;
 		case DONE:
-			// TODO
+			List<UserStory> taskUserStories = task.getTaskUserStories()
+												  .stream()
+												  .map(UserStoryTasK::getUserStory)
+												  .collect(Collectors.toList());
+			taskUserStories.forEach(us -> {
+				if (userStoryService.isAllUserStoryTasksAreDone(us)) {
+					us.setStatus(UserStoryStatus.CLOSE);
+				}
+			});
 			break;
 		}
-		
-		task.setStatus(status);
 	}
 }

@@ -19,4 +19,8 @@ export class RoutingService {
     public gotoProjectComponent(): void {
         this.router.navigate(["/" + PMConstants.PROJECT_MODULE_BASE_URI]);
     }
+
+    public gotoTaskComponent(projectId: number): void {
+        this.router.navigateByUrl('/project/task/' + projectId);
+    }
 }

@@ -46,6 +46,7 @@ export class MenuBarComponent implements OnInit {
       },
       {
         label: 'Tasks',
+        command: () => { this.routingService.gotoTaskComponent( +this.sessionService.getProjectId()); },
         visible: this.isProjectSelected()
       },
       {

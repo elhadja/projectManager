@@ -29,12 +29,16 @@ import { DialogUserStoryDetailsComponent } from './dialog/dialog-user-story-deta
 import {BadgeModule} from 'primeng/badge';
 import { MatSelectModule } from '@angular/material/select';
 import { CalendarModule } from 'primeng/calendar';
-import { OverlayPanelModule } from 'primeng/overlaypanel'
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { TaskComponent } from './task/task.component'
+import { GuiModule } from '../modules/gui/gui.module';
+import { DialogCreateTaskComponent } from './dialog/dialog-create-task/dialog-create-task.component';
 
 
 const routes: Routes = [
   {path: '', canActivate: [RouteSecureService], component: HomeComponent},
-  {path: 'backlog/:backlog-id', canActivate: [RouteSecureService], component: BacklogComponent}
+  {path: 'backlog/:backlog-id', canActivate: [RouteSecureService], component: BacklogComponent},
+  {path: 'task/:project-id', canActivate: [RouteSecureService], component: TaskComponent}
 ]
 
 const PRIME_NG_MODULES = [
@@ -42,6 +46,10 @@ const PRIME_NG_MODULES = [
   BadgeModule,
   CalendarModule,
   OverlayPanelModule
+]
+
+const PM_MODULE = [
+  GuiModule
 ]
 
 const MAT_MODULES = [
@@ -65,11 +73,14 @@ const MAT_MODULES = [
     DialogCreateUerStoryComponent,
     DialogCreateSprintComponent,
     DialogUserStoryDetailsComponent,
+    TaskComponent,
+    DialogCreateTaskComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    [...PM_MODULE],
     [...MAT_MODULES],
     [...PRIME_NG_MODULES],
     TranslateModule.forChild({

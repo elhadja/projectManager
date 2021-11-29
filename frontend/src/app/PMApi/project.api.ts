@@ -3,6 +3,7 @@ import { Observable, of } from "rxjs";
 import { ApiConstant } from "../common/ApiConstant";
 import { AddSprintToProjectOutputDTO } from "../dto/addSprintToProjectOutputDTO";
 import { AddUserStoryOutputDTO } from "../dto/addUserStoryOutputDTO";
+import { CreateTaskOutputDTO } from "../dto/createTask.output.dto";
 import { GetUserStoriesInputDTO } from "../dto/getUserStoriesInputDTO";
 import { StartSprintOutputDTO } from "../dto/startSprintOutputDTO";
 import { API } from "../services/Api";
@@ -59,5 +60,9 @@ export class ProjectApiService {
 
     public openUserStories(projectId: number, userStoryId: number): Observable<void> {
         return this.api.put(this.baseURI + '/' + projectId + '/user-stories/' + userStoryId + '/open', null);
+    }
+
+    public createTask(projectId: number, input: CreateTaskOutputDTO): Observable<void> {
+        return this.api.post(this.baseURI + '/' + projectId + '/user-stories/' + input.userStoryId + '/tasks', input);
     }
 }

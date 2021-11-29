@@ -4,17 +4,17 @@ import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.util.JavaUtil;
 
 public class AddTaskInputDTO implements DTOValidator {
-	private long userId;
+	private Long userId;
 	private long userStoryId;
 	private String description;
-	private float duration;
+	private Float duration;
 	private String definitionOfDone;
 	
-	public long getUserId() {
+	public Long getUserId() {
 		return userId;
 	}
 
-	public void setUserId(long userId) {
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
@@ -34,11 +34,11 @@ public class AddTaskInputDTO implements DTOValidator {
 		this.description = description;
 	}
 
-	public float getDuration() {
+	public Float getDuration() {
 		return duration;
 	}
 
-	public void setDuration(float duration) {
+	public void setDuration(Float duration) {
 		this.duration = duration;
 	}
 	
@@ -56,16 +56,11 @@ public class AddTaskInputDTO implements DTOValidator {
 			throw new PMInvalidInputDTO("task description are required");
 		}
 		
-		try {
-			float f = Float.valueOf(duration);
-			if (f < 0) {
-				throw new Exception();
-			}
-		} catch (Exception e) {
-			throw new PMInvalidInputDTO("Task duration is invalid.");
+		if (duration != null && duration.floatValue() <= 0) {
+			throw new PMInvalidInputDTO("Task duration must be greather than 0.");
 		}
 		
-		if (userId <= 0 || userStoryId <= 0) {
+		if ((userId != null && userId.longValue() <=  0) || userStoryId <= 0) {
 			throw new PMInvalidInputDTO("user and userStory identifers must be greather than 0");
 		}
 	}

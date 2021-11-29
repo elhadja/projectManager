@@ -346,7 +346,7 @@ public class ProjectControllerTest {
 		
 		AddTaskInputDTO input = new AddTaskInputDTO();
 		input.setDescription("task description");
-		input.setUserId(1);
+		input.setUserId(1L);
 		input.setUserStoryId(2);
 
 		// when
@@ -370,7 +370,7 @@ public class ProjectControllerTest {
 		
 		AddTaskInputDTO input = new AddTaskInputDTO();
 		input.setDescription("task description");
-		input.setUserId(1);
+		input.setUserId(1L);
 		input.setUserStoryId(2);
 
 		// when

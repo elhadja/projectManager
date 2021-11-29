@@ -24,6 +24,7 @@ import com.elhadjium.PMBackend.dao.TaskDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
+import com.elhadjium.PMBackend.dto.GetUsersByCriteriaOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
@@ -371,5 +372,13 @@ public class ProjectServiceImpl implements ProjectService {
 			});
 			break;
 		}
+	}
+
+	@Override
+	public List<User> getProjectUsers(long projectId) {
+		return projectDao.findById(projectId).get().getUsers()
+						.stream()
+						.map(UserProject::getUser)
+						.collect(Collectors.toList());
 	}
 }

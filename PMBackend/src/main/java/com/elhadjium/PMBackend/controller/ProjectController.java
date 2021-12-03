@@ -140,7 +140,12 @@ public class ProjectController {
 							@PathVariable("user-story-id") String userStoryId,
 							@RequestBody AddTaskInputDTO input) {
 		input.validate();
-		return projectService.createTask(JavaUtil.parseId(userStoryId), Mapping.mapTo(input, Task.class));
+		
+		// FIXME mapping userId are setting all attribute with %id%
+		Task taskData = Mapping.mapTo(input, Task.class);
+		taskData.setId(null);
+
+		return projectService.createTask(JavaUtil.parseId(userStoryId), taskData);
 	}
 	
 	@DeleteMapping("{project-id}/user-stories/{user-story-id}/tasks/{task-id}")

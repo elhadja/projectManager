@@ -246,7 +246,7 @@ public class ProjectServiceITest {
 	}
 	
 	@Test
-	public void addTask_shouldBeOk() throws Exception {
+	public void createTask_shouldBeOk() throws Exception {
 		// prepare
 		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
@@ -258,8 +258,8 @@ public class ProjectServiceITest {
 		
 		Task taskData = new Task();
 		taskData.setDescription("desc");
-	
-		// when
+		
+        // when
 		long taskId = projectService.createTask(usId, taskData);
 		
 		// then

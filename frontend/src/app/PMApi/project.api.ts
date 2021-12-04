@@ -4,6 +4,7 @@ import { ApiConstant } from "../common/ApiConstant";
 import { AddSprintToProjectOutputDTO } from "../dto/addSprintToProjectOutputDTO";
 import { AddUserStoryOutputDTO } from "../dto/addUserStoryOutputDTO";
 import { CreateTaskOutputDTO } from "../dto/createTask.output.dto";
+import { GetUsersByCriteriaInputDTO } from "../dto/getUsersByCriteriaInputDTO";
 import { GetUserStoriesInputDTO } from "../dto/getUserStoriesInputDTO";
 import { StartSprintOutputDTO } from "../dto/startSprintOutputDTO";
 import { API } from "../services/Api";
@@ -64,5 +65,9 @@ export class ProjectApiService {
 
     public createTask(projectId: number, input: CreateTaskOutputDTO): Observable<void> {
         return this.api.post(this.baseURI + '/' + projectId + '/user-stories/' + input.userStoryId + '/tasks', input);
+    }
+
+    public getProjectUsers(projectId: number): Observable<GetUsersByCriteriaInputDTO[]> {
+        return this.api.get(this.baseURI + '/' + projectId + '/users');
     }
 }

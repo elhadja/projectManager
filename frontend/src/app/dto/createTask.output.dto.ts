@@ -3,5 +3,6 @@ export interface CreateTaskOutputDTO {
     userStoryId: number,
     description: string,
     duration?: number,
-    definitionOfDone?: string
+    definitionOfDone?: string,
+    dependenciesIDs?: number[]
 }

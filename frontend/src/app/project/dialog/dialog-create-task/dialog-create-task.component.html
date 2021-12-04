@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col">
+        <div class="col" style="height: 800px; overflow-y: auto;">
             <h1 class="text-center">Crate task</h1>
             <form [formGroup]="taskFormGroup" (ngSubmit)="onSubmit()">
                 <mat-form-field appearance="fill" class="w-100">
@@ -21,7 +21,7 @@
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label>Responsable</mat-label>
                     <mat-select formControlName="user">
-                        <mat-option *ngFor="let option of responsables" [value]="option.value">{{option.label}}</mat-option>
+                        <mat-option *ngFor="let responsable of responsables" [value]="responsable.id">{{responsable.pseudo}}</mat-option>
                     </mat-select>
                 </mat-form-field >
                 <mat-form-field appearance="fill" class="w-100">
@@ -32,10 +32,16 @@
                 </mat-form-field >
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label>User Story</mat-label>
-                    <mat-select formControlName="userStory">
+                    <mat-select (selectionChange)="onUserStorySelected()" formControlName="userStory">
                         <mat-option *ngFor="let us of userStories" [value]="us.id">{{us.summary}}</mat-option>
                     </mat-select>
                 </mat-form-field >
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Task dependencies</mat-label>
+                    <mat-select formControlName="dependencies" multiple>
+                        <mat-option *ngFor="let dependency of taskDependencies" [value]="dependency.id">{{dependency.id}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
                 <button type="submit" mat-stroked-button [disabled]="taskFormGroup.invalid">create</button>
                 <button type="button" mat-stroked-button>cancel</button>
             </form>

@@ -1,1 +1,87 @@
 <pm-button [label]="'create'" (click)="onCreateTask()"></pm-button>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <mat-button-toggle-group [(ngModel)]="selectedView">
+                <mat-button-toggle value="0">By Sprint</mat-button-toggle>
+                <mat-button-toggle value="1">Kanban</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+    </div>
+    <div class="row" *ngIf="selectedView == 0">
+        <div class="col">
+            <mat-form-field appearance="fill" class="w-100">
+                <mat-label>Choose a sprint</mat-label>
+                <mat-select [(ngModel)]="selectedSprint" (selectionChange)="onSprintSelected()">
+                    <mat-option *ngFor="let sprint of projectSprints" [value]="sprint.id">{{sprint.name}}</mat-option>
+                </mat-select>
+            </mat-form-field >
+
+             <p-table [value]="tasksToDisplay">
+                <ng-template pTemplate="colgroup">
+                    <colgroup>
+                        <col style="width:5%">
+                        <col style="width:5%">
+                        <col style="width:5%">
+                        <col style="width:30%">
+                        <col style="width:5%">
+                        <col style="width:15%">
+                        <col style="width:25%">
+                        <col style="width:5%">
+                        <col style="width:5%">
+                    </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th>ID</th>
+                        <th>US ID</th>
+                        <th>Description</th>
+                        <th>Duration</th>
+                        <th>dependencies</th>
+                        <th>dod</th>
+                        <th>user</th>
+                        <th>status</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                        </td>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.userStoryId }}</td>
+                        <td>{{ row.description }}</td>
+                        <td>{{ row.duration }}</td>
+                        <td>
+                            <ng-container *ngFor="let dependency of row.dependencies">
+                                {{ dependency.id }} &emsp;
+                            </ng-container>
+                        </td>
+                        <td>
+                            <ng-container *ngFor="let dod of dodAsArray(row.definitionOfDone)">
+                                {{ row.definitionOfDone }} <br>
+                            </ng-container>
+                        </td>
+                        <td>{{ row.userPseudo }}</td>
+                        <td>{{ row.status }}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td colspan = "3">
+                            No records found
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="row" *ngIf="selectedView == 1">
+        <div class="col">
+            kanban
+        </div>
+    </div>
+</div>

@@ -33,6 +33,8 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TaskComponent } from './task/task.component'
 import { GuiModule } from '../modules/gui/gui.module';
 import { DialogCreateTaskComponent } from './dialog/dialog-create-task/dialog-create-task.component';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+
 
 
 const routes: Routes = [
@@ -61,7 +63,8 @@ const MAT_MODULES = [
     MatMenuModule,
     MatIconModule,
     MatTabsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatButtonToggleModule
 ]
 
 @NgModule({

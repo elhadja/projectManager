@@ -188,13 +188,20 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
+	@Transactional
 	public List<UserStory> getBacklogUserStories(Long projectId) {
-		return projectDao.findById(projectId).get().getBacklog().getUserStories();
+		List<UserStory> userStories = projectDao.findById(projectId).get().getBacklog().getUserStories();
+		userStories.forEach(us -> us.getTasks()); // force loading tasks to avoid lazy initialization exception
+
+		return userStories;
 	}
 
 	@Override
+	@Transactional
 	public List<UserStory> getSprintUserStories(Long parseId, Long sprintId) {
-		return userStoryDAO.findBySprintId(sprintId);
+		List<UserStory> userStories = userStoryDAO.findBySprintId(sprintId);
+		userStories.forEach(us -> us.getTasks());
+		return userStories;
 	}
 
 	@Override
@@ -241,6 +248,7 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	public Long createTask(Long userStoryId, Task taskData) {
 		Task task = Mapping.mapTo(taskData, Task.class);
+		task.setStatus(TaskStatus.TODO);
 		UserStory us = userStoryDAO.findById(userStoryId).get();
 		task.addUserStory(us);
 		taskDAO.save(task);

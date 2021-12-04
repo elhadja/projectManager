@@ -1,5 +1,7 @@
 package com.elhadjium.PMBackend.dto;
 
+import java.util.List;
+
 import com.elhadjium.PMBackend.entity.UserStoryImportance;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
 
@@ -10,6 +12,7 @@ public class GetUserStoryOutputDTO {
 	private Long storyPoint;
 	private UserStoryStatus status;
 	private UserStoryImportance importance;
+	private List<GetTaskOutputDTO> tasks;
 
 	public Long getId() {
 		return id;
@@ -57,5 +60,13 @@ public class GetUserStoryOutputDTO {
 
 	public void setImportance(UserStoryImportance importance) {
 		this.importance = importance;
+	}
+
+	public List<GetTaskOutputDTO> getTasks() {
+		return tasks;
+	}
+
+	public void setTasks(List<GetTaskOutputDTO> tasks) {
+		this.tasks = tasks;
 	}
 }

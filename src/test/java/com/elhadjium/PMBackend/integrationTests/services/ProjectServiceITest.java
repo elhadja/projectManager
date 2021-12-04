@@ -258,8 +258,8 @@ public class ProjectServiceITest {
 		
 		Task taskData = new Task();
 		taskData.setDescription("desc");
-		
-        // when
+		//taskData.setUser();	
+		// when
 		long taskId = projectService.createTask(usId, taskData);
 		
 		// then

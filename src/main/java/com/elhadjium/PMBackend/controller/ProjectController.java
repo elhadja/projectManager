@@ -38,7 +38,6 @@ import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.TaskStatus;
-import com.elhadjium.PMBackend.entity.TaskTask;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.ProjectService;
@@ -144,6 +143,14 @@ public class ProjectController {
 		// FIXME mapping userId are setting all attribute with %id%
 		Task taskData = Mapping.mapTo(input, Task.class);
 		taskData.setId(null);
+		// TODO should be refactored by defining an input type for the service
+		if (input.getDependenciesIDs() != null) {
+			for (Long dependencyId: input.getDependenciesIDs()) {
+				Task dependency = new Task();
+				dependency.setId(dependencyId);
+				taskData.addDependency(dependency);
+			}
+		}
 
 		return projectService.createTask(JavaUtil.parseId(userStoryId), taskData);
 	}

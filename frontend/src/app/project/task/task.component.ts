@@ -47,6 +47,10 @@ export class TaskComponent implements OnInit {
   ngOnInit(): void {
     this.projectApiService.getProjectSprints(this.projectId).subscribe(sprints => {
       this.projectSprints = sprints;
+      if (sprints != null && sprints.length > 0) {
+        this.selectedSprint = sprints[0].id;
+        this.onSprintSelected();
+      }
     });
   }
 

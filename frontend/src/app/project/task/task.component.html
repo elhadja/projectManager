@@ -1,4 +1,3 @@
-<pm-button [label]="'create'" (click)="onCreateTask()"></pm-button>
 <div class="container-fluid">
     <div class="row">
         <div class="col">
@@ -8,6 +7,8 @@
             </mat-button-toggle-group>
         </div>
     </div>
+
+    <!-- tasks by sprint -->
     <div class="row" *ngIf="selectedView == 0">
         <div class="col">
             <mat-form-field appearance="fill" class="w-100">
@@ -17,7 +18,16 @@
                 </mat-select>
             </mat-form-field >
 
-             <p-table [value]="tasksToDisplay">
+             <p-table [value]="tasksToDisplay" [(selection)]="selectedTasks">
+                <ng-template pTemplate="caption">
+                    <div class="d-flex flex-row justify-content-right">
+                       <div>
+                            <pm-button [label]="'add Task'" (click)="onCreateTask()"></pm-button>
+                            <button *ngIf="selectedTasks.length > 0" mat-stroked-button class="text-danger" (click)=onDeleteSelectedTasks()>delete tasks</button>
+                        </div>
+                    </div>
+                </ng-template>
+ 
                 <ng-template pTemplate="colgroup">
                     <colgroup>
                         <col style="width:5%">
@@ -31,6 +41,7 @@
                         <col style="width:5%">
                     </colgroup>
                 </ng-template>
+
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem">
@@ -79,6 +90,8 @@
             </p-table>
         </div>
     </div>
+
+    <!-- kanban -->
     <div class="row" *ngIf="selectedView == 1">
         <div class="col">
             kanban

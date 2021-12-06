@@ -70,4 +70,15 @@ export class ProjectApiService {
     public getProjectUsers(projectId: number): Observable<GetUsersByCriteriaInputDTO[]> {
         return this.api.get(this.baseURI + '/' + projectId + '/users');
     }
+
+    public deleteTasks(projectId: number, userStoryId: number, tasksIDs: number[]): Observable<void> {
+        let taskIDsString = "";
+        tasksIDs.forEach((id, index) => {
+            taskIDsString += `${id}`;
+            if (index < tasksIDs.length-1) {
+                taskIDsString += ",";
+            }
+        });
+        return this.api.delete(this.baseURI + '/' + projectId + '/user-stories/' + userStoryId + '/tasks/' + taskIDsString);
+    }
 }

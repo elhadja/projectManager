@@ -40,7 +40,7 @@ export class DialogCreateTaskComponent implements OnInit {
       'user': fb.control(null),
       'sprint': fb.control('', [Validators.required]),
       'userStory': fb.control('', [Validators.required]),
-      'dependencies': fb.control('')
+      'dependencies': fb.control([])
     });
 
     this.projectId = data.projectId;

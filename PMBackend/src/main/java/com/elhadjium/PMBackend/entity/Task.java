@@ -31,7 +31,7 @@ public class Task implements Serializable {
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<UserStoryTasK> taskUserStories = new HashSet<UserStoryTasK>();
 	
-	@OneToMany(mappedBy = "task" ,cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "task" ,cascade = CascadeType.REMOVE, orphanRemoval = true)
 	private Set<TaskTask> taskTaskSet = new HashSet<TaskTask>();
 	
 	@Enumerated(EnumType.STRING)

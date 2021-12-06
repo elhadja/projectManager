@@ -4,9 +4,13 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.NamedQueries;
+
 @Entity
+@IdClass(TaskTaskId.class)
 public class TaskTask implements Serializable {
 	private static final long serialVersionUID = 1L;
 

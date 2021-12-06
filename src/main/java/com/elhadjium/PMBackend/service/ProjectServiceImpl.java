@@ -21,6 +21,7 @@ import com.elhadjium.PMBackend.common.Mapping;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.SprintDAO;
 import com.elhadjium.PMBackend.dao.TaskDAO;
+import com.elhadjium.PMBackend.dao.TaskTaskDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
@@ -61,6 +62,9 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Autowired
 	private TaskDAO taskDAO;
+	
+	@Autowired
+	private TaskTaskDAO taskTaskDao;
 	
 	// TODO integration testing
 	@Transactional
@@ -257,10 +261,10 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	@Transactional
 	public void removeTask(Long userStoryId, Long taskId) {
 		Task task = taskDAO.findById(taskId).get();
 		task.removeUserStory(userStoryDAO.findById(userStoryId).get());
+		taskTaskDao.deleteHelp(taskId);
 		taskDAO.delete(task);
 	}
 

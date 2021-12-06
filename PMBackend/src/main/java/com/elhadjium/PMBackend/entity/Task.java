@@ -31,7 +31,7 @@ public class Task implements Serializable {
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<UserStoryTasK> taskUserStories = new HashSet<UserStoryTasK>();
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "task" ,cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<TaskTask> taskTaskSet = new HashSet<TaskTask>();
 	
 	@Enumerated(EnumType.STRING)
@@ -66,12 +66,10 @@ public class Task implements Serializable {
 	
 	public void addDependency(Task task) {
 		if (task != null) {
-			TaskTask taskTask = new TaskTask(this, task);
-			this.taskTaskSet.add(taskTask);
-			task.getTaskTaskSet().add(taskTask);
+			this.taskTaskSet.add(new TaskTask(this, task));
 		}
 	}
-
+	
 	public Long getId() {
 		return id;
 	}

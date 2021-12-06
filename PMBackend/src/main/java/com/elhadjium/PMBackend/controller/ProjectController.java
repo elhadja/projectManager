@@ -155,11 +155,13 @@ public class ProjectController {
 		return projectService.createTask(JavaUtil.parseId(userStoryId), taskData);
 	}
 	
-	@DeleteMapping("{project-id}/user-stories/{user-story-id}/tasks/{task-id}")
-	public void removeTask(@PathVariable("project-id") String projectId,
+	@DeleteMapping("{project-id}/user-stories/{user-story-id}/tasks/{tasks-ids}")
+	public void removeUserStoryTasks(@PathVariable("project-id") String projectId,
 							@PathVariable("user-story-id") String userStoryId,
-							@PathVariable("task-id") String taskId) {
-		projectService.removeTask(JavaUtil.parseId(userStoryId), JavaUtil.parseId(taskId));
+							@PathVariable("tasks-ids") String[] taskIDs) {
+		for (String taskId: taskIDs) {
+			projectService.removeTask(JavaUtil.parseId(userStoryId), JavaUtil.parseId(taskId));
+		}
 	}
 	
 	@GetMapping("{project-id}/sprints/{sprint-id}/tasks")

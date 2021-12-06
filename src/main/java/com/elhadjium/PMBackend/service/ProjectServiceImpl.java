@@ -261,6 +261,7 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
+	@Transactional
 	public void removeTask(Long userStoryId, Long taskId) {
 		Task task = taskDAO.findById(taskId).get();
 		task.removeUserStory(userStoryDAO.findById(userStoryId).get());

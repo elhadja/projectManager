@@ -225,7 +225,20 @@ public class ProjectController {
 						   @PathVariable("user-story-id") String userStoryId,
 						   @PathVariable("task-id") String taskId,
 						   @RequestBody UpdateTaskDTO input) throws Exception {
-		return projectService.updateTask(JavaUtil.parseId(taskId), Mapping.mapTo(input, Task.class));
+		// FIXME mapping userId are setting all attribute with %id%
+		Task taskData = Mapping.mapTo(input, Task.class);
+		taskData.setId(null);
+		// TODO should be refactored by defining an input type for the service
+		if (input.getDependenciesIDs() != null) {
+			for (Long dependencyId: input.getDependenciesIDs()) {
+				Task dependency = new Task();
+				dependency.setId(dependencyId);
+				taskData.addDependency(dependency);
+			}
+		}
+
+		// FIXME return dto
+		return projectService.updateTask(JavaUtil.parseId(taskId), taskData);
 	}
 	
 	@PutMapping("{project-id}/tasks/{task-id}/")

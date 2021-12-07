@@ -353,12 +353,21 @@ public class ProjectServiceImpl implements ProjectService {
 		us.setStatus(UserStoryStatus.OPEN);
 	}
 
+	// TODO test
 	@Override
-	@Transactional
 	public Task updateTask(long taskId, Task taskData) {
 		Task taskToUpdate = taskDAO.findById(taskId).get();
-		taskData.setId(taskToUpdate.getId());
-		taskToUpdate = Mapping.mapTo(taskData, Task.class);
+		taskToUpdate.setDescription(taskData.getDescription());
+		taskToUpdate.setDuration(taskData.getDuration());
+		taskToUpdate.setDefinitionOfDone(taskData.getDefinitionOfDone());
+		taskToUpdate.setUser(taskData.getUser());
+		
+		taskToUpdate.getTaskTaskSet().clear();
+		taskData.getTaskTaskSet().forEach(taskTask -> {
+			taskToUpdate.addDependency(taskDAO.findById(taskTask.getDependent().getId()).get());
+		});
+		
+		taskDAO.save(taskToUpdate);
 
 		return taskToUpdate;
 	}

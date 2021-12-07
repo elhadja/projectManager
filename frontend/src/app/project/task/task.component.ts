@@ -55,7 +55,15 @@ export class TaskComponent implements OnInit {
   }
 
   public onCreateTask(): void {
-    this.matDialog.open(DialogCreateTaskComponent, { data: {projectId: this.projectId } });
+    this.openTask({projectId: this.projectId});
+  }
+
+  public onUpdateTask(task: GetTaskInputDTO): void {
+    this.openTask({projectId: this.projectId, task});
+  }
+
+  private openTask(popupData: {projectId: number, task?: GetTaskInputDTO}): void {
+    this.matDialog.open(DialogCreateTaskComponent, { data: popupData });
   }
 
   public onSprintSelected(): void {

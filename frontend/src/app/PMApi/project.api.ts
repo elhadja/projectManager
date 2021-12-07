@@ -81,4 +81,8 @@ export class ProjectApiService {
         });
         return this.api.delete(this.baseURI + '/' + projectId + '/user-stories/' + userStoryId + '/tasks/' + taskIDsString);
     }
+
+    public updateTask(projectId:  number, userStoryId: number, taskId: number, input: CreateTaskOutputDTO): Observable<void> {
+        return this.api.put(this.baseURI + '/' + projectId + '/user-stories/' + input.userStoryId + '/tasks/' + taskId, input);
+    }
 }

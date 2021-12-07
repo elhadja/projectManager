@@ -42,7 +42,10 @@
                         <mat-option *ngFor="let dependency of taskDependencies" [value]="dependency.id">{{dependency.id}}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <button type="submit" mat-stroked-button [disabled]="taskFormGroup.invalid">create</button>
+                <button *ngIf="updateMode; else createButton" type="submit" mat-stroked-button [disabled]="taskFormGroup.invalid">update</button>
+                <ng-template #createButton>
+                    <button type="submit" mat-stroked-button [disabled]="taskFormGroup.invalid">create</button>
+                </ng-template>
                 <button type="button" mat-stroked-button>cancel</button>
             </form>
         </div>

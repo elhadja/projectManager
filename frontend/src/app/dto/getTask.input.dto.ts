@@ -4,5 +4,6 @@ export interface GetTaskInputDTO {
     description: string,
     duration?: number,
     definitionOfDone?: string
-    userPseudo: number
+    userPseudo: string,
+    dependencies: {id: number}[]
 }

@@ -62,7 +62,7 @@
                         <td>
                             <p-tableCheckbox [value]="row"></p-tableCheckbox>
                         </td>
-                        <td>{{ row.id }}</td>
+                        <td  (click)="onUpdateTask(row)">{{ row.id }}</td>
                         <td>{{ row.userStoryId }}</td>
                         <td>{{ row.description }}</td>
                         <td>{{ row.duration }}</td>

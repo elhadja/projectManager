@@ -10,11 +10,6 @@ import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
 import { MessageService } from 'src/app/services/message.service';
 
-interface LabelValue {
-  label: string,
-  value: string
-}
-
 @Component({
   selector: 'app-dialog-create-task',
   templateUrl: './dialog-create-task.component.html',
@@ -27,10 +22,11 @@ export class DialogCreateTaskComponent implements OnInit {
   public taskDependencies: GetTaskInputDTO[];
   public sprints: GetSprintsInputDTO[];
   public projectId: number;
+  public updateMode: boolean;
 
   constructor(private readonly fb: FormBuilder,
             private route: ActivatedRoute,
-            @Inject(MAT_DIALOG_DATA) public data: {projectId: number},
+            @Inject(MAT_DIALOG_DATA) public data: {projectId: number, task?: GetTaskInputDTO},
             private readonly projectApiService: ProjectApiService,
             private readonly messageService: MessageService) {
     this.taskFormGroup = fb.group({
@@ -39,11 +35,13 @@ export class DialogCreateTaskComponent implements OnInit {
       'duration': fb.control(null),
       'user': fb.control(null),
       'sprint': fb.control('', [Validators.required]),
-      'userStory': fb.control('', [Validators.required]),
+      'userStory': fb.control(data.task != null ? data.task.userStoryId : '', [Validators.required]),
       'dependencies': fb.control([])
     });
 
+    this.updateMode = data.task != null;
     this.projectId = data.projectId;
+
     this.responsables = [];
     this.userStories = [];
     this.sprints = [];
@@ -61,10 +59,34 @@ export class DialogCreateTaskComponent implements OnInit {
     }).subscribe(result => {
       this.sprints = result.projectSprints;
       this.responsables = result.projectUsers;
+      if (this.data.task != null) {
+        this.initializeForm(this.data.task);
+      }
     });
   }
 
+  private initializeForm(task: GetTaskInputDTO): void {
+    this.description?.setValue(task.description);
+    for (let dod of task.definitionOfDone?.split(';') ?? []) {
+      this.definitionOfDone.push(new FormControl(dod));
+    }
+    if (this.definitionOfDone.length > 1) {
+      this.definitionOfDone.removeAt(0);
+    }
+    this.duration?.setValue(task.duration);
+    this.user?.setValue(this.responsables.find(user => user.pseudo === task.userPseudo)?.id);
+    this.sprint?.setValue(this.sprints.find(sprint => sprint.userStories.some(us => us.id === task.userStoryId))?.id);
+    this.userStory?.setValue(task.userStoryId);
+    this.dependencies?.setValue(task.dependencies.map(dependency => dependency.id));
+    this.onSprintSelected();
+    this.onUserStorySelected();
+  }
+
   public onSubmit(): void {
+    this.updateMode ? this.updateTask() : this.createTask();
+  }
+
+  private createTask(): void {
     this.projectApiService.createTask(this.projectId, {
       userId: this.user?.value,
       userStoryId: this.userStory?.value,
@@ -77,9 +99,26 @@ export class DialogCreateTaskComponent implements OnInit {
     });
   }
 
+  private updateTask(): void {
+    this.projectApiService.updateTask(this.projectId,
+                                     this.data.task?.userStoryId as number,
+                                     this.data.task?.id as number,
+                                     { userId: this.user?.value,
+                                      userStoryId: this.userStory?.value,
+                                      description: this.description?.value,
+                                      duration: this.duration?.value,
+                                      definitionOfDone: this.ArrayOfStringToString(this.definitionOfDone.value),
+                                      dependenciesIDs: this.dependencies?.value }).subscribe(() => {
+      this.messageService.showSuccessMessage("task modified succesfully");
+    });
+  }
+
   private ArrayOfStringToString(arr: string[]): string {
     let res = "";
     arr.forEach(s => res += (s + ';'));
+    if (res.length > 0) {
+      res = res.substring(0, res.length-1);
+    }
     return res;
   }
 

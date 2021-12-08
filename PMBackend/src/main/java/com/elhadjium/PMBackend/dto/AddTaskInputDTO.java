@@ -7,7 +7,7 @@ import com.elhadjium.PMBackend.util.JavaUtil;
 
 public class AddTaskInputDTO implements DTOValidator {
 	private Long userId;
-	private long userStoryId;
+	private List<Long> userStoriesIDs;
 	private String description;
 	private Float duration;
 	private String definitionOfDone;
@@ -19,14 +19,6 @@ public class AddTaskInputDTO implements DTOValidator {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
-	}
-
-	public long getUserStoryId() {
-		return userStoryId;
-	}
-
-	public void setUserStoryId(long userStoryId) {
-		this.userStoryId = userStoryId;
 	}
 
 	public String getDescription() {
@@ -61,6 +53,14 @@ public class AddTaskInputDTO implements DTOValidator {
 		this.dependenciesIDs = dependenciesIDs;
 	}
 
+	public List<Long> getUserStoriesIDs() {
+		return userStoriesIDs;
+	}
+
+	public void setUserStoriesIDs(List<Long> userStoriesIDs) {
+		this.userStoriesIDs = userStoriesIDs;
+	}
+
 	@Override
 	public void validate() {
 		if(JavaUtil.isNullOrEmpty(description)) {
@@ -71,8 +71,8 @@ public class AddTaskInputDTO implements DTOValidator {
 			throw new PMInvalidInputDTO("Task duration must be greather than 0.");
 		}
 		
-		if ((userId != null && userId.longValue() <=  0) || userStoryId <= 0) {
-			throw new PMInvalidInputDTO("user and userStory identifers must be greather than 0");
+		if ((userId != null && userId.longValue() <=  0)) {
+			throw new PMInvalidInputDTO("user  identifers must be greather than 0");
 		}
 	}
 }

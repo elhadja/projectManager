@@ -25,7 +25,7 @@ public interface ProjectService {
 	public Long addSprintToProject(Long projectId, Sprint sprintData);
 	public void moveUserStoryToBacklog(Long projectId, Long userStoryId);
 	public void moveUserStoryToSprint(Long projectId, Long sprintId, Long userStoryId);
-	public Long createTask(Long userStoryId, Task taskData);
+	public Long createTask(Task taskData);
 	public void removeTask(Long userStoryId, Long taskId);
 	public Set<Task> getSprintTasks(Long sprintId);
 	public List<Sprint> getProjectSprints(Long projectId);

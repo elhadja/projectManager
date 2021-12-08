@@ -250,13 +250,14 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional
-	public Long createTask(Long userStoryId, Task taskData) {
+	public Long createTask(Task taskData) {
 		Task task = Mapping.mapTo(taskData, Task.class);
 		task.setStatus(TaskStatus.TODO);
-		UserStory us = userStoryDAO.findById(userStoryId).get();
-		task.addUserStory(us);
 		task.getTaskTaskSet().forEach(taskTask -> {
 			taskTask.setDependent(taskDAO.findById(taskTask.getDependent().getId()).get());
+		});
+		task.getTaskUserStories().forEach(taskUserStory -> {
+			taskUserStory.setUserStory(userStoryDAO.findById(taskUserStory.getUserStory().getId()).get());
 		});
 		taskDAO.save(task);
 		

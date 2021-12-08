@@ -134,9 +134,8 @@ public class ProjectController {
 		projectService.moveUserStoryToSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId), JavaUtil.parseId(userStoryId));
 	}
 	
-	@PostMapping("{project-id}/user-stories/{user-story-id}/tasks")
+	@PostMapping("{project-id}/tasks")
 	public Long createTask(@PathVariable("project-id") String projectId,
-							@PathVariable("user-story-id") String userStoryId,
 							@RequestBody AddTaskInputDTO input) {
 		input.validate();
 		
@@ -151,8 +150,18 @@ public class ProjectController {
 				taskData.addDependency(dependency);
 			}
 		}
+		
+		// TODO should be refactored by defining an input type for the service
+		if (input.getUserStoriesIDs() != null) {
+			taskData.getTaskUserStories().clear();
+			for (Long usId: input.getUserStoriesIDs()) {
+				UserStory us = new UserStory();
+				us.setId(usId);
+				taskData.addUserStory(us);
+			}
+		}
 
-		return projectService.createTask(JavaUtil.parseId(userStoryId), taskData);
+		return projectService.createTask(taskData);
 	}
 	
 	@DeleteMapping("{project-id}/user-stories/{user-story-id}/tasks/{tasks-ids}")
@@ -221,7 +230,7 @@ public class ProjectController {
 	}
 	
 	@PutMapping("{project-id}/user-stories/{user-story-id}/tasks/{task-id}")
-	public Task updateTask(@PathVariable("project-id") String projectId, 
+	public GetTaskOutputDTO updateTask(@PathVariable("project-id") String projectId, 
 						   @PathVariable("user-story-id") String userStoryId,
 						   @PathVariable("task-id") String taskId,
 						   @RequestBody UpdateTaskDTO input) throws Exception {
@@ -237,8 +246,10 @@ public class ProjectController {
 			}
 		}
 
-		// FIXME return dto
-		return projectService.updateTask(JavaUtil.parseId(taskId), taskData);
+		Task updatedTask = projectService.updateTask(JavaUtil.parseId(taskId), taskData);
+
+		// TODO respect the contract
+		return null;
 	}
 	
 	@PutMapping("{project-id}/tasks/{task-id}/")

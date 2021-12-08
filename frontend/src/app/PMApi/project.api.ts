@@ -64,7 +64,7 @@ export class ProjectApiService {
     }
 
     public createTask(projectId: number, input: CreateTaskOutputDTO): Observable<void> {
-        return this.api.post(this.baseURI + '/' + projectId + '/user-stories/' + input.userStoryId + '/tasks', input);
+        return this.api.post(this.baseURI + '/' + projectId + '/tasks', input);
     }
 
     public getProjectUsers(projectId: number): Observable<GetUsersByCriteriaInputDTO[]> {
@@ -83,6 +83,7 @@ export class ProjectApiService {
     }
 
     public updateTask(projectId:  number, userStoryId: number, taskId: number, input: CreateTaskOutputDTO): Observable<void> {
-        return this.api.put(this.baseURI + '/' + projectId + '/user-stories/' + input.userStoryId + '/tasks/' + taskId, input);
+        return of();
+        //return this.api.put(this.baseURI + '/' + projectId + '/user-stories/' + input.userStoryId + '/tasks/' + taskId, input);
     }
 }

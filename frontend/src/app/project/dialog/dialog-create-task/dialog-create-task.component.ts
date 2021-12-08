@@ -35,7 +35,7 @@ export class DialogCreateTaskComponent implements OnInit {
       'duration': fb.control(null),
       'user': fb.control(null),
       'sprint': fb.control('', [Validators.required]),
-      'userStory': fb.control(data.task != null ? data.task.userStoryId : '', [Validators.required]),
+      'selectedUserStories': fb.control([], [Validators.required]),
       'dependencies': fb.control([])
     });
 
@@ -76,10 +76,10 @@ export class DialogCreateTaskComponent implements OnInit {
     this.duration?.setValue(task.duration);
     this.user?.setValue(this.responsables.find(user => user.pseudo === task.userPseudo)?.id);
     this.sprint?.setValue(this.sprints.find(sprint => sprint.userStories.some(us => us.id === task.userStoryId))?.id);
-    this.userStory?.setValue(task.userStoryId);
+    this.selectedUserStories?.setValue([task.userStoryId]); // FIXME
     this.dependencies?.setValue(task.dependencies.map(dependency => dependency.id));
     this.onSprintSelected();
-    this.onUserStorySelected();
+    //this.onUserStorySelected();
   }
 
   public onSubmit(): void {
@@ -89,7 +89,7 @@ export class DialogCreateTaskComponent implements OnInit {
   private createTask(): void {
     this.projectApiService.createTask(this.projectId, {
       userId: this.user?.value,
-      userStoryId: this.userStory?.value,
+      userStoriesIDs: this.selectedUserStories?.value,
       description: this.description?.value,
       duration: this.duration?.value,
       definitionOfDone: this.ArrayOfStringToString(this.definitionOfDone.value),
@@ -104,7 +104,7 @@ export class DialogCreateTaskComponent implements OnInit {
                                      this.data.task?.userStoryId as number,
                                      this.data.task?.id as number,
                                      { userId: this.user?.value,
-                                      userStoryId: this.userStory?.value,
+                                      userStoriesIDs: this.selectedUserStories?.value,
                                       description: this.description?.value,
                                       duration: this.duration?.value,
                                       definitionOfDone: this.ArrayOfStringToString(this.definitionOfDone.value),
@@ -130,10 +130,12 @@ export class DialogCreateTaskComponent implements OnInit {
   }
 
   public onUserStorySelected(): void {
-    const selectedUserStory = this.userStories.find(us => us.id == this.userStory?.value);
+    /*
+    const selectedUserStories = this.userStories.filter(us => this.selectedUserStories?.value.some((selectedUs: GetUserStoriesInputDTO) => us.id === selectedUs.id));
     if (selectedUserStory != null) {
       this.taskDependencies = [...selectedUserStory.tasks];
     }
+  */
   }
 
   public addDefinitionOfDone(): void {
@@ -152,8 +154,8 @@ export class DialogCreateTaskComponent implements OnInit {
     return this.taskFormGroup.get('user');
   }
 
-  get userStory() {
-    return this.taskFormGroup.get('userStory');
+  get selectedUserStories() {
+    return this.taskFormGroup.get('selectedUserStories');
   }
 
   get definitionOfDone() {

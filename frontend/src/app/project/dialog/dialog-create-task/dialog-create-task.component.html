@@ -32,7 +32,7 @@
                 </mat-form-field >
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label>User Story</mat-label>
-                    <mat-select (selectionChange)="onUserStorySelected()" formControlName="userStory">
+                    <mat-select (selectionChange)="onUserStorySelected()" formControlName="selectedUserStories" multiple>
                         <mat-option *ngFor="let us of userStories" [value]="us.id">{{us.summary}}</mat-option>
                     </mat-select>
                 </mat-form-field >

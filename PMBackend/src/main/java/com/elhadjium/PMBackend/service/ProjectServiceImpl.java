@@ -255,6 +255,9 @@ public class ProjectServiceImpl implements ProjectService {
 		task.setStatus(TaskStatus.TODO);
 		UserStory us = userStoryDAO.findById(userStoryId).get();
 		task.addUserStory(us);
+		task.getTaskTaskSet().forEach(taskTask -> {
+			taskTask.setDependent(taskDAO.findById(taskTask.getDependent().getId()).get());
+		});
 		taskDAO.save(task);
 		
 		return task.getId();

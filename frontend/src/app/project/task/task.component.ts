@@ -97,31 +97,14 @@ export class TaskComponent implements OnInit {
     return dod != null && dod.length > 0 ? dod.split(";") : [];
   }
 
-  // TODO should be refactored by defining a new backend service for more performance
   public onDeleteSelectedTasks(): void {
-    // FIXME
-    /*
-    let tasksToDeleteByUserStoryId: Map<number, number[]>;
-    tasksToDeleteByUserStoryId = new Map();
-    this.selectedTasks.forEach(task => {
-      if (!tasksToDeleteByUserStoryId.has(task.userStoryId)) {
-        tasksToDeleteByUserStoryId.set(task.userStoryId, []);
-      } 
-      if (task.id != null) {
-        tasksToDeleteByUserStoryId.get(task.userStoryId)?.push(task.id);
-      }
-    });
-
-    for (let usId of tasksToDeleteByUserStoryId.keys()) {
-      const taskstoDelete = tasksToDeleteByUserStoryId.get(usId);
-      if (taskstoDelete != null) {
-        this.projectApiService.deleteTasks(this.projectId, usId, taskstoDelete).subscribe(() => {
-          this.tasksToDisplay = [...this.tasksToDisplay.filter(taskToDisplay => taskstoDelete.every(deletedTaskId => deletedTaskId !== taskToDisplay.id))];
-          this.selectedTasks = [...this.selectedTasks.filter(selectedTask => taskstoDelete.every(deletedTaskId => deletedTaskId !== selectedTask.id))];
-          this.messageService.showSuccessMessage("task for U.S " + usId + 'deleted succesfully');
-        });
-      }
+    const taskIDs = this.selectedTasks.map(task => task.id);
+    if (taskIDs != null) {
+      this.projectApiService.deleteTasks(this.projectId, taskIDs).subscribe(() => {
+        this.tasksToDisplay = [...this.tasksToDisplay.filter(task => taskIDs.every(deletedTaskId => deletedTaskId !==task.id))];
+        this.selectedTasks = [];
+        this.messageService.showSuccessMessage("toutes les tâches ont été supprimées");
+      });
     }
-    */
   }
 }

@@ -71,7 +71,7 @@ export class ProjectApiService {
         return this.api.get(this.baseURI + '/' + projectId + '/users');
     }
 
-    public deleteTasks(projectId: number, userStoryId: number, tasksIDs: number[]): Observable<void> {
+    public deleteTasks(projectId: number, tasksIDs:number[]): Observable<void> {
         let taskIDsString = "";
         tasksIDs.forEach((id, index) => {
             taskIDsString += `${id}`;
@@ -79,7 +79,8 @@ export class ProjectApiService {
                 taskIDsString += ",";
             }
         });
-        return this.api.delete(this.baseURI + '/' + projectId + '/user-stories/' + userStoryId + '/tasks/' + taskIDsString);
+
+        return this.api.delete(this.baseURI + '/' + projectId + '/tasks/' + taskIDsString);
     }
 
     public updateTask(projectId:  number, taskId: number, input: CreateTaskOutputDTO): Observable<void> {

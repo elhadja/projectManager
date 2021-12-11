@@ -1,5 +1,5 @@
 export interface GetTaskInputDTO {
-    id?: number,
+    id: number,
     userStoriesIDs: number[],
     description: string,
     duration?: number,

@@ -3,6 +3,7 @@ package com.elhadjium.PMBackend.entity;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -57,6 +58,15 @@ public class Task implements Serializable {
 		usTask.setUserStory(null);
 	}
 	
+	public void removeUserStory(UserStory us, Iterator<UserStoryTasK> iterotor) {
+		UserStoryTasK usTask = new UserStoryTasK(us, this);
+		iterotor.remove();
+		//this.taskUserStories.remove(usTask);
+		us.getUserStoryTasks().remove(usTask);
+		usTask.setTask(null);
+		usTask.setUserStory(null);
+	}
+	
 	public void removeAllUserStory() {
 		Iterator<UserStoryTasK> it = taskUserStories.iterator();
 		while (it.hasNext()) {
@@ -68,6 +78,14 @@ public class Task implements Serializable {
 		if (task != null) {
 			this.taskTaskSet.add(new TaskTask(this, task));
 		}
+	}
+	
+	public void removeDependencies(List<Task> dependencies) {
+		dependencies.forEach(dependency -> {
+			TaskTask taskTask = new TaskTask(this, dependency);
+			taskTaskSet.remove(taskTask);
+			dependency.getTaskTaskSet().remove(taskTask);
+		});
 	}
 	
 	public Long getId() {

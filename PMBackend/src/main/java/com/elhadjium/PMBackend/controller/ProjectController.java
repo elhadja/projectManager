@@ -174,7 +174,7 @@ public class ProjectController {
 	}
 	
 	@GetMapping("{project-id}/sprints/{sprint-id}/tasks")
-	public Set<GetTaskOutputDTO> getUserstoryTasks(@PathVariable("sprint-id") String sprintId) {
+	public Set<GetTaskOutputDTO> getSprintTasks(@PathVariable("sprint-id") String sprintId) {
 		Set<Task> tasks = projectService.getSprintTasks(JavaUtil.parseId(sprintId));
 		Set<GetTaskOutputDTO> outputList = new HashSet<GetTaskOutputDTO>();
 		tasks.forEach(task -> {
@@ -229,9 +229,8 @@ public class ProjectController {
 		projectService.openUserStory(JavaUtil.parseId(projectId), JavaUtil.parseId(userStoryId));
 	}
 	
-	@PutMapping("{project-id}/user-stories/{user-story-id}/tasks/{task-id}")
+	@PutMapping("{project-id}/tasks/{task-id}")
 	public GetTaskOutputDTO updateTask(@PathVariable("project-id") String projectId, 
-						   @PathVariable("user-story-id") String userStoryId,
 						   @PathVariable("task-id") String taskId,
 						   @RequestBody UpdateTaskDTO input) throws Exception {
 		// FIXME mapping userId are setting all attribute with %id%
@@ -243,6 +242,15 @@ public class ProjectController {
 				Task dependency = new Task();
 				dependency.setId(dependencyId);
 				taskData.addDependency(dependency);
+			}
+		}
+		
+		if (input.getUserStoriesIDs() != null) {
+			taskData.getTaskUserStories().clear();
+			for (Long userStoryId: input.getUserStoriesIDs()) {
+				UserStory us = new UserStory();
+				us.setId(userStoryId);
+				taskData.addUserStory(us);
 			}
 		}
 

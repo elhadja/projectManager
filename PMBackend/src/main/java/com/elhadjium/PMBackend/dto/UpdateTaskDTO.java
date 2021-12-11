@@ -7,7 +7,7 @@ import com.elhadjium.PMBackend.util.JavaUtil;
 
 public class UpdateTaskDTO implements DTOValidator {
 	private Long userId;
-	private long userStoryId;
+	private List<Long> userStoriesIDs;
 	private String description;
 	private float duration;
 	private String definitionOfDone;
@@ -21,12 +21,12 @@ public class UpdateTaskDTO implements DTOValidator {
 		this.userId = userId;
 	}
 
-	public long getUserStoryId() {
-		return userStoryId;
+	public List<Long> getUserStoriesIDs() {
+		return userStoriesIDs;
 	}
 
-	public void setUserStoryId(long userStoryId) {
-		this.userStoryId = userStoryId;
+	public void setUserStoriesIDs(List<Long> userStoriesIDs) {
+		this.userStoriesIDs = userStoriesIDs;
 	}
 
 	public String getDescription() {
@@ -76,8 +76,8 @@ public class UpdateTaskDTO implements DTOValidator {
 			throw new PMInvalidInputDTO("Task duration is invalid.");
 		}
 		
-		if (userId <= 0 || userStoryId <= 0) {
-			throw new PMInvalidInputDTO("user and userStory identifers must be greather than 0");
+		if (userId <= 0) {
+			throw new PMInvalidInputDTO("user identifer must be greather than 0");
 		}
 	}
 }

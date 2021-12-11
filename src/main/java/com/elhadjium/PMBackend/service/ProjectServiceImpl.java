@@ -265,6 +265,7 @@ public class ProjectServiceImpl implements ProjectService {
 		return task.getId();
 	}
 
+	@Deprecated
 	@Override
 	@Transactional
 	public void removeTask(Long userStoryId, Long taskId) {
@@ -273,6 +274,21 @@ public class ProjectServiceImpl implements ProjectService {
 		taskTaskDao.deleteHelp(taskId);
 		taskDAO.delete(task);
 	}
+	
+
+	@Override
+	public void removeTask(Set<Long> taskIds) {
+		taskIds.forEach(taskId -> removeTask(taskId));
+	}
+	
+	@Transactional
+	private void removeTask(long taskId) {
+		Task task = taskDAO.findById(taskId).get();
+		//task.removeUserStory(userStoryDAO.findById(userStoryId).get());
+		taskTaskDao.deleteHelp(taskId);
+		taskDAO.delete(task);
+	}
+
 
 	@Override
 	@Transactional

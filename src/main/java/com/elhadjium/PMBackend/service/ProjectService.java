@@ -37,4 +37,5 @@ public interface ProjectService {
 	public Task updateTask(long taskId, Task taskData);
 	public void setTaskStatus(Long parseId, TaskStatus status);
 	public List<User> getProjectUsers(long projectId);
+	public void removeTask(Set<Long> taskIds);
 }

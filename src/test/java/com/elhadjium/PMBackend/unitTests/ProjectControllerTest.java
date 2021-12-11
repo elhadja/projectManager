@@ -427,14 +427,13 @@ public class ProjectControllerTest {
 	public void updateTask_shouldBeOk() throws Exception {
 		// prepare
 		final long projectId = 1;
-		final long userStoryId = 2;
 		final long taskId = 3;
 		
 		UpdateTaskDTO input = new UpdateTaskDTO();
 		input.setDescription("desc");
 
 		// when
-		putRequest("/pm-api/projects/" + projectId + "/user-stories/" + userStoryId + "/tasks/" + taskId, input);
+		putRequest("/pm-api/projects/" + projectId + "/tasks/" + taskId, input);
 		
 		// then
 		verify(projectService).updateTask(Mockito.eq(taskId), Mockito.any(Task.class));

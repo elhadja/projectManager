@@ -1,6 +1,7 @@
 package com.elhadjium.PMBackend.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -44,5 +45,22 @@ public class TaskTask implements Serializable {
 
 	public void setDependent(Task dependent) {
 		this.dependent = dependent;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(dependent, task);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TaskTask other = (TaskTask) obj;
+		return Objects.equals(dependent, other.dependent) && Objects.equals(task, other.task);
 	}
 }

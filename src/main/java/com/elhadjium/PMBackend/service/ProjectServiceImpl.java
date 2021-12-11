@@ -35,6 +35,7 @@ import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.SprintStatus;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.TaskStatus;
+import com.elhadjium.PMBackend.entity.TaskTask;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
@@ -359,6 +360,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 	// TODO test
 	@Override
+	@Transactional
 	public Task updateTask(long taskId, Task taskData) {
 		Task taskToUpdate = taskDAO.findById(taskId).get();
 		taskToUpdate.setDescription(taskData.getDescription());
@@ -366,12 +368,26 @@ public class ProjectServiceImpl implements ProjectService {
 		taskToUpdate.setDefinitionOfDone(taskData.getDefinitionOfDone());
 		taskToUpdate.setUser(taskData.getUser());
 		
-		taskToUpdate.getTaskTaskSet().clear();
+		taskToUpdate.removeDependencies(taskToUpdate.getTaskTaskSet()
+													.stream()
+													.filter(taskTask -> taskData.getTaskTaskSet()
+																				.stream()
+																				.allMatch(incomingTaskTask -> !incomingTaskTask.getDependent().getId().equals(taskTask.getDependent().getId())))
+													.map(TaskTask::getDependent)
+													.collect(Collectors.toList()));
 		taskData.getTaskTaskSet().forEach(taskTask -> {
 			taskToUpdate.addDependency(taskDAO.findById(taskTask.getDependent().getId()).get());
 		});
+		Iterator<UserStoryTasK> it = taskToUpdate.getTaskUserStories().iterator();
+		while (it.hasNext()) {
+			UserStory us = it.next().getUserStory();
+			if (taskData.getTaskUserStories().stream().allMatch(t -> !t.getUserStory().getId().equals(us.getId()))) {
+				taskToUpdate.removeUserStory(us, it);
+			}
+		}
+		taskData.getTaskUserStories().forEach(taskUs -> taskToUpdate.addUserStory(userStoryDAO.findById(taskUs.getUserStory().getId()).get()));
 		
-		taskDAO.save(taskToUpdate);
+		//taskDAO.save(taskToUpdate);
 
 		return taskToUpdate;
 	}

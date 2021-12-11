@@ -75,11 +75,11 @@ export class DialogCreateTaskComponent implements OnInit {
     }
     this.duration?.setValue(task.duration);
     this.user?.setValue(this.responsables.find(user => user.pseudo === task.userPseudo)?.id);
-    this.sprint?.setValue(this.sprints.find(sprint => sprint.userStories.some(us => us.id === task.userStoryId))?.id);
-    this.selectedUserStories?.setValue([task.userStoryId]); // FIXME
+    this.sprint?.setValue(this.sprints.find(sprint => sprint.userStories.some(us => us.id === task.userStoriesIDs[0]))?.id);
+    this.selectedUserStories?.setValue(task.userStoriesIDs); // FIXME
     this.dependencies?.setValue(task.dependencies.map(dependency => dependency.id));
     this.onSprintSelected();
-    //this.onUserStorySelected();
+    this.onUserStorySelected();
   }
 
   public onSubmit(): void {
@@ -101,7 +101,6 @@ export class DialogCreateTaskComponent implements OnInit {
 
   private updateTask(): void {
     this.projectApiService.updateTask(this.projectId,
-                                     this.data.task?.userStoryId as number,
                                      this.data.task?.id as number,
                                      { userId: this.user?.value,
                                       userStoriesIDs: this.selectedUserStories?.value,
@@ -130,12 +129,19 @@ export class DialogCreateTaskComponent implements OnInit {
   }
 
   public onUserStorySelected(): void {
-    /*
-    const selectedUserStories = this.userStories.filter(us => this.selectedUserStories?.value.some((selectedUs: GetUserStoriesInputDTO) => us.id === selectedUs.id));
-    if (selectedUserStory != null) {
-      this.taskDependencies = [...selectedUserStory.tasks];
+    this.taskDependencies = [];
+    const selectedUserStories = this.userStories.filter(us => this.selectedUserStories?.value.some((selectedUsId:number) => us.id === selectedUsId));
+    if (selectedUserStories != null && selectedUserStories.length > 0) {
+      selectedUserStories.forEach(selectedUserStory => {
+        selectedUserStory.tasks.forEach(task => {
+          if (this.taskDependencies.every(taskDepency => taskDepency.id !== task.id)) {
+            this.taskDependencies.push(task);
+          }
+        });
+      });
+
+      this.taskDependencies = [...this.taskDependencies];
     }
-  */
   }
 
   public addDefinitionOfDone(): void {

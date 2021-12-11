@@ -66,14 +66,22 @@ export class TaskComponent implements OnInit {
     this.matDialog.open(DialogCreateTaskComponent, { data: popupData });
   }
 
+  // TODO should be refactored
   public onSprintSelected(): void {
     this.tasksToDisplay = [];
     if (!this.tasksToDisplayBySprint?.has(this.selectedSprint)) {
       this.projectSprints.find(sprint => sprint.id === this.selectedSprint)
                         ?.userStories.forEach(us => {
                           us.tasks.forEach(task => {
-                            task.userStoryId = us.id;
-                            this.tasksToDisplay.push(task)
+                            if (this.tasksToDisplay.every(addedTask => addedTask.id !== task.id)) {
+                              if (task.userStoriesIDs == null) {
+                                task.userStoriesIDs = [];
+                              }
+                              task.userStoriesIDs.push(us.id);  // TODO task's userstories should be send by services
+                              this.tasksToDisplay.push(task)
+                            } else {
+                              this.tasksToDisplay.find(t => t.id === task.id)?.userStoriesIDs.push(us.id);
+                            }
                           });
                         });
       this.tasksToDisplayBySprint?.set(this.selectedSprint, this.tasksToDisplay);
@@ -81,6 +89,8 @@ export class TaskComponent implements OnInit {
     } else {
       this.tasksToDisplay = [...this.tasksToDisplayBySprint.get(this.selectedSprint) ?? []];
     }
+
+    console.log(this.projectSprints)
   }
 
   public dodAsArray(dod: string): string[] {
@@ -89,6 +99,8 @@ export class TaskComponent implements OnInit {
 
   // TODO should be refactored by defining a new backend service for more performance
   public onDeleteSelectedTasks(): void {
+    // FIXME
+    /*
     let tasksToDeleteByUserStoryId: Map<number, number[]>;
     tasksToDeleteByUserStoryId = new Map();
     this.selectedTasks.forEach(task => {
@@ -110,5 +122,6 @@ export class TaskComponent implements OnInit {
         });
       }
     }
+    */
   }
 }

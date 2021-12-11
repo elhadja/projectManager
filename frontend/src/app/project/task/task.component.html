@@ -48,7 +48,7 @@
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
                         <th>ID</th>
-                        <th>US ID</th>
+                        <th>US IDs</th>
                         <th>Description</th>
                         <th>Duration</th>
                         <th>dependencies</th>
@@ -63,8 +63,12 @@
                             <p-tableCheckbox [value]="row"></p-tableCheckbox>
                         </td>
                         <td  (click)="onUpdateTask(row)">{{ row.id }}</td>
-                        <td>{{ row.userStoryId }}</td>
-                        <td>{{ row.description }}</td>
+                        <td>
+                            <ng-container *ngFor="let usId of row.userStoriesIDs">
+                                {{ usId }}
+                            </ng-container>
+                        </td>
+                        <td>{{row.description }}</td>
                         <td>{{ row.duration }}</td>
                         <td>
                             <ng-container *ngFor="let dependency of row.dependencies">

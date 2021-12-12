@@ -381,6 +381,6 @@ public class ProjectServiceITest {
 		List<Sprint> list = projectService.getProjectSprints(projectId);
 		Sprint sprintToCheck = list.get(0);
 		assertEquals(SprintStatus.CLOSED, sprintToCheck.getStatus());
-		sprintToCheck.getUserStories().forEach(us -> assertEquals(UserStoryStatus.CLOSE, sprintToCheck.getStatus()));
+		sprintToCheck.getUserStories().forEach(us -> assertEquals(UserStoryStatus.CLOSED, sprintToCheck.getStatus()));
 	}
 }

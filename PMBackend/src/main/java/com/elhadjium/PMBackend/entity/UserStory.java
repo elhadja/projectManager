@@ -50,7 +50,7 @@ public class UserStory implements Serializable {
 	private Long storyPoint;
 	
 	public UserStory() {
-		this.status = UserStoryStatus.OPEN;
+		this.status = UserStoryStatus.OPENED;
 	}
 	
 	public UserStory(String summary) {

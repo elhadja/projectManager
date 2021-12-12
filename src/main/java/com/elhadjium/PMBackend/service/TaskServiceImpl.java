@@ -18,7 +18,7 @@ public class TaskServiceImpl implements TaskService {
 			  .map(UserStoryTasK::getUserStory)
 			  .collect(Collectors.toList())
 			  .forEach(us -> {
-				us.setStatus(UserStoryStatus.OPEN);
+				us.setStatus(UserStoryStatus.OPENED);
 			  });
 	}
 }

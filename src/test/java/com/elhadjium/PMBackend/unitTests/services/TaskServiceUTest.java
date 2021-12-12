@@ -23,9 +23,9 @@ public class TaskServiceUTest {
 		UserStory us2 = new UserStory();
 
 		us1.setId(1L);
-		us1.setStatus(UserStoryStatus.CLOSE);
+		us1.setStatus(UserStoryStatus.CLOSED);
 		us2.setId(2L);
-		us2.setStatus(UserStoryStatus.CLOSE);
+		us2.setStatus(UserStoryStatus.CLOSED);
 
 		Task task = new Task();
 		task.addUserStory(us1);
@@ -35,7 +35,7 @@ public class TaskServiceUTest {
 		taskService.openTaskUserStories(task);
 		
 		// then
-		assertEquals(UserStoryStatus.OPEN, us1.getStatus());
-		assertEquals(UserStoryStatus.OPEN, us2.getStatus());
+		assertEquals(UserStoryStatus.OPENED, us1.getStatus());
+		assertEquals(UserStoryStatus.OPENED, us2.getStatus());
 	}
 }

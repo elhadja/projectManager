@@ -135,7 +135,7 @@ public class ProjectControllerTest {
 		us1.setId(2L);
 		us1.setSummary("summary 2");
 		us1.setDescription("desc 2");
-		us1.setStatus(UserStoryStatus.CLOSE);
+		us1.setStatus(UserStoryStatus.CLOSED);
 		us1.setImportance(UserStoryImportance.HIGHT);
 	
 		when(projectService.getBacklogUserStories(projectId)).thenReturn(List.of(us1, us2));
@@ -154,7 +154,7 @@ public class ProjectControllerTest {
 		assertEquals(us1.getId(), usToCheck.getId());
 		assertEquals(us1.getSummary(), usToCheck.getSummary());
 		assertEquals(us1.getDescription(), usToCheck.getDescription());
-		assertEquals(us1.getStatus().CLOSE, usToCheck.getStatus());
+		assertEquals(us1.getStatus().CLOSED, usToCheck.getStatus());
 		assertEquals(us1.getImportance(), usToCheck.getImportance());
 	}
 	
@@ -166,7 +166,7 @@ public class ProjectControllerTest {
 		
 		UpdateUsertStoryInputDTO input = new UpdateUsertStoryInputDTO();
 		input.setSummary("summary");
-		input.setStatus(UserStoryStatus.CLOSE);
+		input.setStatus(UserStoryStatus.CLOSED);
 
 		// when
 		this.mockMvc.perform(put("/pm-api/projects/" + projectId + "/user-stories/" + userStoryId).contentType(MediaType.APPLICATION_JSON).content(stringify(input)))

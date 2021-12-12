@@ -148,7 +148,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public long addUserStrotyToBacklog(Long projectId, AddUserStoryDTO userStoryDTO) {
 		userStoryDTO.validate();
 		UserStory us = Mapping.mapTo(userStoryDTO, UserStory.class);
-		us.setStatus(UserStoryStatus.OPEN);
+		us.setStatus(UserStoryStatus.OPENED);
 		userStoryDAO.save(us);
 		Backlog backlog = projectDao.findById(projectId).get().getBacklog();
 		backlog.addUserStory(us);
@@ -161,7 +161,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public long addUserStoryToSprint(Long sprintId, AddUserStoryDTO userStoryDTO) {
 		userStoryDTO.validate();
 		UserStory us = Mapping.mapTo(userStoryDTO, UserStory.class);
-		us.setStatus(UserStoryStatus.OPEN);
+		us.setStatus(UserStoryStatus.OPENED);
 		sprintDAO.findById(sprintId).get().addUserStory(us);
 		userStoryDAO.save(us);
 		return us.getId();
@@ -350,13 +350,13 @@ public class ProjectServiceImpl implements ProjectService {
 		Iterator<UserStory> it = sprint.getUserStories().iterator();
 		while (it.hasNext()) {
 			UserStory us = it.next();
-			if (us.getStatus() == UserStoryStatus.OPEN) {
+			if (us.getStatus() == UserStoryStatus.OPENED) {
 				sprint.getProject().getBacklog().addUserStory(us);
 				us.setSprint(null);
 			}
 		}
 		sprint.setUserStories(sprint.getUserStories().stream()
-													 .filter(us -> us.getStatus() == UserStoryStatus.CLOSE)
+													 .filter(us -> us.getStatus() == UserStoryStatus.CLOSED)
 													 .collect(Collectors.toList()));
 	}
 
@@ -364,14 +364,14 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	public void closeUserStory(Long projectId, Long userStoryId) {
 		UserStory us = userStoryDAO.findById(userStoryId).get();
-		us.setStatus(UserStoryStatus.CLOSE);
+		us.setStatus(UserStoryStatus.CLOSED);
 	}
 
 	@Override
 	@Transactional
 	public void openUserStory(Long projectId, Long userStoryId) {
 		UserStory us = userStoryDAO.findById(userStoryId).get();
-		us.setStatus(UserStoryStatus.OPEN);
+		us.setStatus(UserStoryStatus.OPENED);
 	}
 
 	// TODO test
@@ -425,7 +425,7 @@ public class ProjectServiceImpl implements ProjectService {
 												  .collect(Collectors.toList());
 			taskUserStories.forEach(us -> {
 				if (userStoryService.isAllUserStoryTasksAreDone(us)) {
-					us.setStatus(UserStoryStatus.CLOSE);
+					us.setStatus(UserStoryStatus.CLOSED);
 				}
 			});
 			break;

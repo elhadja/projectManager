@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { GetSprintsInputDTO } from 'src/app/dto/getSprint.input.dto';
@@ -28,7 +28,8 @@ export class DialogCreateTaskComponent implements OnInit {
             private route: ActivatedRoute,
             @Inject(MAT_DIALOG_DATA) public data: {projectId: number, task?: GetTaskInputDTO},
             private readonly projectApiService: ProjectApiService,
-            private readonly messageService: MessageService) {
+            private readonly messageService: MessageService,
+            private readonly dialogRef: MatDialogRef<DialogCreateTaskComponent>) {
     this.taskFormGroup = fb.group({
       'description': fb.control('', [Validators.required]),
       'definitionOfDone': fb.array([fb.control('')]),
@@ -65,6 +66,14 @@ export class DialogCreateTaskComponent implements OnInit {
     });
   }
 
+  public onCancel(): void {
+    this.closeDialog();
+  }
+
+  private closeDialog(): void {
+    this.dialogRef.close();
+  }
+
   private initializeForm(task: GetTaskInputDTO): void {
     this.description?.setValue(task.description);
     for (let dod of task.definitionOfDone?.split(';') ?? []) {
@@ -76,7 +85,7 @@ export class DialogCreateTaskComponent implements OnInit {
     this.duration?.setValue(task.duration);
     this.user?.setValue(this.responsables.find(user => user.pseudo === task.userPseudo)?.id);
     this.sprint?.setValue(this.sprints.find(sprint => sprint.userStories.some(us => us.id === task.userStoriesIDs[0]))?.id);
-    this.selectedUserStories?.setValue(task.userStoriesIDs); // FIXME
+    this.selectedUserStories?.setValue(task.userStoriesIDs);
     this.dependencies?.setValue(task.dependencies.map(dependency => dependency.id));
     this.onSprintSelected();
     this.onUserStorySelected();
@@ -96,6 +105,7 @@ export class DialogCreateTaskComponent implements OnInit {
       dependenciesIDs: this.dependencies?.value
     }).subscribe(() => {
       this.messageService.showSuccessMessage("task created");
+      this.closeDialog();
     });
   }
 
@@ -109,6 +119,7 @@ export class DialogCreateTaskComponent implements OnInit {
                                       definitionOfDone: this.ArrayOfStringToString(this.definitionOfDone.value),
                                       dependenciesIDs: this.dependencies?.value }).subscribe(() => {
       this.messageService.showSuccessMessage("task modified succesfully");
+      this.closeDialog();
     });
   }
 
@@ -146,6 +157,10 @@ export class DialogCreateTaskComponent implements OnInit {
 
   public addDefinitionOfDone(): void {
     this.definitionOfDone.push(new FormControl(''));
+  }
+
+  public removeDefinitionOfDone(): void {
+    this.definitionOfDone.removeAt(this.definitionOfDone.length - 1);
   }
 
   get description() {

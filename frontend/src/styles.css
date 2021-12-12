@@ -9,3 +9,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     color: blue;
     font-family: 'Courier New', Courier, monospace;
 }
+
+.inline-form > * {
+    width: 100%;
+    margin: 5px;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+}

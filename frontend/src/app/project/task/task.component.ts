@@ -63,7 +63,10 @@ export class TaskComponent implements OnInit {
   }
 
   private openTask(popupData: {projectId: number, task?: GetTaskInputDTO}): void {
-    this.matDialog.open(DialogCreateTaskComponent, { data: popupData });
+    const dialogRef = this.matDialog.open(DialogCreateTaskComponent, { data: popupData, disableClose: true });
+    dialogRef.afterClosed().subscribe(() => {
+      this.ngOnInit(); //TODO should be optimized by getting only tasks related to the current sprint
+    });
   }
 
   // TODO should be refactored

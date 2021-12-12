@@ -15,7 +15,7 @@ interface SprintWrapper {
   totalStoryPoints: string,
   totalClosedUserStoriesStoryPoints: string,
   totalOpenedUserStoriesStoryPoints: string
-  sprintRangeDates: Array<Date|null>;
+  sprintRangeDates: Array<Date>;
 }
 
 @Component({
@@ -62,8 +62,8 @@ export class BacklogComponent implements OnInit {
           totalClosedUserStoriesStoryPoints: this.getClosedUserStorytTotalStoryPoints(sprint.userStories),
           totalOpenedUserStoriesStoryPoints: this.getOpenedUserStorytTotalStoryPoints(sprint.userStories),
           totalStoryPoints: `${this.getTotalStoryPoints(sprint.userStories)}`,
-          sprintRangeDates: [sprint.startDate !== null ? new Date(Date.parse(sprint.startDate)): null,
-                             sprint.endDate !== null ? new Date(Date.parse(sprint.endDate)) : null]
+          sprintRangeDates: [sprint.startDate !== null ? new Date(Date.parse(sprint.startDate)): new Date,
+                             sprint.endDate !== null ? new Date(Date.parse(sprint.endDate)) : new Date]
         });
       });
     });
@@ -143,14 +143,14 @@ export class BacklogComponent implements OnInit {
       if (result != null) {
         this.projectApiService.addSprintToProject(this.projectId, result).subscribe((createdSprintId) => {
           result.id = createdSprintId;
-          result.status = 'CREATED';
+          result.status = 'CREATED'; // TODO use constant
           result.userStories = [];
           this.sprintWrappers = [...this.sprintWrappers, {
             sprint: result,
             totalClosedUserStoriesStoryPoints: '0',
             totalOpenedUserStoriesStoryPoints: '0',
             totalStoryPoints: '0',
-            sprintRangeDates: []
+            sprintRangeDates: [new Date, new Date]
           }];
           this.messageService.showSuccessMessage("sprint created with success");
         })

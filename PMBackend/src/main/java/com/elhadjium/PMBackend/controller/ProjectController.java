@@ -217,6 +217,7 @@ public class ProjectController {
 	public void startSprint(@PathVariable("project-id") String projectId,
 							@PathVariable("sprint-id") String sprintId,
 							@RequestBody StartSprintDTO input) {
+		input.validate();
 		projectService.startSprint(JavaUtil.parseId(projectId), JavaUtil.parseId(sprintId), input);
 	}
 	

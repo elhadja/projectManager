@@ -1,6 +1,6 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col">
+    <div class="row my-3">
+        <div class="col d-flex justify-content-center">
             <mat-button-toggle-group [(ngModel)]="selectedView">
                 <mat-button-toggle value="0">By Sprint</mat-button-toggle>
                 <mat-button-toggle value="1">Kanban</mat-button-toggle>
@@ -11,13 +11,12 @@
     <!-- tasks by sprint -->
     <div class="row" *ngIf="selectedView == 0">
         <div class="col">
-            <mat-form-field appearance="fill" class="w-100">
+            <mat-form-field appearance="legacy" class="w-30">
                 <mat-label>Choose a sprint</mat-label>
                 <mat-select [(ngModel)]="selectedSprint" (selectionChange)="onSprintSelected()">
                     <mat-option *ngFor="let sprint of projectSprints" [value]="sprint.id">{{sprint.name}}</mat-option>
                 </mat-select>
             </mat-form-field >
-
              <p-table [value]="tasksToDisplay" [(selection)]="selectedTasks">
                 <ng-template pTemplate="caption">
                     <div class="d-flex flex-row justify-content-right">
@@ -47,14 +46,14 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th>ID</th>
+                        <th pSortableColumn="id">ID</th>
                         <th>US IDs</th>
                         <th>Description</th>
-                        <th>Duration</th>
+                        <th pSortableColumn="duration">Duration</th>
                         <th>dependencies</th>
                         <th>dod</th>
-                        <th>user</th>
-                        <th>status</th>
+                        <th pSortableColumn="userPseudo">user</th>
+                        <th pSortableColumn="status">status</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
@@ -62,7 +61,7 @@
                         <td>
                             <p-tableCheckbox [value]="row"></p-tableCheckbox>
                         </td>
-                        <td  (click)="onUpdateTask(row)">{{ row.id }}</td>
+                        <td class="link" (click)="onUpdateTask(row)">{{ row.id }}</td>
                         <td>
                             <ng-container *ngFor="let usId of row.userStoriesIDs">
                                 {{ usId }}
@@ -77,7 +76,7 @@
                         </td>
                         <td>
                             <ng-container *ngFor="let dod of dodAsArray(row.definitionOfDone)">
-                                {{ row.definitionOfDone }} <br>
+                                {{ dod }} <br>
                             </ng-container>
                         </td>
                         <td>{{ row.userPseudo }}</td>

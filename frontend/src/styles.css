@@ -18,3 +18,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .overflow-y-auto {
     overflow-y: auto;
 }
+
+.link {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}

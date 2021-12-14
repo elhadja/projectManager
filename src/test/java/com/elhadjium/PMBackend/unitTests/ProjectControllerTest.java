@@ -402,9 +402,13 @@ public class ProjectControllerTest {
 		// prepare
 		final long projectId = 1;
 		final long sprintId = 2;
+		
+		StartSprintDTO dto = new StartSprintDTO();
+		dto.setStartDate("2021-12-14T21:21");
+		dto.setEndDate("2021-12-15T21:21");
 
 		// when
-		putRequest("/pm-api/projects/" + projectId + "/sprints/" + sprintId + "/start", new StartSprintDTO());
+		putRequest("/pm-api/projects/" + projectId + "/sprints/" + sprintId + "/start", dto);
 		
 		// then
 		verify(projectService).startSprint(Mockito.eq(projectId), Mockito.eq(sprintId), Mockito.any(StartSprintDTO.class));

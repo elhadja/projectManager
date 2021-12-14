@@ -4,6 +4,7 @@ import { ApiConstant } from "../common/ApiConstant";
 import { AddSprintToProjectOutputDTO } from "../dto/addSprintToProjectOutputDTO";
 import { AddUserStoryOutputDTO } from "../dto/addUserStoryOutputDTO";
 import { CreateTaskOutputDTO } from "../dto/createTask.output.dto";
+import { GetSprintsInputDTO } from "../dto/getSprint.input.dto";
 import { GetUsersByCriteriaInputDTO } from "../dto/getUsersByCriteriaInputDTO";
 import { GetUserStoriesInputDTO } from "../dto/getUserStoriesInputDTO";
 import { StartSprintOutputDTO } from "../dto/startSprintOutputDTO";
@@ -27,7 +28,7 @@ export class ProjectApiService {
         return this.api.post(this.baseURI + '/' + projectId + '/' + this.sprint, input);
     }
 
-    public getProjectSprints(projectId: number): Observable<any[]> {
+    public getProjectSprints(projectId: number): Observable<GetSprintsInputDTO[]> {
         return this.api.get(this.baseURI + '/' + projectId + '/' + this.sprint);
     }
 
@@ -85,5 +86,9 @@ export class ProjectApiService {
 
     public updateTask(projectId:  number, taskId: number, input: CreateTaskOutputDTO): Observable<void> {
         return this.api.put(this.baseURI + '/' + projectId + '/tasks/' + taskId, input);
+    }
+
+    public setTaskStatus(projectId: number, taskId: number, status: string): Observable<void> {
+        return this.api.put(this.baseURI + '/' + projectId + '/tasks/' + taskId + '/setStatus', status);
     }
 }

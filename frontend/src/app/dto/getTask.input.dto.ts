@@ -6,4 +6,5 @@ export interface GetTaskInputDTO {
     definitionOfDone?: string
     userPseudo: string,
     dependencies: {id: number}[]
+    status: string
 }

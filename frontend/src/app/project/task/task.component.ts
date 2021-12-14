@@ -1,6 +1,8 @@
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { PMConstants } from 'src/app/common/PMConstants';
 import { GetSprintsInputDTO } from 'src/app/dto/getSprint.input.dto';
 import { GetTaskInputDTO } from 'src/app/dto/getTask.input.dto';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
@@ -20,6 +22,10 @@ export class TaskComponent implements OnInit {
   public tasksToDisplay: GetTaskInputDTO[];
   public tasksToDisplayBySprint: Map<number, GetTaskInputDTO[]> | undefined;
   public selectedTasks: GetTaskInputDTO[];
+  // kanban
+  public todoTasks: GetTaskInputDTO[];
+  public doingTasks: GetTaskInputDTO[];
+  public doneTasks: GetTaskInputDTO[];
 
   constructor(private matDialog: MatDialog,
               private route: ActivatedRoute,
@@ -32,6 +38,9 @@ export class TaskComponent implements OnInit {
     this.projectSprints = [];
     this.tasksToDisplay = [];
     this.selectedTasks = [];
+    this.todoTasks = [];
+    this.doingTasks = [];
+    this.doneTasks = [];
     this.tasksToDisplayBySprint = undefined;
 
     const routeParameter = this.route.snapshot.paramMap.get('project-id');
@@ -48,10 +57,52 @@ export class TaskComponent implements OnInit {
     this.projectApiService.getProjectSprints(this.projectId).subscribe(sprints => {
       this.projectSprints = sprints;
       if (sprints != null && sprints.length > 0) {
-        this.selectedSprint = sprints[0].id;
+        this.selectedSprint = sprints[0].id; // TODO should be the active sprint
+        this.initializeKanban(sprints);
         this.onSprintSelected();
       }
     });
+  }
+
+  private initializeKanban(sprints: GetSprintsInputDTO[]): void {
+    sprints[0].userStories.forEach(us => us.tasks.forEach(task => { // TOTO should be the active sprint
+      if (task.status === PMConstants.TASK_STATUS_TODO && this.todoTasks.every(kanbanTask => kanbanTask.id !== task.id)) {
+        this.todoTasks.push(task);
+      } else if (task.status === PMConstants.TASK_STATUS_DOING && this.doingTasks.every(kanbanTask => kanbanTask.id !== task.id)) {
+        this.doingTasks.push(task);
+      } else if (task.status === PMConstants.TASK_STATUS_DONE && this.doneTasks.every(kanbanTask => kanbanTask.id !== task.id)) {
+        this.doneTasks.push(task);
+      }
+    }));
+  }
+
+  public dropTaskOnDoingList(event: CdkDragDrop<GetTaskInputDTO[]>): void {
+    event.previousContainer.data[event.previousIndex].status = PMConstants.TASK_STATUS_DOING;
+    this.projectApiService.setTaskStatus(this.projectId, event.previousContainer.data[event.previousIndex].id, JSON.stringify(PMConstants.TASK_STATUS_DOING)).subscribe();
+    this.dropDraggableItem(event);
+  }
+
+  public dropTaskOnDoneList(event: CdkDragDrop<GetTaskInputDTO[]>): void {
+    event.previousContainer.data[event.previousIndex].status = PMConstants.TASK_STATUS_DONE;
+    this.projectApiService.setTaskStatus(this.projectId, event.previousContainer.data[event.previousIndex].id, JSON.stringify(PMConstants.TASK_STATUS_DONE)).subscribe();
+    this.dropDraggableItem(event);
+  }
+
+  public dropTaskOnTodoList(event: CdkDragDrop<GetTaskInputDTO[]>): void {
+    event.previousContainer.data[event.previousIndex].status = PMConstants.TASK_STATUS_TODO;
+    this.projectApiService.setTaskStatus(this.projectId, event.previousContainer.data[event.previousIndex].id, JSON.stringify(PMConstants.TASK_STATUS_TODO)).subscribe();
+    this.dropDraggableItem(event);
+  }
+
+  private dropDraggableItem(event: CdkDragDrop<GetTaskInputDTO[]>): void {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+    }
   }
 
   public onCreateTask(): void {

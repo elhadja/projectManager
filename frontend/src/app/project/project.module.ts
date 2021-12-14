@@ -34,6 +34,9 @@ import { TaskComponent } from './task/task.component'
 import { GuiModule } from '../modules/gui/gui.module';
 import { DialogCreateTaskComponent } from './dialog/dialog-create-task/dialog-create-task.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {DragDropModule} from '@angular/cdk/drag-drop';
+import {MatListModule} from '@angular/material/list';
+import {MatCardModule} from '@angular/material/card';
 
 
 
@@ -64,7 +67,10 @@ const MAT_MODULES = [
     MatIconModule,
     MatTabsModule,
     MatSelectModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    DragDropModule,
+    MatListModule,
+    MatCardModule
 ]
 
 @NgModule({

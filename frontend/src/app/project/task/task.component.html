@@ -112,9 +112,16 @@
                             [cdkDropListData]="todoTasks" 
                             [cdkDropListConnectedTo]="[doingList, doneList]" 
                             (cdkDropListDropped)="dropTaskOnTodoList($event)">
-                            <mat-list-item class="movable itemList" *ngFor="let task of todoTasks" cdkDrag>
-                                {{ task.description }}
-                            </mat-list-item>
+                            <mat-card mat-list-item class="my-2" *ngFor="let task of todoTasks;" cdkDrag>
+                                <mat-card-title style="font-size: small;">
+                                    <span class="link" (click)="onUpdateTask(task)">ID: {{task.id}}</span> - US:
+                                    <ng-container *ngFor="let usId of task.userStoriesIDs;  let isLast = last;">
+                                        {{ usId }}
+                                        <ng-container *ngIf="!isLast">, </ng-container>
+                                    </ng-container>
+                                </mat-card-title>
+                                <mat-card-content>{{task.description}}</mat-card-content>
+                            </mat-card>
                         </mat-list>
                     </mat-card-content>
                 </mat-card>
@@ -129,9 +136,17 @@
                             [cdkDropListData]="doingTasks" 
                             [cdkDropListConnectedTo]="[todoList,doneList]" 
                             (cdkDropListDropped)="dropTaskOnDoingList($event)">
-                            <mat-list-item class="movable itemList" *ngFor="let task of doingTasks" cdkDrag>
-                                {{ task.description }}
-                            </mat-list-item>
+                            <mat-card mat-list-item class="my-2" *ngFor="let task of doingTasks;" cdkDrag>
+                                <mat-card-title style="font-size: small;">
+                                    <span class="link" (click)="onUpdateTask(task)">ID: {{task.id}}</span> - US:
+                                    <ng-container *ngFor="let usId of task.userStoriesIDs;  let isLast = last;">
+                                        {{ usId }}
+                                        <ng-container *ngIf="!isLast">, </ng-container>
+                                    </ng-container>
+                                </mat-card-title>
+                                <mat-card-content>{{task.description}}</mat-card-content>
+                            </mat-card>
+ 
                         </mat-list>
                     </mat-card-content>
                 </mat-card>
@@ -146,9 +161,16 @@
                             [cdkDropListData]="doneTasks" 
                             [cdkDropListConnectedTo]="[todoList, doingList]" 
                             (cdkDropListDropped)="dropTaskOnDoneList($event)">
-                            <mat-list-item class="movable itemList" *ngFor="let task of doneTasks" cdkDrag>
-                                {{ task.description }}
-                            </mat-list-item>
+                            <mat-card mat-list-item class="my-2" *ngFor="let task of doneTasks;" cdkDrag>
+                                <mat-card-title style="font-size: small;">
+                                    <span class="link" (click)="onUpdateTask(task)">ID: {{task.id}}</span> - US:
+                                    <ng-container *ngFor="let usId of task.userStoriesIDs;  let isLast = last;">
+                                        {{ usId }}
+                                        <ng-container *ngIf="!isLast">, </ng-container>
+                                    </ng-container>
+                                </mat-card-title>
+                                <mat-card-content>{{task.description}}</mat-card-content>
+                            </mat-card>
                         </mat-list>
                     </mat-card-content>
                 </mat-card>

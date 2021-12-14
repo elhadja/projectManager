@@ -5,5 +5,6 @@ export interface GetSprintsInputDTO {
     name: string,
     startDate: string,
     endDate: string,
-    userStories: GetUserStoriesInputDTO[]
+    userStories: GetUserStoriesInputDTO[],
+    status: string
 }

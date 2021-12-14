@@ -26,6 +26,7 @@ export class TaskComponent implements OnInit {
   public todoTasks: GetTaskInputDTO[];
   public doingTasks: GetTaskInputDTO[];
   public doneTasks: GetTaskInputDTO[];
+  public activeSprintId: number;
 
   constructor(private matDialog: MatDialog,
               private route: ActivatedRoute,
@@ -34,6 +35,7 @@ export class TaskComponent implements OnInit {
     this.selectedView = 0;
     this.selectedSprint = 0.
     this.projectId = 0;
+    this.activeSprintId = 0;
 
     this.projectSprints = [];
     this.tasksToDisplay = [];
@@ -55,9 +57,14 @@ export class TaskComponent implements OnInit {
 
   ngOnInit(): void {
     this.projectApiService.getProjectSprints(this.projectId).subscribe(sprints => {
-      this.projectSprints = sprints;
       if (sprints != null && sprints.length > 0) {
-        this.selectedSprint = sprints[0].id; // TODO should be the active sprint
+        this.projectSprints = sprints;
+        this.selectedSprint = sprints.find(sprint => sprint.status === PMConstants.SPRINT_STATUS_STARTED)?.id ?? -1;
+        if (this.selectedSprint === -1) {
+          this.selectedSprint = sprints[0].id;
+        } else {
+          this.activeSprintId = this.selectedSprint;
+        }
         this.initializeKanban(sprints);
         this.onSprintSelected();
       }
@@ -65,7 +72,7 @@ export class TaskComponent implements OnInit {
   }
 
   private initializeKanban(sprints: GetSprintsInputDTO[]): void {
-    sprints[0].userStories.forEach(us => us.tasks.forEach(task => { // TOTO should be the active sprint
+    sprints.find(sprint => sprint.id === this.activeSprintId)?.userStories.forEach(us => us.tasks.forEach(task => {
       if (task.status === PMConstants.TASK_STATUS_TODO && this.todoTasks.every(kanbanTask => kanbanTask.id !== task.id)) {
         this.todoTasks.push(task);
       } else if (task.status === PMConstants.TASK_STATUS_DOING && this.doingTasks.every(kanbanTask => kanbanTask.id !== task.id)) {

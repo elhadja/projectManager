@@ -14,7 +14,12 @@
             <mat-form-field appearance="legacy" class="w-30">
                 <mat-label>Choose a sprint</mat-label>
                 <mat-select [(ngModel)]="selectedSprint" (selectionChange)="onSprintSelected()">
-                    <mat-option *ngFor="let sprint of projectSprints" [value]="sprint.id">{{sprint.name}}</mat-option>
+                    <mat-option *ngFor="let sprint of projectSprints" [value]="sprint.id">
+                        {{sprint.name}}
+                        <ng-container *ngIf="activeSprintId === sprint.id">
+                            (active sprint)
+                        </ng-container>
+                    </mat-option>
                 </mat-select>
             </mat-form-field >
              <p-table [value]="tasksToDisplay" [(selection)]="selectedTasks">
@@ -96,56 +101,61 @@
 
     <!-- kanban -->
     <div class="row" *ngIf="selectedView == 1">
-        <div class="col-4">
-            <mat-card>
-                <mat-card-title>TODO</mat-card-title>
-                <mat-card-content>
-                    <mat-list 
-                        cdkDropList 
-                        #todoList="cdkDropList" 
-                        [cdkDropListData]="todoTasks" 
-                        [cdkDropListConnectedTo]="[doingList, doneList]" 
-                        (cdkDropListDropped)="dropTaskOnTodoList($event)">
-                        <mat-list-item class="movable itemList" *ngFor="let task of todoTasks" cdkDrag>
-                            {{ task.description }}
-                        </mat-list-item>
-                    </mat-list>
-                </mat-card-content>
-            </mat-card>
-       </div>
-        <div class="col-4">
-            <mat-card>
-                <mat-card-title>DOING</mat-card-title>
-                <mat-card-content>
-                    <mat-list 
-                        cdkDropList 
-                        #doingList="cdkDropList" 
-                        [cdkDropListData]="doingTasks" 
-                        [cdkDropListConnectedTo]="[todoList,doneList]" 
-                        (cdkDropListDropped)="dropTaskOnDoingList($event)">
-                        <mat-list-item class="movable itemList" *ngFor="let task of doingTasks" cdkDrag>
-                            {{ task.description }}
-                        </mat-list-item>
-                    </mat-list>
-                </mat-card-content>
-            </mat-card>
+        <ng-container *ngIf="activeSprintId > 0; else noActiveSprint">
+            <div class="col-4">
+                <mat-card>
+                    <mat-card-title>TODO</mat-card-title>
+                    <mat-card-content>
+                        <mat-list 
+                            cdkDropList 
+                            #todoList="cdkDropList" 
+                            [cdkDropListData]="todoTasks" 
+                            [cdkDropListConnectedTo]="[doingList, doneList]" 
+                            (cdkDropListDropped)="dropTaskOnTodoList($event)">
+                            <mat-list-item class="movable itemList" *ngFor="let task of todoTasks" cdkDrag>
+                                {{ task.description }}
+                            </mat-list-item>
+                        </mat-list>
+                    </mat-card-content>
+                </mat-card>
         </div>
-        <div class="col-4">
-            <mat-card>
-                <mat-card-title>DONE</mat-card-title>
-                <mat-card-content>
-                    <mat-list 
-                        cdkDropList 
-                        #doneList="cdkDropList" 
-                        [cdkDropListData]="doneTasks" 
-                        [cdkDropListConnectedTo]="[todoList, doingList]" 
-                        (cdkDropListDropped)="dropTaskOnDoneList($event)">
-                        <mat-list-item class="movable itemList" *ngFor="let task of doneTasks" cdkDrag>
-                            {{ task.description }}
-                        </mat-list-item>
-                    </mat-list>
-                </mat-card-content>
-            </mat-card>
-       </div>
+            <div class="col-4">
+                <mat-card>
+                    <mat-card-title>DOING</mat-card-title>
+                    <mat-card-content>
+                        <mat-list 
+                            cdkDropList 
+                            #doingList="cdkDropList" 
+                            [cdkDropListData]="doingTasks" 
+                            [cdkDropListConnectedTo]="[todoList,doneList]" 
+                            (cdkDropListDropped)="dropTaskOnDoingList($event)">
+                            <mat-list-item class="movable itemList" *ngFor="let task of doingTasks" cdkDrag>
+                                {{ task.description }}
+                            </mat-list-item>
+                        </mat-list>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-4">
+                <mat-card>
+                    <mat-card-title>DONE</mat-card-title>
+                    <mat-card-content>
+                        <mat-list 
+                            cdkDropList 
+                            #doneList="cdkDropList" 
+                            [cdkDropListData]="doneTasks" 
+                            [cdkDropListConnectedTo]="[todoList, doingList]" 
+                            (cdkDropListDropped)="dropTaskOnDoneList($event)">
+                            <mat-list-item class="movable itemList" *ngFor="let task of doneTasks" cdkDrag>
+                                {{ task.description }}
+                            </mat-list-item>
+                        </mat-list>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </ng-container>
+        <ng-template #noActiveSprint>
+            <h2>No started sprint</h2>
+        </ng-template>
     </div>
 </div>

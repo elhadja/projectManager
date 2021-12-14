@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -266,10 +267,10 @@ public class ProjectController {
 		// TODO respect the contract
 		return null;
 	}
-	
-	@PutMapping("{project-id}/tasks/{task-id}/")
+
+	@PutMapping("{project-id}/tasks/{task-id}/setStatus")
 	public void setTaskStatus(@PathVariable("task-id") String taskId, @RequestBody TaskStatus status) throws Exception {
-		projectService.setTaskStatus(JavaUtil.parseId(taskId),status);
+		projectService.setTaskStatus(JavaUtil.parseId(taskId), status);
 	}
 	
 	// TODO to be tested

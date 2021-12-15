@@ -91,4 +91,12 @@ export class ProjectApiService {
     public setTaskStatus(projectId: number, taskId: number, status: string): Observable<void> {
         return this.api.put(this.baseURI + '/' + projectId + '/tasks/' + taskId + '/setStatus', status);
     }
+
+    public moveUserStoryFromSprintToBacklog(projectId: number, userStoryid: number): Observable<void> {
+        return this.api.post(this.baseURI + '/' + projectId + '/backlog/user-stories/' + userStoryid, null);
+    }
+
+    public moveUserStoryToSprint(projectId: number, userStoryid: number, sprintId: number): Observable<void> {
+        return this.api.post(this.baseURI + '/' + projectId + '/sprints/' + sprintId + '/user-stories/' + userStoryid, null);
+    }
 }

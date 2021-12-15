@@ -1,7 +1,9 @@
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { PMConstants } from 'src/app/common/PMConstants';
+import { GetSprintsInputDTO } from 'src/app/dto/getSprint.input.dto';
 import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
 import { MessageService } from 'src/app/services/message.service';
@@ -11,7 +13,7 @@ import { DialogUserStoryDetailsComponent } from '../dialog/dialog-user-story-det
 import { BacklogService } from '../services/backlog.service';
 
 interface SprintWrapper {
-  sprint: any,
+  sprint: GetSprintsInputDTO,
   totalStoryPoints: string,
   totalClosedUserStoriesStoryPoints: string,
   totalOpenedUserStoriesStoryPoints: string
@@ -235,6 +237,39 @@ export class BacklogComponent implements OnInit {
         this.sprintWrappers = [...this.sprintWrappers];
       });
     })
+  }
+
+  public dropInBacklog(event: CdkDragDrop<GetUserStoriesInputDTO[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      this.projectApiService.moveUserStoryFromSprintToBacklog(this.projectId, event.previousContainer.data[event.previousIndex].id).subscribe();
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+    }
+    this.userStories = [...this.userStories];
+  }
+
+  public dropInSprint(event: CdkDragDrop<GetUserStoriesInputDTO[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+      let targetSprintId = this.sprintWrappers.find(sprintWrapper => {
+        return sprintWrapper.sprint.userStories.some(us => us.id === event.container.data[event.currentIndex].id);
+      })?.sprint.id;
+      if (targetSprintId != null) {
+        this.projectApiService.moveUserStoryToSprint(this.projectId, event.container.data[event.currentIndex].id, targetSprintId).subscribe();
+      } else {
+        // should not happen
+      }
+    }
+    this.sprintWrappers = [...this.sprintWrappers];
   }
 
 }

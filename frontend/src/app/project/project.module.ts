@@ -37,7 +37,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatListModule} from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
-
+import {MatExpansionModule} from '@angular/material/expansion';
 
 
 const routes: Routes = [
@@ -70,7 +70,8 @@ const MAT_MODULES = [
     MatButtonToggleModule,
     DragDropModule,
     MatListModule,
-    MatCardModule
+    MatCardModule,
+    MatExpansionModule
 ]
 
 @NgModule({

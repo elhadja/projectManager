@@ -29,7 +29,7 @@ export class DialogCreateUerStoryComponent implements OnInit {
       "summary": fb.control('', [Validators.required, Validators.maxLength(200)]),
       "description": fb.control(''),
       "storyPoint": fb.control(''),
-      "importance": fb.control('')
+      "importance": fb.control(null)
     });
     this.userStoryImportanceValues = [];
     this.isUpdateMode = dialogData != null;

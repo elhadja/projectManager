@@ -186,7 +186,6 @@ public class ProjectServiceImpl implements ProjectService {
 		userStoryToUpdate.setSummary(userStoryData.getSummary());
 		userStoryToUpdate.setDescription(userStoryData.getDescription());
 		userStoryToUpdate.setStoryPoint(userStoryData.getStoryPoint());
-		userStoryToUpdate.setStatus(userStoryData.getStatus());
 		userStoryToUpdate.setImportance(userStoryData.getImportance());
 
 		userStoryDAO.save(userStoryToUpdate);

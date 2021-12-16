@@ -40,6 +40,7 @@ import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
 import com.elhadjium.PMBackend.entity.UserStoryTasK;
+import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 
 @Service
@@ -330,6 +331,9 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	public void startSprint(Long projectId, Long sprintId, StartSprintDTO input) {
 		Sprint sprint = sprintDAO.findById(sprintId).get();
+		if (sprint.getProject().getSprints().stream().anyMatch(s -> s.getStatus().equals(SprintStatus.STARTED))) {
+			throw new PMInvalidInputDTO("Another sprint is on going"); //TODO An functional exception should be defined
+		}
 		sprint.setStatus(SprintStatus.STARTED);
 		sprint.setStartDate(input.getStartDate());
 		sprint.setEndDate(input.getEndDate());

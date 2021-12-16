@@ -71,6 +71,11 @@ export class BacklogComponent implements OnInit {
     });
   }
 
+  private refresh(): void {
+    this.sprintWrappers = [];
+    this.ngOnInit();
+  }
+
   private initializeBacklog(): void {
     this.projectApiService.getBacklogUserStories(this.projectId).subscribe((userStories) => {
       this.userStories = [...userStories];
@@ -164,13 +169,14 @@ export class BacklogComponent implements OnInit {
   public onOpenUserStory(row: GetUserStoriesInputDTO): void {
     const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {
       data: row,
+      width: "600px",
       disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((userStoryToUpdate) => {
       if (userStoryToUpdate != null) {
         this.projectApiService.updateUserStory(this.projectId, row.id, userStoryToUpdate).subscribe(() => {
-          this.ngOnInit();
+          this.refresh();
         });
       }
     });

@@ -1,7 +1,7 @@
 <div class="ng-container">
     <div class="row">
         <div class="col">
-            <h1 class="dialogTitle">CREATE NEW USER STORY</h1>
+            <h3 class="text-center">Create/Update User Story</h3>
             <form [formGroup]="userStoryForm" (ngSubmit)="onValidate()">
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label>Summary</mat-label>
@@ -17,20 +17,22 @@
                     <mat-label>Description</mat-label>
                     <textarea type="text" matInput formControlName="description" rows="10" cols="200"></textarea>
                 </mat-form-field >
-                <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>Story points</mat-label>
-                    <input type="number" matInput formControlName="storyPoint" min="1">
-                </mat-form-field >
-                 <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>Importance</mat-label>
-                    <mat-select formControlName="importance">
-                        <mat-option *ngFor="let option of userStoryImportanceValues" [value]="option.value">{{option.label}}</mat-option>
-                    </mat-select>
-                </mat-form-field >
-                <button mat-stroked-button class="mr-2" type="submit"
+                <div class="d-flex inline-form">
+                    <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Story points</mat-label>
+                        <input type="number" matInput formControlName="storyPoint" min="1">
+                    </mat-form-field >
+                    <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Importance</mat-label>
+                        <mat-select formControlName="importance">
+                            <mat-option *ngFor="let option of userStoryImportanceValues" [value]="option.value">{{option.label}}</mat-option>
+                        </mat-select>
+                    </mat-form-field >
+                </div>
+               <button mat-stroked-button class="mr-2 text-success" type="submit"
                        [disabled]="userStoryForm.invalid">{{ isUpdateMode ? 'Update' : 'Create' }}
                 </button>
-                <button mat-stroked-button type="button" (click)="onCancel()">annuler</button>
+                <button mat-stroked-button type="button" class="text-danger" (click)="onCancel()">annuler</button>
             </form>
         </div>
     </div>

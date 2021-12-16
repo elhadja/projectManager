@@ -104,7 +104,7 @@ export class BacklogComponent implements OnInit {
 
 
   public onOpenCreateUserStoryDialogFromBacklog(): void {
-    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent);
+    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {disableClose: true});
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         this.backlogService.createUserStoryInBacklog(this.projectId, result).subscribe((userSotryId) => {
@@ -120,7 +120,7 @@ export class BacklogComponent implements OnInit {
   }
 
   public onOpenCreateUserStoryDialogFromSprint(sprintId: number): void {
-    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent);
+    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {disableClose: true});
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         this.projectApiService.addUserStoryToSprint(this.projectId, sprintId, result).subscribe((userStoryId) => {
@@ -140,7 +140,7 @@ export class BacklogComponent implements OnInit {
   }
 
   public onOpenCreateSprintDialog(): void {
-    const dialogRef = this.materialDialogservice.open(DialogCreateSprintComponent);
+    const dialogRef = this.materialDialogservice.open(DialogCreateSprintComponent, {disableClose: true});
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         this.projectApiService.addSprintToProject(this.projectId, result).subscribe((createdSprintId) => {
@@ -163,7 +163,8 @@ export class BacklogComponent implements OnInit {
 
   public onOpenUserStory(row: GetUserStoriesInputDTO): void {
     const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {
-      data: row
+      data: row,
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((userStoryToUpdate) => {

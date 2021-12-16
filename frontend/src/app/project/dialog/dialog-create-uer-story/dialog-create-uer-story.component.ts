@@ -1,10 +1,9 @@
-import { Component, EventEmitter, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PMConstants } from 'src/app/common/PMConstants';
 import { AddUserStoryOutputDTO } from 'src/app/dto/addUserStoryOutputDTO';
 import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
-import { ProjectApiService } from 'src/app/PMApi/project.api';
 
 interface LabelValue {
   value: string,
@@ -23,8 +22,7 @@ export class DialogCreateUerStoryComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
              private matDialogRef: MatDialogRef<DialogCreateUerStoryComponent, AddUserStoryOutputDTO>,
-             @Inject(MAT_DIALOG_DATA) public dialogData: GetUserStoriesInputDTO,
-             private projectApiService: ProjectApiService) {
+             @Inject(MAT_DIALOG_DATA) public dialogData: GetUserStoriesInputDTO) {
     this.userStoryForm = fb.group({
       "summary": fb.control('', [Validators.required, Validators.maxLength(200)]),
       "description": fb.control(''),
@@ -64,7 +62,7 @@ export class DialogCreateUerStoryComponent implements OnInit {
   }
 
   public onCancel(): void {
-    this.matDialogRef.close(undefined);
+    this.matDialogRef.close();
   }
 
   public get summary () {

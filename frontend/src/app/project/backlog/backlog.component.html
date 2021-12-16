@@ -27,12 +27,12 @@
                             (cdkDropListDropped)="dropInSprint($event)"
                             >
                         <ng-template pTemplate="caption">
-                            <div class="d-flex flex-row justify-content-between">
-                                <div>
-                                    <span class="mx-1"> {{ sprintWrapper.sprint.name }}</span>
+                            <div class="d-flex justify-content-between">
+                                <div class="flex-grow-1">
                                     <p-calendar [(ngModel)]="sprintWrapper.sprintRangeDates"
                                                 [showTime]="true" [showButtonBar]="true" selectionMode="range" 
-                                                dataFormat="yyyy-mm-dd"></p-calendar>
+                                                dataFormat="yyyy-mm-dd">
+                                    </p-calendar>
                                     <p-badge severity="info" styleClass="p-mr-2" [value]="sprintWrapper.totalStoryPoints"></p-badge>
                                     <p-badge class="mx-1" severity="success" styleClass="p-mr-2" [value]="sprintWrapper.totalClosedUserStoriesStoryPoints"></p-badge>
                                     <p-badge severity="danger" styleClass="p-mr-2" [value]="sprintWrapper.totalOpenedUserStoriesStoryPoints"></p-badge>

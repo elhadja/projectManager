@@ -120,6 +120,7 @@ export class HomeComponent implements OnInit {
     })
 
    this.homeService.acceptInvitationToProject(ids).subscribe(() => {
+    this.selectedInvitations =[];
     this.loadUserProject();
     this.loadUserInvitations();
    });
@@ -132,6 +133,7 @@ export class HomeComponent implements OnInit {
       })
 
     this.homeService.cancelInvitationToProject(ids).subscribe(() => {
+      this.selectedInvitations =[];
       this.loadUserInvitations();
     });
   }

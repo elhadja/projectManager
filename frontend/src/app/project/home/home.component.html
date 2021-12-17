@@ -37,7 +37,7 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-row>
                         <tr>
-                            <td (click)='onClickOnProject(row.projectId)'>{{row.projectId}}</td>
+                            <td class="link" (click)='onClickOnProject(row.projectId)'>{{row.projectId}}</td>
                             <td>{{row.projectName}}</td>
                             <td>{{row.projectDescription}}</td>
                             <td>
@@ -92,7 +92,6 @@
                             <th style="width: 3rem">
                                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                             </th>
-                            <th>ID</th>
                             <th>name</th>
                             <th>description</th>
                             <th>inivation author</th>
@@ -103,7 +102,6 @@
                             <td>
                                 <p-tableCheckbox [value]="row"></p-tableCheckbox>
                             </td>
-                            <td>{{row.projectId}}</td>
                             <td>{{row.projectName}}</td>
                             <td>{{row.projectDescription}}</td>
                             <td>{{row.authorPseudo}}</td>
@@ -111,7 +109,7 @@
                     </ng-template>
                     <ng-template pTemplate="emptymessage" let-columns>
                         <tr>
-                            <td colspan = "5" class="text-center">
+                            <td colspan = "4" class="text-center">
                                 No Invitations
                             </td>
                         </tr>

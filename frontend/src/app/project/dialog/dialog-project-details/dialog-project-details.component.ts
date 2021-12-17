@@ -1,6 +1,6 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GetUserByCriteriaOutputDTO } from 'src/app/dto/GetUserByCriteriaOutputDTO';
 import { GetUserInvitationsInputDTO } from 'src/app/dto/GetUserInvitationInputDTO';
 import { GetUsersByCriteriaInputDTO } from 'src/app/dto/getUsersByCriteriaInputDTO';
@@ -37,7 +37,8 @@ export class DialogProjectDetailsComponent implements OnInit {
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,
             private dialogProjectDetailsService: DialogDetailsProjectService,
             private messageServcie: MessageService,
-            private sessionManager: sessionManagerService) {
+            private sessionManager: sessionManagerService,
+            private readonly dialogRef: MatDialogRef<DialogProjectDetailsComponent>) {
     this.projectName = new FormControl('', [Validators.required, Validators.minLength(2)]),
     this.projectDescription = new FormControl('', [Validators.required, Validators.minLength(2)])
     this.projectUsersDataTable = [];
@@ -115,6 +116,7 @@ export class DialogProjectDetailsComponent implements OnInit {
 
     this.dialogProjectDetailsService.updateProjectDetails(output, this.project.projectId).subscribe(() => {
       this.messageServcie.showSuccessMessage("Project update successfully");
+      this.dialogRef.close(output);
     });
   }
 

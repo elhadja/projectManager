@@ -54,6 +54,15 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  private refresh(): void {
+    this.projects = [];
+    this.invitations = [];
+    this.selectedInvitations = [];
+
+    this.ngOnInit();
+  }
+
+
   public getComponentName(): string {
     return 'HomeComponent';
   }
@@ -68,9 +77,18 @@ export class HomeComponent implements OnInit {
   }
 
   public onOpenProjectDetails(project: projectInputDTO): void {
-    this.addProjectDialog.open(DialogProjectDetailsComponent, {
+    const dialogRef = this.addProjectDialog.open(DialogProjectDetailsComponent, {
       data: {
         project
+      },
+      width: "50%",
+      height: "100%",
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result != null) {
+        this.refresh();
       }
     });
   }

@@ -36,3 +36,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .action-buttons > * {
     margin-right: 2px;
 }
+
+.bloc {
+    margin-top: 5px;
+    padding: 5px;
+    border-top: 5px blue solid;
+}

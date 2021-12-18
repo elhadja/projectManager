@@ -17,6 +17,9 @@ import { ProjectApiService } from './PMApi/project.api';
 import { MenubarModule } from 'primeng/menubar'
 import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import { RoutingService } from './services/routing.service';
+import { SharedModule } from 'primeng/api';
+import {SlideMenuModule} from 'primeng/slidemenu';
+
 
 const SERVICES = [API, 
                   MessageService,
@@ -39,6 +42,8 @@ const SERVICES = [API,
     BrowserAnimationsModule,
     HttpClientModule,
     MenubarModule,
+    SharedModule,
+    SlideMenuModule,
     TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

@@ -11,12 +11,14 @@ import { sessionManagerService } from 'src/app/services/sessionManager.service';
 })
 export class MenuBarComponent implements OnInit {
   public items: MenuItem[];
+  public userItems: MenuItem[];
   public isVisible: boolean;
 
   constructor(private router: Router,
              private sessionService: sessionManagerService,
              private routingService: RoutingService) { 
     this.items = [];
+    this.userItems = [];
     this.isVisible = sessionService.getUserId() > 0;
 
     this.sessionService.userLoggedEmitter.subscribe((isUserLogged) => {
@@ -49,19 +51,20 @@ export class MenuBarComponent implements OnInit {
         command: () => { this.routingService.gotoTaskComponent( +this.sessionService.getProjectId()); },
         visible: this.isProjectSelected()
       },
+    ];
+    this.userItems = [
       {
-        label: 'user name',
-        items: [
-          {
-            label: 'quitter',
-            command: () => { 
-              this.sessionService.closeSession();
-              this.routingService.gotoLoginComponent();
-            }
-          }
-        ]
+        label: 'Quitter',
+        command: () => { 
+          this.sessionService.closeSession();
+          this.routingService.gotoLoginComponent();
+        }
+      },
+      {
+        label:'Profile',
+        disabled: true,
       }
-    ]
+    ];
   }
 
   private isProjectSelected(): boolean {

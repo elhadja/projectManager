@@ -1,12 +1,12 @@
-<div class="alert" 
-    *ngIf="!!message"
+<div class="alert d-flex justify-content-between" 
+    *ngIf="message !=  null"
     [ngClass]="{'alert-success': messageType === 0,
                 'alert-warning': messageType === 1,
                 'alert-danger': messageType === 2}">
-    <p>
+    <span class="p-2">
         {{ message }}
-    </p>
-    <button (click)="hide()" type="button">
+    </span>
+    <button type="button" class="close p-2 ml-auto" (click)="hide()" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
 </div>

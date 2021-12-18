@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { RoutingService } from 'src/app/services/routing.service';
 import { LoginService } from '../services/login-service';
 
 @Component({
@@ -12,7 +13,7 @@ export class LoginComponent implements OnInit {
   passwordFormControl: FormControl;
 
   public hidePassword: boolean;
-  constructor(private loginService: LoginService) { 
+  constructor(private loginService: LoginService, private routingService: RoutingService) { 
     this.hidePassword = true;
     this.userIdentifierFormControl = new FormControl('elhadj', [Validators.required, Validators.minLength(2)]);
     this.passwordFormControl = new FormControl('password', [Validators.required]);
@@ -30,6 +31,10 @@ export class LoginComponent implements OnInit {
       userIdentifier: this.userIdentifierFormControl.value,
       password: this.passwordFormControl.value
     });
+  }
+
+  public gotoSignupComponent(): void {
+    this.routingService.gotoSignupComponent();
   }
 
 }

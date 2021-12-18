@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { RoutingService } from 'src/app/services/routing.service';
 import { SignupService } from '../services/signup.service';
 
 @Component({
@@ -11,7 +12,7 @@ export class RegisterComponent implements OnInit {
   public signupFormGroup: FormGroup;
   public hidePassword: boolean;
 
-  constructor(private signupService: SignupService) {
+  constructor(private signupService: SignupService, private readonly routingService: RoutingService) {
     this.hidePassword = false;
 
     this.signupFormGroup = new FormGroup({
@@ -42,5 +43,9 @@ export class RegisterComponent implements OnInit {
 
   get password() {
     return this.signupFormGroup.get('password');
+  }
+
+  public gotoLoginComponent():void {
+    this.routingService.gotoLoginComponent();
   }
 }

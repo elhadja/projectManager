@@ -23,4 +23,8 @@ export class RoutingService {
     public gotoTaskComponent(projectId: number): void {
         this.router.navigateByUrl('/project/task/' + projectId);
     }
+
+    public gotoSignupComponent(): void {
+        this.router.navigateByUrl('/auth/signup');
+    }
 }

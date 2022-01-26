@@ -1,0 +1,127 @@
+<div class="container">
+    <!-- sprints -->
+    <ng-template ngFor let-sprintWrapper [ngForOf]="sprintWrappers" >
+        <div class="row my-5" *ngIf="sprintWrapper.sprint.status !== 'CLOSED'">
+            <div class="col">
+                <p-table [value]="sprintWrapper.sprint.userStories" 
+                        [(selection)]="selectedUserStoriesFromSprint"
+                        responsiveLayout="scroll"
+                        styleClass="p-datatable-striped">
+                    <ng-template pTemplate="caption">
+                        <div class="d-flex flex-row justify-content-between">
+                            <div>
+                                <span class="mx-1"> {{ sprintWrapper.sprint.name }}</span>
+                                <p-calendar [(ngModel)]="sprintWrapper.sprintRangeDates" [showTime]="true" [showButtonBar]="true" selectionMode="range" dataFormat="yyyy-mm-dd"></p-calendar>
+                                <p-badge severity="info" styleClass="p-mr-2" [value]="sprintWrapper.totalStoryPoints"></p-badge>
+                                <p-badge class="mx-1" severity="success" styleClass="p-mr-2" [value]="sprintWrapper.totalClosedUserStoriesStoryPoints"></p-badge>
+                                <p-badge severity="danger" styleClass="p-mr-2" [value]="sprintWrapper.totalOpenedUserStoriesStoryPoints"></p-badge>
+                            </div>
+                            <div>
+                                <button *ngIf="selectedUserStoriesFromSprint.length > 0" mat-stroked-button (click)=onDeleteSelectedSprintsUserStories(sprintWrapper)>delete U.S</button>
+                                <button *ngIf="selectedUserStoriesFromSprint.length > 0" mat-stroked-button (click)=onCloseSelectedSprintsUserStories()>Close U.S</button>
+                                <button *ngIf="selectedUserStoriesFromSprint.length > 0" mat-stroked-button (click)=onOpenSelectedSprintsUserStories()>Open U.S</button>
+                                <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromSprint(sprintWrapper.sprint.id)>create U.S</button>
+                                <button *ngIf="sprintWrapper.sprint.status === 'CREATED'" mat-stroked-button (click)="onStartSprint(sprintWrapper)">Start</button>
+                                <button *ngIf="sprintWrapper.sprint.status !== 'CREATED'" mat-stroked-button (click)="onTerminateSprint(sprintWrapper)">Terminate</button>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="colgroup">
+                        <colgroup>
+                            <col style="width:5%">
+                            <col style="width:5%">
+                            <col style="width:60%">
+                            <col style="width:10%">
+                            <col style="width:10%">
+                            <col style="width:10%">
+                        </colgroup>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 3rem">
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </th>
+                            <th>ID</th>
+                            <th>summary</th>
+                            <th>storyPoint</th>
+                            <th>Importance</th>
+                            <th>Status</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row>
+                        <tr>
+                            <td>
+                                <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                            </td>
+                            <td>{{row.id}}</td>
+                            <td (click)="onOpenUserStory(row)">{{row.summary}}</td>
+                            <td>{{row.storyPoint}}</td>
+                            <td>{{row.importance}}</td>
+                            <td>{{row.status}}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                </div>
+        </div>
+    </ng-template>
+
+    <!-- backlog -->
+    <div class="row my-5">
+        <div class="col">
+            <p-table [value]="userStories" [(selection)]="selectedUserStoriesFromBacklog">
+                <ng-template pTemplate="caption">
+                    <div class="d-flex flex-row justify-content-between">
+                        <div>
+                            <span style="vertical-align:baseline;">Backlog</span>
+                        </div>
+                        <div>
+                            <button *ngIf="selectedUserStoriesFromBacklog.length > 0" mat-stroked-button (click)=onDeleteSelectedBacklogUserStories()>delete U.S</button>
+                            <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromBacklog()>create U.S</button>
+                            <button mat-stroked-button (click)=onOpenCreateSprintDialog()>create sprint</button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="colgroup">
+                    <colgroup>
+                        <col style="width:5%">
+                        <col style="width:5%">
+                        <col style="width:65%">
+                        <col style="width:15%">
+                        <col style="width:10%">
+                    </colgroup>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th>ID</th>
+                        <th>summary</th>
+                        <th class="d-flex justify-content-between">
+                            storyPoint
+                            <p-badge severity="success" styleClass="p-mr-2" [value]="backlogTotalStoryPoints"></p-badge></th>
+                        <th>Importance</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                        </td>
+                        <td>{{row.id}}</td>
+                        <td (click)="onOpenUserStory(row)">{{row.summary}}</td>
+                        <td>{{row.storyPoint}}</td>
+                        <td>{{row.importance}}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td colspan = "3">
+                            No records found
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

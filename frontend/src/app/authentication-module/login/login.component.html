@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-4">
+           <h1 class="text-center">login page</h1>
+            <div class="d-flex flex-column justify-content-center">
+                    <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>Email ou Pseudo</mat-label>
+                        <input type="text" matInput [formControl]="userIdentifierFormControl" required minlength="2">
+                        <mat-error *ngIf="userIdentifierFormControl.hasError('required')">
+                            this field is <strong>required</strong>
+                        </mat-error>
+                        <mat-error *ngIf="userIdentifierFormControl.hasError('minlength')">
+                            2 characteres <strong>minimum</strong>
+                        </mat-error>
+                    </mat-form-field >
+                    <mat-form-field appearance="fill" class="w-100">
+                        <mat-label>{{ 'loginComponent.passwordLabel' | translate }}</mat-label>
+                        <input matInput [formControl]="passwordFormControl" [type]="hidePassword ? 'password' : 'text'" required>
+                        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                        <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        <mat-error *ngIf="passwordFormControl.hasError('required')">
+                            {{ 'loginComponent.requiredPassword' | translate }}
+                        </mat-error>
+                    </mat-form-field>
+                    <button mat-stroked-button (click)='onLogin()' [disabled]='!isValidForm()'>login</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -13,7 +13,7 @@ jobs:
       - name: Use Node.js 14.x
         uses: actions/setup-node@v1
         with:
-          node-version: 14.x
+          node-version: 14.xChrome
 
       - name: Setup
         run: |
@@ -28,7 +28,7 @@ jobs:
       - name: Test
         run: |
           cd frontend
-          npm test -- --no-watch --no-progress --browsers=Chrome
+          npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
 
       - name: Lint
         run: |

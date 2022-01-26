@@ -9,7 +9,6 @@ import { ProjectApiService } from 'src/app/PMApi/project.api';
 import { MessageService } from 'src/app/services/message.service';
 import { DialogCreateSprintComponent } from '../dialog/dialog-create-sprint/dialog-create-sprint.component';
 import { DialogCreateUerStoryComponent } from '../dialog/dialog-create-uer-story/dialog-create-uer-story.component';
-import { DialogUserStoryDetailsComponent } from '../dialog/dialog-user-story-details/dialog-user-story-details.component';
 import { BacklogService } from '../services/backlog.service';
 
 interface SprintWrapper {
@@ -65,7 +64,7 @@ export class BacklogComponent implements OnInit {
           totalOpenedUserStoriesStoryPoints: this.getOpenedUserStorytTotalStoryPoints(sprint.userStories),
           totalStoryPoints: `${this.getTotalStoryPoints(sprint.userStories)}`,
           sprintRangeDates: [sprint.startDate !== null ? new Date(Date.parse(sprint.startDate)): new Date,
-                             sprint.endDate !== null ? new Date(Date.parse(sprint.endDate)) : new Date]
+            sprint.endDate !== null ? new Date(Date.parse(sprint.endDate)) : new Date]
         });
       });
     });

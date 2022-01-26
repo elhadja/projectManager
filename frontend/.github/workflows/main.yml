@@ -1,5 +1,10 @@
 name: CI Angular app through Github Actions
 on: push
+  branches:
+    - develop
+on: pull_request:
+  branches:
+    - main
 jobs:
   build:
     runs-on: ubuntu-latest

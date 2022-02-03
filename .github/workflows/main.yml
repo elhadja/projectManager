@@ -1,0 +1,36 @@
+name: CI Angular app through Github Actions
+on: 
+  push:
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Setup
+        run: |
+          cd frontend
+          npm ci
+      
+      - name: build
+        run: |
+          cd frontend
+          npm run build
+
+      - name: Test
+        run: |
+          cd frontend
+          npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+
+      - name: Lint
+        run: |
+          cd frontend
+          npm run lint

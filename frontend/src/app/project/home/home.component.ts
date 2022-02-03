@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { PMConstants } from 'src/app/common/PMConstants';
 import { GetUserInvitationsInputDTO } from 'src/app/dto/GetUserInvitationInputDTO';
 import { projectInputDTO } from 'src/app/dto/project.input.dto';
 import { RoutingService } from 'src/app/services/routing.service';

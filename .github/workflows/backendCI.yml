@@ -21,7 +21,7 @@ jobs:
         image: mysql
         ports:
           - 3306:3306
-        environment:
+        env:
           MYSQL_DATABASE: projectManagerTest
           MYSQL_ROOT_PASSWORD: password
     steps:

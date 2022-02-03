@@ -9,5 +9,7 @@ jobs:
         with:
           java-version: 11
       - name: build
-        run: mvn clean compile
+        run: |
+          cd PMBackend
+          mvn clean compile
 

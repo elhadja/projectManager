@@ -15,7 +15,7 @@ jobs:
           mvn clean compile
   tests:
     runs-on: ubuntu-latest
-    container: openjdk
+    #container: openjdk
     services:
       mysql:
         image: mysql

@@ -10,7 +10,7 @@
         "projectDetails": "Project Detail",
         "projectName": "Project name",
         "projectDescription": "Project Description",
-        "projectManagers": "managers",
+        "projectManagers": "manager",
         "projectUsers": "users"
     }
 }

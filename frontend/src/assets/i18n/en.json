@@ -7,7 +7,7 @@
         "projects": "Projects"
     },
     "DialogProjectDetailsComponent": {
-        "projectDetails": "Project Details",
+        "projectDetails": "Project Detail",
         "projectName": "Project name",
         "projectDescription": "Project Description",
         "projectManagers": "managers",

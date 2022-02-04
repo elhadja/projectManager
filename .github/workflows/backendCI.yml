@@ -1,5 +1,14 @@
 name: backend CI
-on: [push]
+on:
+  push:
+    paths:
+      - 'PMBackend/**'
+    branches:
+      - main
+      - develop
+  pull-request:
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,7 +24,6 @@ jobs:
           mvn clean compile
   tests:
     runs-on: ubuntu-latest
-    #container: openjdk
     services:
       mysql:
         image: mysql

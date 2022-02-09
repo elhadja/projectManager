@@ -1,4 +1,4 @@
-name: CI Angular app through Github Actions
+name: fronted CI
 on: 
   push:
     paths:

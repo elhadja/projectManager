@@ -1,38 +1,29 @@
-backend:
-depends_on: 
-  - mysqlDatabase
-build: 
-  context: backend
-  dockerfile: Dockerfile
-ports:
-  - "9090:9090"
-restart: always
-environment:
-        SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDatabase:3306/projectManager
-        SPRING_DATASOURCE_USERNAME: root
-        SPRING_DATASOURCE_PASSWORD: password
-networks:
-      -common-network
-
-mysqlDatabase:
-image: mysql
-restart: always
-volumes:
-  - db_data:/var/lib/mysql
-environment:
-  MYSQL_DATABASE: projectManager
-  MYSQL_USER: root
-  MYSQL_PASSWORD: password
-  MYSQL_ROOT_PASSWORD: password
-networks:
-      -common-network
-
-#Docker Networks
-networks:
-    common-network:
-        driver: bridge
-
-#Volumes
-volumes:
-    dbdata:
-        driver: local
+version: '2.1'
+services:
+  backend:
+    depends_on: 
+      - mysqlDatabase
+    build: 
+      context: PMBackend
+      dockerfile: Dockerfile
+    ports:
+      - "9090:9090"
+    restart: always
+    environment:
+            SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDatabase:3306/projectManager
+            MYSQL_ROOT_PASSWORD: password
+  mysqlDatabase:
+    image: mysql
+    restart: always
+    ports:
+      - "3606:3606"
+    environment:
+      MYSQL_DATABASE: projectManager
+      MYSQL_ROOT_PASSWORD: password
+  fronted:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    ports:
+    - "80:80"
+    restart: always

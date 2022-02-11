@@ -246,7 +246,7 @@ public class ProjectServiceITest {
 	}
 	
 	@Test
-	public void addTask_shouldBeOk() throws Exception {
+	public void createTask_shouldBeOk() throws Exception {
 		// prepare
 		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
@@ -258,9 +258,9 @@ public class ProjectServiceITest {
 		
 		Task taskData = new Task();
 		taskData.setDescription("desc");
-	
+		//taskData.setUser();	
 		// when
-		long taskId = projectService.createTask(usId, taskData);
+		long taskId = projectService.createTask(taskData);
 		
 		// then
 		assertTrue(taskId > 0);
@@ -281,7 +281,7 @@ public class ProjectServiceITest {
 		Task taskData = new Task();
 		taskData.setDescription("desc");
 		
-		long taskId = projectService.createTask(usId, taskData);
+		long taskId = projectService.createTask(taskData);
 		
 		// when
 		projectService.removeTask(usId, taskId);
@@ -305,13 +305,18 @@ public class ProjectServiceITest {
 
 		long usId = projectService.addUserStoryToSprint(sprintId, new AddUserStoryDTO("a summary 1"));
 		
+
+		UserStory userStory = new UserStory();
+		userStory.setId(usId);
 		Task taskData1 = new Task();
 		taskData1.setDescription("desc");
-		long taskId1 = projectService.createTask(usId, taskData1);
+		taskData1.addUserStory(userStory);
+		long taskId1 = projectService.createTask(taskData1);
 		
 		Task taskData2 = new Task();
 		taskData2.setDescription("desc 2");
-		long taskId2 = projectService.createTask(usId, taskData2);
+		taskData2.addUserStory(userStory);
+		long taskId2 = projectService.createTask(taskData2);
 		
 		// when
 		Set<Task> tasks = projectService.getSprintTasks(sprintId);
@@ -376,6 +381,6 @@ public class ProjectServiceITest {
 		List<Sprint> list = projectService.getProjectSprints(projectId);
 		Sprint sprintToCheck = list.get(0);
 		assertEquals(SprintStatus.CLOSED, sprintToCheck.getStatus());
-		sprintToCheck.getUserStories().forEach(us -> assertEquals(UserStoryStatus.CLOSE, sprintToCheck.getStatus()));
+		sprintToCheck.getUserStories().forEach(us -> assertEquals(UserStoryStatus.CLOSED, sprintToCheck.getStatus()));
 	}
 }

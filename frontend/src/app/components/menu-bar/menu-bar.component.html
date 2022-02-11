@@ -1,1 +1,15 @@
-<p-menubar *ngIf="isVisible" [model]="items"></p-menubar>
+<p-menubar *ngIf="isVisible" [model]="items">
+    <ng-template pTemplate="start">
+        <img src="assets/images/project.png" width="40" height="40" alt="">
+    </ng-template>
+    <ng-template pTemplate="end">
+        <div>
+            <img src="assets/images/compte.png" width="30" height="30" alt=""
+                #btn type="button" label="Show" (click)="menu.toggle($event)">
+            <p-slideMenu #menu [model]="userItems" [popup]="true"></p-slideMenu>
+            <!--
+            <img src="assets/images/france.png" width="30" height="30" alt="">
+            -->
+        </div>
+    </ng-template>
+</p-menubar>

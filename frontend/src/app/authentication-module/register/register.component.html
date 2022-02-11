@@ -1,8 +1,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-4">
-            <h1 class="text-center">Signup</h1>
-            <form [formGroup]="signupFormGroup" (ngSubmit)="onSignup()">
+            <h1 class="text-center">SIGNUP</h1>
+            <form [formGroup]="signupFormGroup" (ngSubmit)="onSignup()" class="d-flex flex-column">
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label>Email</mat-label>
                     <input type="email" matInput formControlName="email" required>
@@ -32,7 +32,8 @@
                         Password is <strong>required</strong>
                     </mat-error>
                 </mat-form-field>
-                <button mat-stroked-button type="submit" [disabled]='!signupFormGroup.valid'>login</button>
+                <button mat-stroked-button type="submit" [disabled]='!signupFormGroup.valid'>signup</button>
+                <span class="mt-4">You already have an account ? <a class="link" style="color: blue; text-decoration: underline;" (click)="gotoLoginComponent()">login</a></span>
             </form>
         </div>
     </div>

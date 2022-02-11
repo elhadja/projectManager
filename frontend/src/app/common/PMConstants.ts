@@ -15,6 +15,14 @@ export class PMConstants {
     public static USER_STORY_STATUS_IMPORTANCE_NORMAL = 'NORMAL';
     public static USER_STORY_STATUS_IMPORTANCE_LOW = 'LOW';
 
+    public static TASK_STATUS_TODO = 'TODO';
+    public static TASK_STATUS_DOING = 'DOING';
+    public static TASK_STATUS_DONE = 'DONE';
+
+    public static SPRINT_STATUS_CREATED = 'CREATED';
+    public static SPRINT_STATUS_STARTED = 'STARTED';
+    public static SPRINT_STATUS_CLOSED = 'CLOSED';
+
     // session keys
     public static SESSION_USER_ID_KEY = "USER_ID";
     public static SESSION_PROJECT_ID_KEY = "PROJECT_ID";

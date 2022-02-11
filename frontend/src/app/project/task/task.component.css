@@ -1,0 +1,12 @@
+.mat-list-base .mat-list-item {
+    margin: 5px;
+    padding: 2px;
+    max-height: 100px;
+    min-height: 48px;
+    height: fit-content;
+    overflow: hidden;
+    background-color: aliceblue;
+
+    display: flex;
+    flex-direction: column;
+}

@@ -4,51 +4,34 @@ import { PMConstants } from "../common/PMConstants";
 
 @Injectable()
 export class sessionManagerService {
-    private userId: number
-    private projectId: number;
     public userLoggedEmitter: Subject<boolean>;
     public projectSelectedSubject: Subject<void>;
+    private readonly invalidId: number;
 
     constructor() {
-        this.userId = -1;
-        this.projectId = -1;
         this.userLoggedEmitter = new Subject<boolean>();
         this.projectSelectedSubject = new Subject<void>();
+        this.invalidId = -1;
     }
 
     public setUserid(id: number): void {
-        sessionStorage.setItem(PMConstants.SESSION_USER_ID_KEY, `${id}`);
-        this.userId = id;
         localStorage.setItem(PMConstants.SESSION_USER_ID_KEY, `${id}`);
         this.userLoggedEmitter.next(true);
     }
 
     public getUserId(): number {
-        if (this.userId === -1) {
-            const id = localStorage.getItem(PMConstants.SESSION_USER_ID_KEY);
-            if (id != null) {
-                this.userId = +id;
-            }
-        }
-
-        return this.userId;
+        const id = localStorage.getItem(PMConstants.SESSION_USER_ID_KEY);
+        return id != null ? +id : -1;
     }
 
     public setProjectId(id: number): void {
-        this.projectId = id;
         localStorage.setItem(PMConstants.SESSION_PROJECT_ID_KEY, `${id}`);
         this.projectSelectedSubject.next();
     }
 
     public getProjectId(): number {
-        if (this.projectId === -1) {
-            const id = localStorage.getItem(PMConstants.SESSION_PROJECT_ID_KEY);
-            if (id != null) {
-                this.projectId = +id;
-            }
-        }
-
-        return this.projectId;
+        const id = localStorage.getItem(PMConstants.SESSION_PROJECT_ID_KEY);
+        return id != null ? +id : -1;
     }
 
     public closeSession(): void {

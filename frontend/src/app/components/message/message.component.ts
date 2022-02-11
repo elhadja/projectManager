@@ -18,9 +18,10 @@ export class MessageComponent implements OnInit, OnDestroy {
     this.messageSubscription = this.messageService.messageSubject.subscribe((message => {
       this.message = message;
       this.messageType = messageService.getCurrentMessageType();
+      const timeout = this.messageType === 0 ? 5000 : 10000;
       setTimeout(() => {
         this.hide();
-      }, 5000);
+      }, timeout);
     }))
    }
 

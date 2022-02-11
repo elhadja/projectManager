@@ -1,4 +1,5 @@
 import { Summary } from "@angular/compiler";
+import { GetTaskInputDTO } from "./getTask.input.dto";
 
 export interface GetUserStoriesInputDTO {
     id: number,
@@ -6,5 +7,6 @@ export interface GetUserStoriesInputDTO {
     description?: string,
     storyPoint?: number
     status?: string,
-    importance?: string
+    importance?: string,
+    tasks: GetTaskInputDTO[]
 }

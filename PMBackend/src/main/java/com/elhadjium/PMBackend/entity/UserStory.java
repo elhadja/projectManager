@@ -2,8 +2,10 @@ package com.elhadjium.PMBackend.entity;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,7 +50,7 @@ public class UserStory implements Serializable {
 	private Long storyPoint;
 	
 	public UserStory() {
-		this.status = UserStoryStatus.OPEN;
+		this.status = UserStoryStatus.OPENED;
 	}
 	
 	public UserStory(String summary) {
@@ -140,6 +142,10 @@ public class UserStory implements Serializable {
 
 	public void setImportance(UserStoryImportance importance) {
 		this.importance = importance;
+	}
+	
+	public List<Task> getTasks() {
+		return userStoryTasks.stream().map(UserStoryTasK::getTask).collect(Collectors.toList());
 	}
 
 	@Override

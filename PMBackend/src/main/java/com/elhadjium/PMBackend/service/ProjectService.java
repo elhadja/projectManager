@@ -8,8 +8,9 @@ import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
-import com.elhadjium.PMBackend.entity.SprintStatus;
 import com.elhadjium.PMBackend.entity.Task;
+import com.elhadjium.PMBackend.entity.TaskStatus;
+import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 
 public interface ProjectService {
@@ -24,7 +25,7 @@ public interface ProjectService {
 	public Long addSprintToProject(Long projectId, Sprint sprintData);
 	public void moveUserStoryToBacklog(Long projectId, Long userStoryId);
 	public void moveUserStoryToSprint(Long projectId, Long sprintId, Long userStoryId);
-	public Long createTask(Long userStoryId, Task taskData);
+	public Long createTask(Task taskData);
 	public void removeTask(Long userStoryId, Long taskId);
 	public Set<Task> getSprintTasks(Long sprintId);
 	public List<Sprint> getProjectSprints(Long projectId);
@@ -33,4 +34,8 @@ public interface ProjectService {
 	public void terminateSprint(Long projectId, Long sprintId);
 	public void closeUserStory(Long projectId, Long userStoryId);
 	public void openUserStory(Long projectId, Long userStoryId);
+	public Task updateTask(long taskId, Task taskData);
+	public void setTaskStatus(Long parseId, TaskStatus status);
+	public List<User> getProjectUsers(long projectId);
+	public void removeTask(Set<Long> taskIds);
 }

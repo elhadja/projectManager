@@ -21,10 +21,11 @@ import com.elhadjium.PMBackend.common.Mapping;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.SprintDAO;
 import com.elhadjium.PMBackend.dao.TaskDAO;
+import com.elhadjium.PMBackend.dao.TaskTaskDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
-import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
+import com.elhadjium.PMBackend.dto.GetUsersByCriteriaOutputDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
@@ -33,13 +34,22 @@ import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.SprintStatus;
 import com.elhadjium.PMBackend.entity.Task;
+import com.elhadjium.PMBackend.entity.TaskStatus;
+import com.elhadjium.PMBackend.entity.TaskTask;
 import com.elhadjium.PMBackend.entity.User;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
+import com.elhadjium.PMBackend.entity.UserStoryTasK;
+import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
+	@Autowired
+	private UserStoryService userStoryService;
+	
+	@Autowired TaskService taskService;
+	
 	@Autowired
 	private ProjectDAO projectDao;
 	
@@ -54,6 +64,9 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Autowired
 	private TaskDAO taskDAO;
+	
+	@Autowired
+	private TaskTaskDAO taskTaskDao;
 	
 	// TODO integration testing
 	@Transactional
@@ -136,7 +149,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public long addUserStrotyToBacklog(Long projectId, AddUserStoryDTO userStoryDTO) {
 		userStoryDTO.validate();
 		UserStory us = Mapping.mapTo(userStoryDTO, UserStory.class);
-		us.setStatus(UserStoryStatus.OPEN);
+		us.setStatus(UserStoryStatus.OPENED);
 		userStoryDAO.save(us);
 		Backlog backlog = projectDao.findById(projectId).get().getBacklog();
 		backlog.addUserStory(us);
@@ -149,7 +162,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public long addUserStoryToSprint(Long sprintId, AddUserStoryDTO userStoryDTO) {
 		userStoryDTO.validate();
 		UserStory us = Mapping.mapTo(userStoryDTO, UserStory.class);
-		us.setStatus(UserStoryStatus.OPEN);
+		us.setStatus(UserStoryStatus.OPENED);
 		sprintDAO.findById(sprintId).get().addUserStory(us);
 		userStoryDAO.save(us);
 		return us.getId();
@@ -174,20 +187,26 @@ public class ProjectServiceImpl implements ProjectService {
 		userStoryToUpdate.setSummary(userStoryData.getSummary());
 		userStoryToUpdate.setDescription(userStoryData.getDescription());
 		userStoryToUpdate.setStoryPoint(userStoryData.getStoryPoint());
-		userStoryToUpdate.setStatus(userStoryData.getStatus());
 		userStoryToUpdate.setImportance(userStoryData.getImportance());
 
 		userStoryDAO.save(userStoryToUpdate);
 	}
 
 	@Override
+	@Transactional
 	public List<UserStory> getBacklogUserStories(Long projectId) {
-		return projectDao.findById(projectId).get().getBacklog().getUserStories();
+		List<UserStory> userStories = projectDao.findById(projectId).get().getBacklog().getUserStories();
+		userStories.forEach(us -> us.getTasks()); // force loading tasks to avoid lazy initialization exception
+
+		return userStories;
 	}
 
 	@Override
+	@Transactional
 	public List<UserStory> getSprintUserStories(Long parseId, Long sprintId) {
-		return userStoryDAO.findBySprintId(sprintId);
+		List<UserStory> userStories = userStoryDAO.findBySprintId(sprintId);
+		userStories.forEach(us -> us.getTasks());
+		return userStories;
 	}
 
 	@Override
@@ -232,22 +251,44 @@ public class ProjectServiceImpl implements ProjectService {
 
 	@Override
 	@Transactional
-	public Long createTask(Long userStoryId, Task taskData) {
+	public Long createTask(Task taskData) {
 		Task task = Mapping.mapTo(taskData, Task.class);
-		UserStory us = userStoryDAO.findById(userStoryId).get();
-		task.addUserStory(us);
+		task.setStatus(TaskStatus.TODO);
+		task.getTaskTaskSet().forEach(taskTask -> {
+			taskTask.setDependent(taskDAO.findById(taskTask.getDependent().getId()).get());
+		});
+		task.getTaskUserStories().forEach(taskUserStory -> {
+			taskUserStory.setUserStory(userStoryDAO.findById(taskUserStory.getUserStory().getId()).get());
+		});
 		taskDAO.save(task);
 		
 		return task.getId();
 	}
 
+	@Deprecated
 	@Override
 	@Transactional
 	public void removeTask(Long userStoryId, Long taskId) {
 		Task task = taskDAO.findById(taskId).get();
 		task.removeUserStory(userStoryDAO.findById(userStoryId).get());
+		taskTaskDao.deleteHelp(taskId);
 		taskDAO.delete(task);
 	}
+	
+
+	@Override
+	public void removeTask(Set<Long> taskIds) {
+		taskIds.forEach(taskId -> removeTask(taskId));
+	}
+	
+	@Transactional
+	private void removeTask(long taskId) {
+		Task task = taskDAO.findById(taskId).get();
+		//task.removeUserStory(userStoryDAO.findById(userStoryId).get());
+		taskTaskDao.deleteHelp(taskId);
+		taskDAO.delete(task);
+	}
+
 
 	@Override
 	@Transactional
@@ -290,6 +331,9 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	public void startSprint(Long projectId, Long sprintId, StartSprintDTO input) {
 		Sprint sprint = sprintDAO.findById(sprintId).get();
+		if (sprint.getProject().getSprints().stream().anyMatch(s -> s.getStatus().equals(SprintStatus.STARTED))) {
+			throw new PMInvalidInputDTO("Another sprint is on going"); //TODO An functional exception should be defined
+		}
 		sprint.setStatus(SprintStatus.STARTED);
 		sprint.setStartDate(input.getStartDate());
 		sprint.setEndDate(input.getEndDate());
@@ -309,13 +353,13 @@ public class ProjectServiceImpl implements ProjectService {
 		Iterator<UserStory> it = sprint.getUserStories().iterator();
 		while (it.hasNext()) {
 			UserStory us = it.next();
-			if (us.getStatus() == UserStoryStatus.OPEN) {
+			if (us.getStatus() == UserStoryStatus.OPENED) {
 				sprint.getProject().getBacklog().addUserStory(us);
 				us.setSprint(null);
 			}
 		}
 		sprint.setUserStories(sprint.getUserStories().stream()
-													 .filter(us -> us.getStatus() == UserStoryStatus.CLOSE)
+													 .filter(us -> us.getStatus() == UserStoryStatus.CLOSED)
 													 .collect(Collectors.toList()));
 	}
 
@@ -323,13 +367,79 @@ public class ProjectServiceImpl implements ProjectService {
 	@Transactional
 	public void closeUserStory(Long projectId, Long userStoryId) {
 		UserStory us = userStoryDAO.findById(userStoryId).get();
-		us.setStatus(UserStoryStatus.CLOSE);
+		us.setStatus(UserStoryStatus.CLOSED);
 	}
 
 	@Override
 	@Transactional
 	public void openUserStory(Long projectId, Long userStoryId) {
 		UserStory us = userStoryDAO.findById(userStoryId).get();
-		us.setStatus(UserStoryStatus.OPEN);
+		us.setStatus(UserStoryStatus.OPENED);
+	}
+
+	// TODO test
+	@Override
+	@Transactional
+	public Task updateTask(long taskId, Task taskData) {
+		Task taskToUpdate = taskDAO.findById(taskId).get();
+		taskToUpdate.setDescription(taskData.getDescription());
+		taskToUpdate.setDuration(taskData.getDuration());
+		taskToUpdate.setDefinitionOfDone(taskData.getDefinitionOfDone());
+		taskToUpdate.setUser(taskData.getUser());
+		
+		taskToUpdate.removeDependencies(taskToUpdate.getTaskTaskSet()
+													.stream()
+													.filter(taskTask -> taskData.getTaskTaskSet()
+																				.stream()
+																				.allMatch(incomingTaskTask -> !incomingTaskTask.getDependent().getId().equals(taskTask.getDependent().getId())))
+													.map(TaskTask::getDependent)
+													.collect(Collectors.toList()));
+		taskData.getTaskTaskSet().forEach(taskTask -> {
+			taskToUpdate.addDependency(taskDAO.findById(taskTask.getDependent().getId()).get());
+		});
+		Iterator<UserStoryTasK> it = taskToUpdate.getTaskUserStories().iterator();
+		while (it.hasNext()) {
+			UserStory us = it.next().getUserStory();
+			if (taskData.getTaskUserStories().stream().allMatch(t -> !t.getUserStory().getId().equals(us.getId()))) {
+				taskToUpdate.removeUserStory(us, it);
+			}
+		}
+		taskData.getTaskUserStories().forEach(taskUs -> taskToUpdate.addUserStory(userStoryDAO.findById(taskUs.getUserStory().getId()).get()));
+		
+		//taskDAO.save(taskToUpdate);
+
+		return taskToUpdate;
+	}
+
+	@Override
+	@Transactional
+	public void setTaskStatus(Long taskId, TaskStatus status) {
+		Task task = taskDAO.findById(taskId).get();
+		task.setStatus(status);
+		switch (status) {
+		case TODO:
+		case DOING:
+			taskService.openTaskUserStories(task);
+			break;
+		case DONE:
+			List<UserStory> taskUserStories = task.getTaskUserStories()
+												  .stream()
+												  .map(UserStoryTasK::getUserStory)
+												  .collect(Collectors.toList());
+			taskUserStories.forEach(us -> {
+				if (userStoryService.isAllUserStoryTasksAreDone(us)) {
+					us.setStatus(UserStoryStatus.CLOSED);
+				}
+			});
+			break;
+		}
+	}
+
+	@Override
+	public List<User> getProjectUsers(long projectId) {
+		return projectDao.findById(projectId).get().getUsers()
+						.stream()
+						.map(UserProject::getUser)
+						.collect(Collectors.toList());
 	}
 }

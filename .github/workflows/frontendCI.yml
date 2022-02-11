@@ -1,0 +1,63 @@
+name: fronted CI
+on: 
+  push:
+    paths:
+      - 'frontend/**'
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Setup
+        run: |
+          cd frontend
+          npm ci
+      
+      - name: build
+        run: |
+          cd frontend
+          npm run build
+  #test:
+  #  runs-on: ubuntu-latest
+  #  steps:
+  #    - uses: actions/checkout@v2
+  #    - name: Use Node.js 14.x
+  #      uses: actions/setup-node@v1
+  #      with:
+  #        node-version: 14.x
+
+ #     - name: Setup
+ #      run: |
+ #         cd frontend
+ #         npm ci
+      
+ #     - name: test
+ #       run: |
+ #         cd frontend
+  #        npm test -- --no-watch --no-progress --browsers=ChromeHeadlessCI
+ # lint:
+ #   runs-on: ubuntu-latest
+ #   steps:
+ #     - uses: actions/checkout@v2
+ #     - name: Use Node.js 14.x
+ #       uses: actions/setup-node@v1
+ #       with:
+ #         node-version: 14.x
+
+ #     - name: Setup
+ #       run: |
+ #         cd frontend
+ #         npm ci
+ #     - name: lint
+ #       run: |
+ #         cd frontend
+ #         npm run lint

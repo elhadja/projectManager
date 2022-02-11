@@ -1,21 +1,22 @@
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { PMConstants } from 'src/app/common/PMConstants';
+import { GetSprintsInputDTO } from 'src/app/dto/getSprint.input.dto';
 import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
 import { MessageService } from 'src/app/services/message.service';
 import { DialogCreateSprintComponent } from '../dialog/dialog-create-sprint/dialog-create-sprint.component';
 import { DialogCreateUerStoryComponent } from '../dialog/dialog-create-uer-story/dialog-create-uer-story.component';
-import { DialogUserStoryDetailsComponent } from '../dialog/dialog-user-story-details/dialog-user-story-details.component';
 import { BacklogService } from '../services/backlog.service';
 
 interface SprintWrapper {
-  sprint: any,
+  sprint: GetSprintsInputDTO,
   totalStoryPoints: string,
   totalClosedUserStoriesStoryPoints: string,
   totalOpenedUserStoriesStoryPoints: string
-  sprintRangeDates: Array<Date|null>;
+  sprintRangeDates: Array<Date>;
 }
 
 @Component({
@@ -62,11 +63,16 @@ export class BacklogComponent implements OnInit {
           totalClosedUserStoriesStoryPoints: this.getClosedUserStorytTotalStoryPoints(sprint.userStories),
           totalOpenedUserStoriesStoryPoints: this.getOpenedUserStorytTotalStoryPoints(sprint.userStories),
           totalStoryPoints: `${this.getTotalStoryPoints(sprint.userStories)}`,
-          sprintRangeDates: [sprint.startDate !== null ? new Date(Date.parse(sprint.startDate)): null,
-                             sprint.endDate !== null ? new Date(Date.parse(sprint.endDate)) : null]
+          sprintRangeDates: [sprint.startDate !== null ? new Date(Date.parse(sprint.startDate)): new Date,
+            sprint.endDate !== null ? new Date(Date.parse(sprint.endDate)) : new Date]
         });
       });
     });
+  }
+
+  private refresh(): void {
+    this.sprintWrappers = [];
+    this.ngOnInit();
   }
 
   private initializeBacklog(): void {
@@ -102,7 +108,7 @@ export class BacklogComponent implements OnInit {
 
 
   public onOpenCreateUserStoryDialogFromBacklog(): void {
-    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent);
+    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {disableClose: true});
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         this.backlogService.createUserStoryInBacklog(this.projectId, result).subscribe((userSotryId) => {
@@ -118,7 +124,7 @@ export class BacklogComponent implements OnInit {
   }
 
   public onOpenCreateUserStoryDialogFromSprint(sprintId: number): void {
-    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent);
+    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {disableClose: true});
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         this.projectApiService.addUserStoryToSprint(this.projectId, sprintId, result).subscribe((userStoryId) => {
@@ -138,19 +144,19 @@ export class BacklogComponent implements OnInit {
   }
 
   public onOpenCreateSprintDialog(): void {
-    const dialogRef = this.materialDialogservice.open(DialogCreateSprintComponent);
+    const dialogRef = this.materialDialogservice.open(DialogCreateSprintComponent, {disableClose: true});
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         this.projectApiService.addSprintToProject(this.projectId, result).subscribe((createdSprintId) => {
           result.id = createdSprintId;
-          result.status = 'CREATED';
+          result.status = 'CREATED'; // TODO use constant
           result.userStories = [];
           this.sprintWrappers = [...this.sprintWrappers, {
             sprint: result,
             totalClosedUserStoriesStoryPoints: '0',
             totalOpenedUserStoriesStoryPoints: '0',
             totalStoryPoints: '0',
-            sprintRangeDates: []
+            sprintRangeDates: [new Date, new Date]
           }];
           this.messageService.showSuccessMessage("sprint created with success");
         })
@@ -161,13 +167,15 @@ export class BacklogComponent implements OnInit {
 
   public onOpenUserStory(row: GetUserStoriesInputDTO): void {
     const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {
-      data: row
+      data: row,
+      width: "600px",
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((userStoryToUpdate) => {
       if (userStoryToUpdate != null) {
         this.projectApiService.updateUserStory(this.projectId, row.id, userStoryToUpdate).subscribe(() => {
-          this.ngOnInit();
+          this.refresh();
         });
       }
     });
@@ -235,6 +243,39 @@ export class BacklogComponent implements OnInit {
         this.sprintWrappers = [...this.sprintWrappers];
       });
     })
+  }
+
+  public dropInBacklog(event: CdkDragDrop<GetUserStoriesInputDTO[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      this.projectApiService.moveUserStoryFromSprintToBacklog(this.projectId, event.previousContainer.data[event.previousIndex].id).subscribe();
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+    }
+    this.userStories = [...this.userStories];
+  }
+
+  public dropInSprint(event: CdkDragDrop<GetUserStoriesInputDTO[]>) {
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data,
+                        event.container.data,
+                        event.previousIndex,
+                        event.currentIndex);
+      let targetSprintId = this.sprintWrappers.find(sprintWrapper => {
+        return sprintWrapper.sprint.userStories.some(us => us.id === event.container.data[event.currentIndex].id);
+      })?.sprint.id;
+      if (targetSprintId != null) {
+        this.projectApiService.moveUserStoryToSprint(this.projectId, event.container.data[event.currentIndex].id, targetSprintId).subscribe();
+      } else {
+        // should not happen
+      }
+    }
+    this.sprintWrappers = [...this.sprintWrappers];
   }
 
 }

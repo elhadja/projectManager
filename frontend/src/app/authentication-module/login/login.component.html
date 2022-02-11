@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row d-flex justify-content-center">
         <div class="col-4">
-           <h1 class="text-center">login page</h1>
+           <h1 class="text-center">LOGIN</h1>
             <div class="d-flex flex-column justify-content-center">
                     <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Email ou Pseudo</mat-label>
@@ -24,6 +24,7 @@
                         </mat-error>
                     </mat-form-field>
                     <button mat-stroked-button (click)='onLogin()' [disabled]='!isValidForm()'>login</button>
+                    <span class="mt-4">You don't have an account ? <a class="link" style="color: blue; text-decoration: underline;" (click)="gotoSignupComponent()">Signup</a></span>
             </div>
         </div>
     </div>

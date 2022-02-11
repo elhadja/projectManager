@@ -1,15 +1,15 @@
 import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
 import { ApiConstant } from "src/app/common/ApiConstant";
 import { PMConstants } from "src/app/common/PMConstants";
 import { LoginOutputDTO } from "src/app/dto/login.output.interface";
 import { API } from "src/app/services/Api";
+import { RoutingService } from "src/app/services/routing.service";
 import { sessionManagerService } from "src/app/services/sessionManager.service";
 
 @Injectable()
 export class LoginService {
     constructor(private api: API,
-                private router: Router,
+                private routingService: RoutingService,
                 private sessionManager: sessionManagerService) {
 
     }
@@ -20,7 +20,7 @@ export class LoginService {
                         localStorage.setItem(PMConstants.SESSION_TOKEN_ID_KEY, response.token);
                         this.api.setHttpOptions(response.token);
 
-                        this.router.navigate(["/" + PMConstants.PROJECT_MODULE_BASE_URI]);
+                        this.routingService.gotoProjectComponent();
                     });
     }
 }

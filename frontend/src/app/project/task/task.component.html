@@ -1,0 +1,183 @@
+<div class="container-fluid">
+    <div class="row my-3">
+        <div class="col d-flex justify-content-center">
+            <mat-button-toggle-group [(ngModel)]="selectedView">
+                <mat-button-toggle value="0">By Sprint</mat-button-toggle>
+                <mat-button-toggle value="1">Kanban</mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+    </div>
+
+    <!-- tasks by sprint -->
+    <div class="row" *ngIf="selectedView == 0">
+        <div class="col">
+            <mat-form-field appearance="legacy" class="w-30">
+                <mat-label>Choose a sprint</mat-label>
+                <mat-select [(ngModel)]="selectedSprint" (selectionChange)="onSprintSelected()">
+                    <mat-option *ngFor="let sprint of projectSprints" [value]="sprint.id">
+                        {{sprint.name}}
+                        <ng-container *ngIf="activeSprintId === sprint.id">
+                            (active sprint)
+                        </ng-container>
+                    </mat-option>
+                </mat-select>
+            </mat-form-field >
+             <p-table [value]="tasksToDisplay" [(selection)]="selectedTasks">
+                <ng-template pTemplate="caption">
+                    <div class="d-flex flex-row justify-content-right">
+                       <div>
+                            <pm-button [label]="'add Task'" (click)="onCreateTask()"></pm-button>
+                            <button *ngIf="selectedTasks.length > 0" mat-stroked-button class="text-danger" (click)=onDeleteSelectedTasks()>delete tasks</button>
+                        </div>
+                    </div>
+                </ng-template>
+ 
+                <ng-template pTemplate="colgroup">
+                    <colgroup>
+                        <col style="width:5%">
+                        <col style="width:5%">
+                        <col style="width:5%">
+                        <col style="width:30%">
+                        <col style="width:5%">
+                        <col style="width:15%">
+                        <col style="width:25%">
+                        <col style="width:5%">
+                        <col style="width:5%">
+                    </colgroup>
+                </ng-template>
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="id">ID</th>
+                        <th>US IDs</th>
+                        <th>Description</th>
+                        <th pSortableColumn="duration">Duration</th>
+                        <th>dependencies</th>
+                        <th>dod</th>
+                        <th pSortableColumn="userPseudo">user</th>
+                        <th pSortableColumn="status">status</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                        </td>
+                        <td class="link" (click)="onUpdateTask(row)">{{ row.id }}</td>
+                        <td>
+                            <ng-container *ngFor="let usId of row.userStoriesIDs">
+                                {{ usId }}
+                            </ng-container>
+                        </td>
+                        <td>{{row.description }}</td>
+                        <td>{{ row.duration }}</td>
+                        <td>
+                            <ng-container *ngFor="let dependency of row.dependencies">
+                                {{ dependency.id }} &emsp;
+                            </ng-container>
+                        </td>
+                        <td>
+                            <ng-container *ngFor="let dod of dodAsArray(row.definitionOfDone)">
+                                {{ dod }} <br>
+                            </ng-container>
+                        </td>
+                        <td>{{ row.userPseudo }}</td>
+                        <td>{{ row.status }}</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td colspan = "3">
+                            No records found
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+
+    <!-- kanban -->
+    <div class="row" *ngIf="selectedView == 1">
+        <ng-container *ngIf="activeSprintId > 0; else noActiveSprint">
+            <div class="col-4">
+                <mat-card>
+                    <mat-card-title>TODO</mat-card-title>
+                    <mat-card-content>
+                        <mat-list 
+                            cdkDropList 
+                            #todoList="cdkDropList" 
+                            [cdkDropListData]="todoTasks" 
+                            [cdkDropListConnectedTo]="[doingList, doneList]" 
+                            (cdkDropListDropped)="dropTaskOnTodoList($event)">
+                            <mat-card mat-list-item class="my-2" *ngFor="let task of todoTasks;" cdkDrag>
+                                <mat-card-title style="font-size: small;">
+                                    <span class="link" (click)="onUpdateTask(task)">ID: {{task.id}}</span> - US:
+                                    <ng-container *ngFor="let usId of task.userStoriesIDs;  let isLast = last;">
+                                        {{ usId }}
+                                        <ng-container *ngIf="!isLast">, </ng-container>
+                                    </ng-container>
+                                </mat-card-title>
+                                <mat-card-content>{{task.description}}</mat-card-content>
+                            </mat-card>
+                        </mat-list>
+                    </mat-card-content>
+                </mat-card>
+        </div>
+            <div class="col-4">
+                <mat-card>
+                    <mat-card-title>DOING</mat-card-title>
+                    <mat-card-content>
+                        <mat-list 
+                            cdkDropList 
+                            #doingList="cdkDropList" 
+                            [cdkDropListData]="doingTasks" 
+                            [cdkDropListConnectedTo]="[todoList,doneList]" 
+                            (cdkDropListDropped)="dropTaskOnDoingList($event)">
+                            <mat-card mat-list-item class="my-2" *ngFor="let task of doingTasks;" cdkDrag>
+                                <mat-card-title style="font-size: small;">
+                                    <span class="link" (click)="onUpdateTask(task)">ID: {{task.id}}</span> - US:
+                                    <ng-container *ngFor="let usId of task.userStoriesIDs;  let isLast = last;">
+                                        {{ usId }}
+                                        <ng-container *ngIf="!isLast">, </ng-container>
+                                    </ng-container>
+                                </mat-card-title>
+                                <mat-card-content>{{task.description}}</mat-card-content>
+                            </mat-card>
+ 
+                        </mat-list>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-4">
+                <mat-card>
+                    <mat-card-title>DONE</mat-card-title>
+                    <mat-card-content>
+                        <mat-list 
+                            cdkDropList 
+                            #doneList="cdkDropList" 
+                            [cdkDropListData]="doneTasks" 
+                            [cdkDropListConnectedTo]="[todoList, doingList]" 
+                            (cdkDropListDropped)="dropTaskOnDoneList($event)">
+                            <mat-card mat-list-item class="my-2" *ngFor="let task of doneTasks;" cdkDrag>
+                                <mat-card-title style="font-size: small;">
+                                    <span class="link" (click)="onUpdateTask(task)">ID: {{task.id}}</span> - US:
+                                    <ng-container *ngFor="let usId of task.userStoriesIDs;  let isLast = last;">
+                                        {{ usId }}
+                                        <ng-container *ngIf="!isLast">, </ng-container>
+                                    </ng-container>
+                                </mat-card-title>
+                                <mat-card-content>{{task.description}}</mat-card-content>
+                            </mat-card>
+                        </mat-list>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </ng-container>
+        <ng-template #noActiveSprint>
+            <h2>No started sprint</h2>
+        </ng-template>
+    </div>
+</div>

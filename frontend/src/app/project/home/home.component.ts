@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GetUserInvitationsInputDTO } from 'src/app/dto/GetUserInvitationInputDTO';
 import { projectInputDTO } from 'src/app/dto/project.input.dto';
+import { RoutingService } from 'src/app/services/routing.service';
 import { sessionManagerService } from 'src/app/services/sessionManager.service';
 import { CreateProjectComponent } from '../dialog/create-project/create-project.component';
 import { DialogProjectDetailsComponent } from '../dialog/dialog-project-details/dialog-project-details.component';
@@ -24,7 +25,8 @@ export class HomeComponent implements OnInit {
               private homeService: HomeService,
               private addProjectDialog: MatDialog,
               private dialogCreateProjectService: DialogCreateProjectService,
-              private sessionService: sessionManagerService) {
+              private sessionService: sessionManagerService,
+              private readonly routingService: RoutingService) {
     this.projects = [];
     this.invitations = [];
     this.selectedInvitations = [];
@@ -51,6 +53,15 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  private refresh(): void {
+    this.projects = [];
+    this.invitations = [];
+    this.selectedInvitations = [];
+
+    this.ngOnInit();
+  }
+
+
   public getComponentName(): string {
     return 'HomeComponent';
   }
@@ -61,13 +72,22 @@ export class HomeComponent implements OnInit {
 
   public onClickOnProject(projectId: number): void{
     this.sessionService.setProjectId(projectId);
-    this.router.navigateByUrl('/project/backlog/' + projectId);
+    this.routingService.gotoBacklogComponent(projectId);
   }
 
   public onOpenProjectDetails(project: projectInputDTO): void {
-    this.addProjectDialog.open(DialogProjectDetailsComponent, {
+    const dialogRef = this.addProjectDialog.open(DialogProjectDetailsComponent, {
       data: {
         project
+      },
+      width: "50%",
+      height: "100%",
+      disableClose: true
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result != null) {
+        this.refresh();
       }
     });
   }
@@ -99,6 +119,7 @@ export class HomeComponent implements OnInit {
     })
 
    this.homeService.acceptInvitationToProject(ids).subscribe(() => {
+    this.selectedInvitations =[];
     this.loadUserProject();
     this.loadUserInvitations();
    });
@@ -111,6 +132,7 @@ export class HomeComponent implements OnInit {
       })
 
     this.homeService.cancelInvitationToProject(ids).subscribe(() => {
+      this.selectedInvitations =[];
       this.loadUserInvitations();
     });
   }

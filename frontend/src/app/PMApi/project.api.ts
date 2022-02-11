@@ -3,6 +3,9 @@ import { Observable, of } from "rxjs";
 import { ApiConstant } from "../common/ApiConstant";
 import { AddSprintToProjectOutputDTO } from "../dto/addSprintToProjectOutputDTO";
 import { AddUserStoryOutputDTO } from "../dto/addUserStoryOutputDTO";
+import { CreateTaskOutputDTO } from "../dto/createTask.output.dto";
+import { GetSprintsInputDTO } from "../dto/getSprint.input.dto";
+import { GetUsersByCriteriaInputDTO } from "../dto/getUsersByCriteriaInputDTO";
 import { GetUserStoriesInputDTO } from "../dto/getUserStoriesInputDTO";
 import { StartSprintOutputDTO } from "../dto/startSprintOutputDTO";
 import { API } from "../services/Api";
@@ -25,7 +28,7 @@ export class ProjectApiService {
         return this.api.post(this.baseURI + '/' + projectId + '/' + this.sprint, input);
     }
 
-    public getProjectSprints(projectId: number): Observable<any[]> {
+    public getProjectSprints(projectId: number): Observable<GetSprintsInputDTO[]> {
         return this.api.get(this.baseURI + '/' + projectId + '/' + this.sprint);
     }
 
@@ -59,5 +62,41 @@ export class ProjectApiService {
 
     public openUserStories(projectId: number, userStoryId: number): Observable<void> {
         return this.api.put(this.baseURI + '/' + projectId + '/user-stories/' + userStoryId + '/open', null);
+    }
+
+    public createTask(projectId: number, input: CreateTaskOutputDTO): Observable<void> {
+        return this.api.post(this.baseURI + '/' + projectId + '/tasks', input);
+    }
+
+    public getProjectUsers(projectId: number): Observable<GetUsersByCriteriaInputDTO[]> {
+        return this.api.get(this.baseURI + '/' + projectId + '/users');
+    }
+
+    public deleteTasks(projectId: number, tasksIDs:number[]): Observable<void> {
+        let taskIDsString = "";
+        tasksIDs.forEach((id, index) => {
+            taskIDsString += `${id}`;
+            if (index < tasksIDs.length-1) {
+                taskIDsString += ",";
+            }
+        });
+
+        return this.api.delete(this.baseURI + '/' + projectId + '/tasks/' + taskIDsString);
+    }
+
+    public updateTask(projectId:  number, taskId: number, input: CreateTaskOutputDTO): Observable<void> {
+        return this.api.put(this.baseURI + '/' + projectId + '/tasks/' + taskId, input);
+    }
+
+    public setTaskStatus(projectId: number, taskId: number, status: string): Observable<void> {
+        return this.api.put(this.baseURI + '/' + projectId + '/tasks/' + taskId + '/setStatus', status);
+    }
+
+    public moveUserStoryFromSprintToBacklog(projectId: number, userStoryid: number): Observable<void> {
+        return this.api.post(this.baseURI + '/' + projectId + '/backlog/user-stories/' + userStoryid, null);
+    }
+
+    public moveUserStoryToSprint(projectId: number, userStoryid: number, sprintId: number): Observable<void> {
+        return this.api.post(this.baseURI + '/' + projectId + '/sprints/' + sprintId + '/user-stories/' + userStoryid, null);
     }
 }

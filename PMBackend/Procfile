@@ -1,1 +1,1 @@
-web: java -Dserver.port=7276 $JAVA_OPTS -jar target/PMBackend-0.0.1-SNAPSHOT.jar
+web: java $JAVA_OPTS -jar -Dserver.port=9090 target/PMBackend-0.0.1-SNAPSHOT.jar

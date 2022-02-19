@@ -21,7 +21,7 @@ import com.elhadjium.PMBackend.controller.UserController;
 import com.elhadjium.PMBackend.dto.LoginInputDTO;
 import com.elhadjium.PMBackend.dto.signupInputDTO;
 import com.elhadjium.PMBackend.entity.CustomUserDetailsImpl;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.exception.PMBadCredentialsException;
 import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.service.UserService;
@@ -49,7 +49,7 @@ public class UserControllerTest {
 		signupInputDTO.setPseudo("mockito");
 		signupInputDTO.setPassword("trickyPassword#!66664");
 
-		when(userService.signup(any(User.class))).thenReturn(1L);
+		when(userService.signup(any(UserAccount.class))).thenReturn(1L);
 		
 		// When // Then
 		assertEquals(1L, userController.signup(signupInputDTO));
@@ -60,7 +60,7 @@ public class UserControllerTest {
 		// Prepare
 		signupInputDTO signupInputDTO = new signupInputDTO();
 	
-		when(userService.signup(any(User.class))).thenReturn(1L);
+		when(userService.signup(any(UserAccount.class))).thenReturn(1L);
 		
 		try {
 			// When

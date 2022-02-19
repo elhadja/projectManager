@@ -21,7 +21,7 @@ import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.ProjectService;
@@ -70,7 +70,7 @@ public class ProjectServiceTest {
 	public void addInvitation_shouldFailWhenUserHasNoRight() throws Exception {
 		//prepare
 		final long projectId = 1;
-		User author = new User();
+		UserAccount author = new UserAccount();
 		author.setId(1L);
 				
 		InviteUsersToProjectInputDTO input = new InviteUsersToProjectInputDTO();
@@ -94,11 +94,11 @@ public class ProjectServiceTest {
 		Project project = new Project();
 		project.setId(1L);
 
-		User author = new User();
+		UserAccount author = new UserAccount();
 		author.setId(1L);
 		author.setManagedProjects(Arrays.asList(project));
 
-		User guest = new User();
+		UserAccount guest = new UserAccount();
 		guest.setId(2L);
 		guest.setProjects(Arrays.asList(new UserProject(guest, project)));
 
@@ -126,11 +126,11 @@ public class ProjectServiceTest {
 		Project project = new Project();
 		project.setId(1L);
 
-		User author = new User();
+		UserAccount author = new UserAccount();
 		author.setId(1L);
 		author.setManagedProjects(Arrays.asList(project));
 
-		User guest = new User();
+		UserAccount guest = new UserAccount();
 		guest.setId(2L);
 		guest.setProjects(new ArrayList<UserProject>());
 

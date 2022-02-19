@@ -36,7 +36,7 @@ import com.elhadjium.PMBackend.entity.SprintStatus;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.TaskStatus;
 import com.elhadjium.PMBackend.entity.TaskTask;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
 import com.elhadjium.PMBackend.entity.UserStoryTasK;
@@ -78,19 +78,19 @@ public class ProjectServiceImpl implements ProjectService {
 			project.setDescription(updateProjectInputDTO.getProjectDescription());
 
 			// get users to remove from project
-			List<User> usersToRemoveFromProject = new ArrayList<User>();
+			List<UserAccount> usersToRemoveFromProject = new ArrayList<UserAccount>();
 			for (UserProject userProject: project.getUsers()) {
 				if (!updateProjectInputDTO.getProjectUsersIds().contains(userProject.getUser().getId())) {
 					usersToRemoveFromProject.add(userProject.getUser());
 				}
 			}
 			// remove users
-			for (User userToRemove: usersToRemoveFromProject) {
+			for (UserAccount userToRemove: usersToRemoveFromProject) {
 				project.removeUser(userToRemove);
 			}
 
 			// add users to project
-			Map<Long, User> userCache = new HashMap<Long, User>();
+			Map<Long, UserAccount> userCache = new HashMap<Long, UserAccount>();
 			for (Long userId: updateProjectInputDTO.getProjectUsersIds()) {
 				userCache.put(userId, userDAO.findById(userId).get());
 				if (!project.getUsers().contains(new UserProject(userCache.get(userId), project))) {
@@ -101,7 +101,7 @@ public class ProjectServiceImpl implements ProjectService {
 			// actualize managers
 			project.removeAllManagers();
 			for (Long managerId: updateProjectInputDTO.getProjectManagersIds()) {
-				User user = userCache.containsKey(managerId) ? userCache.get(managerId) : userDAO.findById(managerId).get();
+				UserAccount user = userCache.containsKey(managerId) ? userCache.get(managerId) : userDAO.findById(managerId).get();
 				project.addManager(user);
 			}
 			
@@ -113,7 +113,7 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	@Transactional
 	public void addInvitations(Long projectId, InviteUsersToProjectInputDTO input) {
-		User author = userDAO.findById(input.getAuthorId()).get();
+		UserAccount author = userDAO.findById(input.getAuthorId()).get();
 		boolean isManager = false;
 		for (Project managedProject: author.getManagedProjects()) {
 			if (managedProject.getId() == projectId) {
@@ -125,7 +125,7 @@ public class ProjectServiceImpl implements ProjectService {
 			throw new PMRuntimeException("You don't have access to this functionality", 400);
 		}
 
-		User guest = userDAO.findById(input.getGuestId()).get();
+		UserAccount guest = userDAO.findById(input.getGuestId()).get();
 		guest.getProjects().forEach((project) -> {
 			if (project.getProject().getId() == projectId) {
 				throw new PMRuntimeException("User already on this project", 400);
@@ -436,7 +436,7 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 
 	@Override
-	public List<User> getProjectUsers(long projectId) {
+	public List<UserAccount> getProjectUsers(long projectId) {
 		return projectDao.findById(projectId).get().getUsers()
 						.stream()
 						.map(UserProject::getUser)

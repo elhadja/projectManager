@@ -17,10 +17,10 @@ public class InvitationToProject {
 	private Long id;
 
 	@ManyToOne
-	private User guest;
+	private UserAccount guest;
 
 	@ManyToOne
-	private User author;
+	private UserAccount author;
 	
 	@ManyToOne
 	private Project project;
@@ -33,19 +33,19 @@ public class InvitationToProject {
 		this.id = id;
 	}
 
-	public User getGuest() {
+	public UserAccount getGuest() {
 		return guest;
 	}
 
-	public void setGuest(User guest) {
+	public void setGuest(UserAccount guest) {
 		this.guest = guest;
 	}
 
-	public User getAuthor() {
+	public UserAccount getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(User author) {
+	public void setAuthor(UserAccount author) {
 		this.author = author;
 	}
 

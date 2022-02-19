@@ -10,7 +10,7 @@ import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.TaskStatus;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.entity.UserStory;
 
 public interface ProjectService {
@@ -36,6 +36,6 @@ public interface ProjectService {
 	public void openUserStory(Long projectId, Long userStoryId);
 	public Task updateTask(long taskId, Task taskData);
 	public void setTaskStatus(Long parseId, TaskStatus status);
-	public List<User> getProjectUsers(long projectId);
+	public List<UserAccount> getProjectUsers(long projectId);
 	public void removeTask(Set<Long> taskIds);
 }

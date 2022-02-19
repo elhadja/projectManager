@@ -51,7 +51,7 @@ import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.TaskTask;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.entity.UserStoryImportance;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
@@ -93,7 +93,7 @@ public class ProjectControllerTest {
 		dependency2.setId(3L);
 		task.addDependency(dependency1);
 		task.addDependency(dependency2);
-		User user = new User();
+		UserAccount user = new UserAccount();
 		user.setId(1L);
 		user.setPseudo("pseudo");
 		task.setUser(user);

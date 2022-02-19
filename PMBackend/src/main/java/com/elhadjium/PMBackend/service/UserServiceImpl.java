@@ -25,7 +25,7 @@ import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
 import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.CustomUserDetailsImpl;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.exception.PMEntityExistsException;
 import com.elhadjium.PMBackend.exception.PMEntityNotExistsException;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 	private BCryptPasswordEncoder passwordEncodere = new BCryptPasswordEncoder();
 
 	@Override
-	public Long signup(User user) {
+	public Long signup(UserAccount user) {
 		if (userDAO.findByPseudo(user.getPseudo()) != null || userDAO.findByEmail(user.getEmail()) != null) {
 			// TODO use message manager
 			throw new PMEntityExistsException(messageSource.getMessage("msgErrorUserAlreadExists", null, LocaleContextHolder.getLocale()));
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDetails loadUserByUsername(String userIdentifier) throws UsernameNotFoundException {
 		try {
-			User u = userDAO.findByEmail(userIdentifier);
+			UserAccount u = userDAO.findByEmail(userIdentifier);
 			if (u == null) {
 				u = userDAO.findByPseudo(userIdentifier);
 			}
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		try {
-			User user = userDAO.findById(userId).get();
+			UserAccount user = userDAO.findById(userId).get();
 			project.addManager(user);
 			Backlog backlog = new Backlog();
 			backlog.setProject(project);
@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> getUsersByCriteria(GetUsersByCriteriaInputDTO input) {
+	public List<UserAccount> getUsersByCriteria(GetUsersByCriteriaInputDTO input) {
 		return userDAO.getUsersByCriteria(input.getPseudo(), input.getFirstname(), input.getLastname());
 	}
 

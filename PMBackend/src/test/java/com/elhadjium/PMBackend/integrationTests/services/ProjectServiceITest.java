@@ -34,7 +34,7 @@ import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.SprintStatus;
 import com.elhadjium.PMBackend.entity.Task;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.entity.UserStoryStatus;
 import com.elhadjium.PMBackend.service.ProjectService;
@@ -114,7 +114,7 @@ public class ProjectServiceITest {
 	@Transactional
 	public void addUserStoryToBacklog_ok() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		Project project = new Project();
 		project.setName("project name");
 		Long projectId = userService.CreateUserProject(userId, project);
@@ -135,7 +135,7 @@ public class ProjectServiceITest {
 	@Test
 	public void deleteUserStoryFromProject_shouldRemoveUserStoryFromSprint() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");
@@ -168,7 +168,7 @@ public class ProjectServiceITest {
 	@Test
 	public void deleteUserStoryFromProject_shouldRemoveUserStoryFromBacklog() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");
@@ -195,7 +195,7 @@ public class ProjectServiceITest {
 	@Test
 	public void updateUserStory_shouldBeOk() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");
@@ -222,7 +222,7 @@ public class ProjectServiceITest {
 	@Test
 	public void moveUserStoryFromSprintToBacklog() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");
@@ -248,7 +248,7 @@ public class ProjectServiceITest {
 	@Test
 	public void createTask_shouldBeOk() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");
@@ -270,7 +270,7 @@ public class ProjectServiceITest {
 	@Test
 	public void deleteTask_shouldBeOk() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");
@@ -293,7 +293,7 @@ public class ProjectServiceITest {
 	@Test
 	public void getSprintTasks_shouldBeOk() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");
@@ -329,7 +329,7 @@ public class ProjectServiceITest {
 	@Test
 	public void deleteSprint_shouldMoveAllUserStoriesToBacklogBeforeDeleting() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");
@@ -362,7 +362,7 @@ public class ProjectServiceITest {
 	@Transactional
 	public void terminateSprint_shouldBeOk() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");

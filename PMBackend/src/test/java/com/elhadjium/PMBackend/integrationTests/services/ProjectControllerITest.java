@@ -20,7 +20,7 @@ import com.elhadjium.PMBackend.dto.AddSprintToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
 import com.elhadjium.PMBackend.entity.Sprint;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.entity.UserStory;
 import com.elhadjium.PMBackend.service.ProjectService;
 import com.elhadjium.PMBackend.service.UserService;
@@ -46,7 +46,7 @@ public class ProjectControllerITest {
 	@Test
 	public void getBacklogUserStories_shouldBeOk() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");
@@ -70,7 +70,7 @@ public class ProjectControllerITest {
 	@Test
 	public void getSprintUserStories_shouldBeOk() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");
@@ -95,7 +95,7 @@ public class ProjectControllerITest {
 	@Test
 	public void addSprintToProject_shoulbeOk() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");
@@ -117,7 +117,7 @@ public class ProjectControllerITest {
 	@Test
 	public void moveUserStoryFromSprintToBacklog() throws Exception {
 		// prepare
-		Long userId = userService.signup(new User(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
 		
 		Project project = new Project();
 		project.setName("project name");

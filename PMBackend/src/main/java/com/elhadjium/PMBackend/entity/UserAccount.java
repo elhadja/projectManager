@@ -17,7 +17,7 @@ import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
 
 @Entity
-public class User implements Serializable {
+public class UserAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -42,9 +42,9 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "guest", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<InvitationToProject> invitationnToProject = new ArrayList<InvitationToProject>();
 	
-	public User() {}
+	public UserAccount() {}
 	
-	public User(Long id, String firstName, String lastName, String email, String pseudo, String password) {
+	public UserAccount(Long id, String firstName, String lastName, String email, String pseudo, String password) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -161,7 +161,7 @@ public class User implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		User other = (User) obj;
+		UserAccount other = (UserAccount) obj;
 		return Objects.equals(email, other.email) && Objects.equals(pseudo, other.pseudo);
 	}
 }

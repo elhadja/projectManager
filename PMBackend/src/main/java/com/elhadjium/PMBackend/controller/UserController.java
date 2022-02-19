@@ -34,7 +34,7 @@ import com.elhadjium.PMBackend.dto.ProjectManagerOutputDTO;
 import com.elhadjium.PMBackend.dto.signupInputDTO;
 import com.elhadjium.PMBackend.entity.CustomUserDetails;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.exception.PMBadCredentialsException;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.UserService;
@@ -58,7 +58,7 @@ public class UserController {
 	@PostMapping("signup")
 	public Long signup(@RequestBody signupInputDTO signupInputDTO) throws Exception {
 		signupInputDTO.validate();
-		User user = new User();
+		UserAccount user = new UserAccount();
 		user.setEmail(signupInputDTO.getEmail());
 		user.setPseudo(signupInputDTO.getPseudo());
 		user.setPassword(signupInputDTO.getPassword());
@@ -102,7 +102,7 @@ public class UserController {
 			userProjectOutputDTO.setProjectName(project.getName());
 			userProjectOutputDTO.setProjectId(project.getId());
 			userProjectOutputDTO.setProjectManagers(new ArrayList<ProjectManagerOutputDTO>());
-			for (User user: project.getManagers()) {
+			for (UserAccount user: project.getManagers()) {
 				ProjectManagerOutputDTO manager = new ProjectManagerOutputDTO();
 				manager.setPseudo(user.getPseudo());
 				manager.setId(user.getId());
@@ -127,8 +127,8 @@ public class UserController {
 	@PostMapping
 	public List<GetUsersByCriteriaOutputDTO> getUsersByCriteria(@RequestBody GetUsersByCriteriaInputDTO input) throws Exception {
 		List<GetUsersByCriteriaOutputDTO> userListOutput = new ArrayList<GetUsersByCriteriaOutputDTO>();
-		List<User> users = userService.getUsersByCriteria(input);
-		for (User user: users) {
+		List<UserAccount> users = userService.getUsersByCriteria(input);
+		for (UserAccount user: users) {
 			userListOutput.add(new GetUsersByCriteriaOutputDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getPseudo()));
 		}
 		return userListOutput;

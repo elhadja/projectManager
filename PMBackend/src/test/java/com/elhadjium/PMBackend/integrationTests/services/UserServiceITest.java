@@ -20,7 +20,7 @@ import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.service.UserService;
 
 @SpringBootTest
@@ -41,7 +41,7 @@ public class UserServiceITest {
 	@Transactional
 	public void createUserProject_ok() throws Exception {
 		// prepare
-		User user = new User();
+		UserAccount user = new UserAccount();
 		user.setEmail("email");
 		user.setPassword("password");
 		user.setPseudo("pseudo");
@@ -70,7 +70,7 @@ public class UserServiceITest {
 		userService.acceptInvitationToProjects(new String[] {"1"}, 1L);
 		
 		// then
-		User invitedUser = userDAO.findById(2L).get();
+		UserAccount invitedUser = userDAO.findById(2L).get();
 		assertEquals(0, invitedUser.getInvitationnToProject().size());
 		assertEquals(1, invitedUser.getProjects().size());
 	}
@@ -84,7 +84,7 @@ public class UserServiceITest {
 		
 		// then
 		Project project = projectDAO.findById(1L).get();
-		User user = userDAO.findById(2L).get();
+		UserAccount user = userDAO.findById(2L).get();
 		assertEquals(0, project.getInvitationsToProject().size());
 		assertEquals(0, user.getInvitationnToProject().size());
 	}
@@ -100,7 +100,7 @@ public class UserServiceITest {
 		input.setLastname("dupont");
 
 		// when
-		List<User> users = userService.getUsersByCriteria(input);
+		List<UserAccount> users = userService.getUsersByCriteria(input);
 		
 		// then
 		assertNotNull(users);
@@ -118,7 +118,7 @@ public class UserServiceITest {
 		input.setLastname("dupont");
 
 		// when
-		List<User> users = userService.getUsersByCriteria(input);
+		List<UserAccount> users = userService.getUsersByCriteria(input);
 		
 		// then
 		assertNotNull(users);

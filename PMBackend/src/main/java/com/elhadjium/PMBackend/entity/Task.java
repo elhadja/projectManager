@@ -27,7 +27,7 @@ public class Task implements Serializable {
 	private Long id;
 
 	@ManyToOne
-	private User user;
+	private UserAccount user;
 	
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<UserStoryTasK> taskUserStories = new HashSet<UserStoryTasK>();
@@ -96,11 +96,11 @@ public class Task implements Serializable {
 		this.id = id;
 	}
 
-	public User getUser() {
+	public UserAccount getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserAccount user) {
 		this.user = user;
 	}
 

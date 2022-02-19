@@ -1,7 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, ObservableInput, throwError } from "rxjs";
-import { catchError } from 'rxjs/operators'
+import { Observable, throwError } from "rxjs";
+import { catchError } from 'rxjs/operators';
+import { environment } from "src/environments/environment";
 import { PMConstants } from "../common/PMConstants";
 import { MessageService } from "./message.service";
 
@@ -13,7 +14,7 @@ export class API {
     };
 
     constructor(private httpClient: HttpClient, private messageService: MessageService) {
-        this.baseURI = "https://mighty-peak-16888.herokuapp.com/pm-api";
+        this.baseURI = environment.api_base_uri;
         this.httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',

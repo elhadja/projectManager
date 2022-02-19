@@ -13,7 +13,7 @@ export class API {
     };
 
     constructor(private httpClient: HttpClient, private messageService: MessageService) {
-        this.baseURI = "http://localhost:9090/pm-api";
+        this.baseURI = "https://mighty-peak-16888.herokuapp.com/pm-api";
         this.httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',

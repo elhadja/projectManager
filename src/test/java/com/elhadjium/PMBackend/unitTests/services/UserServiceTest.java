@@ -15,7 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.exception.PMEntityExistsException;
 import com.elhadjium.PMBackend.service.UserService;
 import com.elhadjium.PMBackend.service.UserServiceImpl;
@@ -37,28 +37,28 @@ public class UserServiceTest {
 	@Test
 	public void signup_ok() throws Exception {
 		
-		User user = new User();
+		UserAccount user = new UserAccount();
 		user.setPassword("password");
 		// mock
-		when(userDAO.save(any(User.class))).thenReturn(new User());
+		when(userDAO.save(any(UserAccount.class))).thenReturn(new UserAccount());
 
 		// When
 		userService.signup(user);
 		
 		// Then
-		verify(userDAO).save(any(User.class));
+		verify(userDAO).save(any(UserAccount.class));
 	}
 	
 	@Test
 	public void signup_userAlreadyExists() throws Exception {
 		// Prepare
-		User user = new User();
+		UserAccount user = new UserAccount();
 		when(userDAO.findByEmail(any())).thenReturn(user);
 		when(userDAO.findByPseudo(any())).thenReturn(user);
 		
 		try {
 			// when
-			userService.signup(new User());
+			userService.signup(new UserAccount());
 		} catch (PMEntityExistsException e) {
 			
 		}

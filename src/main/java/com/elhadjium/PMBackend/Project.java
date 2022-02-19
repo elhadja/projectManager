@@ -17,7 +17,7 @@ import javax.persistence.OneToOne;
 import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.Sprint;
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 
 @Entity
 public class Project implements Serializable {
@@ -38,7 +38,7 @@ public class Project implements Serializable {
 	private List<UserProject> users = new ArrayList<UserProject>();
 	
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private List<User> managers = new ArrayList<User>();
+	private List<UserAccount> managers = new ArrayList<UserAccount>();
 	
 	@OneToMany(mappedBy = "project")
 	private List<InvitationToProject> invitationsToProject = new ArrayList<InvitationToProject>();
@@ -49,7 +49,7 @@ public class Project implements Serializable {
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Sprint> sprints = new ArrayList<>();
 	
-	public void addUser(User user) {
+	public void addUser(UserAccount user) {
 		UserProject userProject = new UserProject();
 		userProject.setProject(this);
 		userProject.setUser(user);
@@ -58,7 +58,7 @@ public class Project implements Serializable {
 		user.getProjects().add(userProject);
 	}
 	
-	public void removeUser(User user)  {
+	public void removeUser(UserAccount user)  {
 		UserProject userProject = new UserProject();
 		userProject.setUser(user);
 		userProject.setProject(this);
@@ -76,14 +76,14 @@ public class Project implements Serializable {
 	}
 	
 	public void removeAllManagers() {
-		for (User user: managers) {
+		for (UserAccount user: managers) {
 			user.getManagedProjects().remove(this);
 		}
 
 		managers.clear();
 	}
 	
-	public void addManager(User manager) {
+	public void addManager(UserAccount manager) {
 		managers.add(manager);
 		manager.getManagedProjects().add(this);
 	}
@@ -140,11 +140,11 @@ public class Project implements Serializable {
 		this.users = users;
 	}
 	
-	public List<User> getManagers() {
+	public List<UserAccount> getManagers() {
 		return managers;
 	}
 
-	public void setManagers(List<User> managers) {
+	public void setManagers(List<UserAccount> managers) {
 		this.managers = managers;
 	}
 

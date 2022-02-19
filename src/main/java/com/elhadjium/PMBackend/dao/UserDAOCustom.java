@@ -2,8 +2,8 @@ package com.elhadjium.PMBackend.dao;
 
 import java.util.List;
 
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 
 public interface UserDAOCustom {
-	public List<User> getUsersByCriteria(String pseudo, String firstname, String lastname);
+	public List<UserAccount> getUsersByCriteria(String pseudo, String firstname, String lastname);
 }

@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 
 @Entity
 public class UserProject implements Serializable {
@@ -17,7 +17,7 @@ public class UserProject implements Serializable {
 		
 	}
 	
-	public UserProject(User user, Project project) {
+	public UserProject(UserAccount user, Project project) {
 		super();
 		this.user = user;
 		this.project = project;
@@ -25,17 +25,17 @@ public class UserProject implements Serializable {
 
 	@Id
 	@ManyToOne
-	private User user;
+	private UserAccount user;
 
 	@Id
 	@ManyToOne
 	private Project project;
 
-	public User getUser() {
+	public UserAccount getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserAccount user) {
 		this.user = user;
 	}
 

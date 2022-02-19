@@ -11,7 +11,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.elhadjium.PMBackend.entity.User;
+import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.util.JavaUtil;
 
 @Repository
@@ -20,10 +20,10 @@ public class UserDAOCustomImpl implements UserDAOCustom {
 	EntityManager em;
 
 	@Override
-	public List<User> getUsersByCriteria(String pseudo, String firstname, String lastname) {
+	public List<UserAccount> getUsersByCriteria(String pseudo, String firstname, String lastname) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<User> cq = cb.createQuery(User.class);
-		Root<User> root = cq.from(User.class);
+		CriteriaQuery<UserAccount> cq = cb.createQuery(UserAccount.class);
+		Root<UserAccount> root = cq.from(UserAccount.class);
 		
 		Predicate p = cb.isNotNull(root.get("id"));
 

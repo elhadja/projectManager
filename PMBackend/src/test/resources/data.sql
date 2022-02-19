@@ -1,7 +1,7 @@
-insert into user (id, pseudo, email) values (1, "elhadj1", "email1@test.com");
-insert into user (id, pseudo, email) values (2, "elhadj2", "email2@test.com");
-insert into user (id, pseudo, email) values (3, "elhadj3", "email3@test.com");
-insert into user (id, pseudo, email) values (4, "elhadj4", "email4@test.com");
+insert into user_account (id, pseudo, email) values (1, "elhadj1", "email1@test.com");
+insert into user_account (id, pseudo, email) values (2, "elhadj2", "email2@test.com");
+insert into user_account (id, pseudo, email) values (3, "elhadj3", "email3@test.com");
+insert into user_account (id, pseudo, email) values (4, "elhadj4", "email4@test.com");
 
 insert into project (id, name) values (1, "project1");
 

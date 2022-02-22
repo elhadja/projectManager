@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,6 +56,19 @@ public class UserController {
 	
 	@Autowired
 	private MessageSource messageSource;
+	
+	@Autowired
+	private JavaMailSender javaMailSender;
+	
+	@PostMapping("testEmail")
+	public void sendEmail(@RequestBody String messageText) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("elhadja007@gmail.com");
+        message.setTo("elhadja007@gmail.com"); 
+        message.setSubject("test"); 
+        message.setText(messageText);
+        javaMailSender.send(message);
+	}
 
 	@PostMapping("signup")
 	public Long signup(@RequestBody signupInputDTO signupInputDTO) throws Exception {

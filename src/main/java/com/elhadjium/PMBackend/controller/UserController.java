@@ -13,6 +13,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.common.PMConstants;
+import com.elhadjium.PMBackend.controller.constant.UserControllerConstant;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserInvitationsOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserProjectOutputDTO;
@@ -32,15 +34,19 @@ import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
 import com.elhadjium.PMBackend.dto.GetUsersByCriteriaOutputDTO;
 import com.elhadjium.PMBackend.dto.LoginInputDTO;
 import com.elhadjium.PMBackend.dto.LoginOutputDTO;
+import com.elhadjium.PMBackend.dto.PasswordReinitialisationTokenInputDTO;
 import com.elhadjium.PMBackend.dto.ProjectManagerOutputDTO;
 import com.elhadjium.PMBackend.dto.signupInputDTO;
 import com.elhadjium.PMBackend.entity.CustomUserDetails;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.exception.PMBadCredentialsException;
+import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.UserService;
 import com.elhadjium.PMBackend.util.JwtToken;
+
+import io.jsonwebtoken.ExpiredJwtException;
 
 @RestController
 @RequestMapping(PMConstants.PMBaseUri + "/users")
@@ -57,17 +63,10 @@ public class UserController {
 	@Autowired
 	private MessageSource messageSource;
 	
-	@Autowired
-	private JavaMailSender javaMailSender;
 	
 	@PostMapping("testEmail")
 	public void sendEmail(@RequestBody String messageText) {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom("elhadja007@gmail.com");
-        message.setTo("elhadja007@gmail.com"); 
-        message.setSubject("test"); 
-        message.setText(messageText);
-        javaMailSender.send(message);
+		userService.sendSimpleEmail("elhadja007@gmail.com", "test mail service", "this message is just to test that mail sending are working on project manager webpp");
 	}
 
 	@PostMapping("signup")
@@ -173,6 +172,29 @@ public class UserController {
 			result.add(output);
 		});
 		return result;
+	}
+	
+	@GetMapping(UserControllerConstant.passwordReinitialisationToken)
+	public void generateTokenForPasswordReinitialisation(@RequestBody PasswordReinitialisationTokenInputDTO input) {
+		input.validate();
+		StringBuilder link = new StringBuilder(input.getUrl());
+		link.append("?token=");
+		link.append(jwt.generateToken(input.getEmail(), System.currentTimeMillis() + (12 * 60 * 60 * 1000), "secret"));
+		
+		userService.sendSimpleEmail(input.getEmail(), "Password Reinitialization", link.toString());
+	}
+	
+	@PostMapping(UserControllerConstant.reinitializePassword + "/{token}")
+	public void reinitializePassword(@RequestBody String newUserPassword, @PathVariable("token") String jwToken) {
+		String email = null;
+		try {
+			email = jwt.extractUsername(jwToken);
+			userService.loadUserByUsername(email);
+		} catch (ExpiredJwtException | UsernameNotFoundException e) {
+			throw new PMInvalidInputDTO("This token has expired or are not valide, try to get a new token");
+		}
+
+		userService.updateUserPassword(email, newUserPassword);
 	}
 	
 	@GetMapping("test")

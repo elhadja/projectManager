@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Subject } from "rxjs";
 import { PMConstants } from "../common/PMConstants";
+import { API } from "./Api";
 
 @Injectable()
 export class sessionManagerService {
@@ -8,7 +9,7 @@ export class sessionManagerService {
     public projectSelectedSubject: Subject<void>;
     private readonly invalidId: number;
 
-    constructor() {
+    constructor(private readonly api: API) {
         this.userLoggedEmitter = new Subject<boolean>();
         this.projectSelectedSubject = new Subject<void>();
         this.invalidId = -1;
@@ -37,5 +38,6 @@ export class sessionManagerService {
     public closeSession(): void {
         this.userLoggedEmitter.next(false);
         localStorage.clear();
+        this.api.clearHeader();
     }
 }

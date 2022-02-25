@@ -64,6 +64,10 @@ export class API {
         this.httpOptions.headers = this.httpOptions.headers?.set("Authorization", "Bearer " + token);
     }
 
+    public clearHeader(): void {
+        this.httpOptions.headers = undefined;
+    }
+
     private f = (error: HttpErrorResponse): Observable<never> => {
         if (error.status === 401 && !!error.error) {
             this.messageService.showErrorMessage(error.error.message);

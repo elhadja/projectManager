@@ -27,4 +27,8 @@ export class RoutingService {
     public gotoSignupComponent(): void {
         this.router.navigateByUrl('/auth/signup');
     }
+
+    public gotoRequestNewPasswordComponent(): void {
+        this.router.navigateByUrl('auth/password-request');
+    }
 }

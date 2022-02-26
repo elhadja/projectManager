@@ -37,4 +37,7 @@ export class LoginComponent implements OnInit {
     this.routingService.gotoSignupComponent();
   }
 
+  public onForgottenPassword(): void {
+    this.routingService.gotoRequestNewPasswordComponent();
+  }
 }

@@ -19,6 +19,7 @@ import { MenuBarComponent } from './components/menu-bar/menu-bar.component';
 import { RoutingService } from './services/routing.service';
 import { SharedModule } from 'primeng/api';
 import {SlideMenuModule} from 'primeng/slidemenu';
+import { UserApiService } from './PMApi/user-api.service';
 
 
 const SERVICES = [API, 
@@ -26,7 +27,8 @@ const SERVICES = [API,
                   RouteSecureService,
                   sessionManagerService,
                   ProjectApiService,
-                  RoutingService
+                  RoutingService,
+                  UserApiService
                 ];
 
 @NgModule({

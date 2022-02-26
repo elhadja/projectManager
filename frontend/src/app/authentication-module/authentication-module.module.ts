@@ -13,18 +13,24 @@ import { SignupService } from './services/signup.service';
 import { HttpClient } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpLoaderFactory } from '../app.module';
+import { RequestNewPasswordComponent } from './request-new-password/request-new-password.component';
+import { UpdatePasswordComponent } from './update-password/update-password.component';
 
 const routes: Routes = [
   {path: '', component: LoginComponent},
   {path: 'login', component: LoginComponent},
-  {path: 'signup', component: RegisterComponent}
-]
+  {path: 'signup', component: RegisterComponent},
+  { path: 'password-request', component: RequestNewPasswordComponent },
+  { path: 'password-update', component: UpdatePasswordComponent },
+];
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    RequestNewPasswordComponent,
+    UpdatePasswordComponent
   ],
   imports: [
     CommonModule,

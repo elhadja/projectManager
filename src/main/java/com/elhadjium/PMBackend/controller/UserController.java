@@ -174,7 +174,7 @@ public class UserController {
 		return result;
 	}
 	
-	@GetMapping(UserControllerConstant.passwordReinitialisationToken)
+	@PostMapping(UserControllerConstant.passwordReinitialisationToken)
 	public void generateTokenForPasswordReinitialisation(@RequestBody PasswordReinitialisationTokenInputDTO input) {
 		input.validate();
 		StringBuilder link = new StringBuilder(input.getUrl());

@@ -80,7 +80,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     	final String baseUrl = PMConstants.PMBaseUri + "/users";
         web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/signup");
         web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/login");
-        web.ignoring().antMatchers(HttpMethod.GET, baseUrl + "/" + UserControllerConstant.passwordReinitialisationToken);
+        web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/" + UserControllerConstant.passwordReinitialisationToken);
         web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/" + UserControllerConstant.reinitializePassword + "/**");
     }
     

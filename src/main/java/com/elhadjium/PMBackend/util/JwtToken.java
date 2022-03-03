@@ -12,10 +12,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+// TODO make method finals and remove Service annotation
+// TODO should be tested (at least generate token)
 @Service
 public class JwtToken {
-	public String key = "secret";
-	
 	private String SECRET_KEY = "secret";
 
     public String extractUsername(String token) {
@@ -34,13 +34,23 @@ public class JwtToken {
         return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
     }
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userDetails.getUsername());
+    }
+    
+    public String generateToken(String subject, long expirationDate, String secreteKey) {
+		Map<String, Object> claims = new HashMap<>();
+		return Jwts.builder()
+				.setClaims(claims)
+				.setSubject(subject)
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(expirationDate))
+				.signWith(SignatureAlgorithm.HS256, secreteKey).compact();
     }
 
     private String createToken(Map<String, Object> claims, String subject) {

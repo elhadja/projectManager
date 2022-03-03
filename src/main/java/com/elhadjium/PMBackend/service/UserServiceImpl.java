@@ -29,6 +29,8 @@ import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.exception.PMEntityExistsException;
 import com.elhadjium.PMBackend.exception.PMEntityNotExistsException;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -45,6 +47,9 @@ public class UserServiceImpl implements UserService {
 	private InvitationToProjectDAO invitationToProjectDAO;
 	
 	private BCryptPasswordEncoder passwordEncodere = new BCryptPasswordEncoder();
+	
+	@Autowired
+	private JavaMailSender javaMailSender;
 
 	@Override
 	public Long signup(UserAccount user) {
@@ -139,4 +144,23 @@ public class UserServiceImpl implements UserService {
 			invitation.getProject().removeInvitation(invitation);
 		}
 	}
+	
+	@Transactional
+	public void updateUserPassword(String userEmail, String newUserPassword) {
+		UserAccount user = userDAO.findByEmail(userEmail);
+		if (user != null) {
+			user.setPassword(this.passwordEncodere.encode(newUserPassword));
+		}
+	}
+	
+	@Override
+	public void sendSimpleEmail(String targetEmail, String subject, String content) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom("elhadja007@gmail.com");
+        message.setTo(targetEmail); 
+        message.setSubject(subject); 
+        message.setText(content);
+        javaMailSender.send(message);
+	}
+
 }

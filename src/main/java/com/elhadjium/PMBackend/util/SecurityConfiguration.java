@@ -19,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.elhadjium.PMBackend.common.PMConstants;
+import com.elhadjium.PMBackend.controller.constant.UserControllerConstant;
 import com.elhadjium.PMBackend.service.UserService;
 
 @Configuration
@@ -79,6 +80,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     	final String baseUrl = PMConstants.PMBaseUri + "/users";
         web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/signup");
         web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/login");
+        web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/" + UserControllerConstant.passwordReinitialisationToken);
+        web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/" + UserControllerConstant.reinitializePassword + "/**");
     }
     
     public void addCorsMappings(CorsRegistry registry) {

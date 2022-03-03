@@ -17,4 +17,7 @@ public interface UserService extends UserDetailsService {
 	public void acceptInvitationToProjects(String[] invitationsIds, Long userId);
 	public List<InvitationToProject> getUserInvitationToProject(long guestId);
 	public void cancelInvitationToProjects(String[] invitationsIds, Long valueOf);
+	public void updateUserPassword(String userEmail, String newUserPassword);
+	// TODO move this method in a more appropriate service
+	public void sendSimpleEmail(String targetEmail, String subject, String content);
 }

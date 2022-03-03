@@ -1,4 +1,5 @@
 export const environment = {
   production: false,
-  api_base_uri: 'https://still-brushlands-21859.herokuapp.com/pm-api'
+  api_base_uri: 'https://still-brushlands-21859.herokuapp.com/pm-api',
+  host: 'https://project-manager-staging.netlify.app'
 };

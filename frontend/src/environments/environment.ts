@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  api_base_uri: 'http://localhost:9090/pm-api'
+  api_base_uri: 'http://localhost:9090/pm-api',
+  host: 'http://localhost:4200'
 };
 
 /*

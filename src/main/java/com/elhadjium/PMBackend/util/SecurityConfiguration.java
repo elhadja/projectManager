@@ -82,6 +82,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/login");
         web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/" + UserControllerConstant.passwordReinitialisationToken);
         web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/" + UserControllerConstant.reinitializePassword + "/**");
+        web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/" + UserControllerConstant.loginWithGoogle);
     }
     
     public void addCorsMappings(CorsRegistry registry) {

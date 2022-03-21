@@ -24,6 +24,7 @@
                         </mat-error>
                     </mat-form-field>
                     <button mat-stroked-button (click)='onLogin()' [disabled]='!isValidForm()'>login</button>
+                    <button mat-stroked-button (click)='onLoginWithGoogle()'>login with google</button>
                     <span class="mt-4">You don't have an account ? <a class="link" style="color: blue; text-decoration: underline;" (click)="gotoSignupComponent()">Signup</a></span>
                     <span class="mt-4">You've forgotten your password ? <a class="link" style="color: blue; text-decoration: underline;" (click)="onForgottenPassword()">request a new one</a></span>
             </div>

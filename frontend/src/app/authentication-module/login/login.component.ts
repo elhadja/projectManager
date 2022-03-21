@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { RoutingService } from 'src/app/services/routing.service';
 import { LoginService } from '../services/login-service';
@@ -8,18 +8,16 @@ import { LoginService } from '../services/login-service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   userIdentifierFormControl: FormControl;
   passwordFormControl: FormControl;
 
   public hidePassword: boolean;
-  constructor(private loginService: LoginService, private routingService: RoutingService) { 
+  constructor(private loginService: LoginService,
+             private routingService: RoutingService) { 
     this.hidePassword = true;
     this.userIdentifierFormControl = new FormControl('elhadj', [Validators.required, Validators.minLength(2)]);
     this.passwordFormControl = new FormControl('password', [Validators.required]);
-  }
-
-  ngOnInit(): void {
   }
 
   public isValidForm(): boolean {
@@ -39,5 +37,9 @@ export class LoginComponent implements OnInit {
 
   public onForgottenPassword(): void {
     this.routingService.gotoRequestNewPasswordComponent();
+  }
+
+  public onLoginWithGoogle(): void {
+    this.loginService.loginWithGoogle();
   }
 }

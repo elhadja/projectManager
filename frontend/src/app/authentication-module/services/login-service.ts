@@ -1,26 +1,46 @@
-import { Injectable } from "@angular/core";
-import { ApiConstant } from "src/app/common/ApiConstant";
-import { PMConstants } from "src/app/common/PMConstants";
-import { LoginOutputDTO } from "src/app/dto/login.output.interface";
-import { API } from "src/app/services/Api";
-import { RoutingService } from "src/app/services/routing.service";
-import { sessionManagerService } from "src/app/services/sessionManager.service";
+import { Injectable } from '@angular/core';
+import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
+import { ApiConstant } from 'src/app/common/ApiConstant';
+import { PMConstants } from 'src/app/common/PMConstants';
+import { LoginInputDTO } from 'src/app/dto/login.input.interface';
+import { LoginOutputDTO } from 'src/app/dto/login.output.interface';
+import { UserApiService } from 'src/app/PMApi/user-api.service';
+import { API } from 'src/app/services/Api';
+import { RoutingService } from 'src/app/services/routing.service';
+import { sessionManagerService } from 'src/app/services/sessionManager.service';
 
 @Injectable()
 export class LoginService {
-    constructor(private api: API,
+  constructor(private api: API,
                 private routingService: RoutingService,
-                private sessionManager: sessionManagerService) {
+                private sessionManager: sessionManagerService,
+                private readonly socialAuthService: SocialAuthService,
+                private readonly userApiService: UserApiService) {
 
-    }
-    public login(output: LoginOutputDTO): void {
-        this.api.postWithoutHeaders(ApiConstant.USERS_BASE_URI + '/' + ApiConstant.LOGIN_URI, output)
-                    .subscribe((response) => {
-                        this.sessionManager.setUserid(response.id);
-                        localStorage.setItem(PMConstants.SESSION_TOKEN_ID_KEY, response.token);
-                        this.api.setHttpOptions(response.token);
+  }
+  public login(output: LoginOutputDTO): void {
+    this.api.postWithoutHeaders(ApiConstant.USERS_BASE_URI + '/' + ApiConstant.LOGIN_URI, output)
+      .subscribe((response) => {
+        this.initializeLocalStorage(response);
+        this.routingService.gotoProjectComponent();
+      });
+  }
 
-                        this.routingService.gotoProjectComponent();
-                    });
-    }
+  private initializeLocalStorage(response: LoginInputDTO): void {
+    this.sessionManager.setUserid(response.id);
+    localStorage.setItem(PMConstants.SESSION_TOKEN_ID_KEY, response.token);
+    this.api.setHttpOptions(response.token);
+
+  }
+
+  public loginWithGoogle(): void {
+    this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
+      .then((response) => { 
+        this.userApiService.loginWithGoogle(response.idToken).subscribe((response) => {
+          this.initializeLocalStorage(response);
+          this.routingService.gotoProjectComponent(); 
+        });
+      })
+      .catch(error => console.log(error));
+  }
 }

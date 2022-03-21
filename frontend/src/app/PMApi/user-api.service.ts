@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { LoginInputDTO } from '../dto/login.input.interface';
 import { API } from '../services/Api';
 
 @Injectable()
@@ -17,4 +18,8 @@ export class UserApiService {
   public reinitializePassword(password: string, token: string): Observable<void> {
     return this.api.post(this.baseURI + '/reinitializePassword/' + token, password);
   } 
+
+  public loginWithGoogle(googleTokenId: string): Observable<LoginInputDTO> {
+    return this.api.post(this.baseURI + '/loginWithGoogle', googleTokenId);
+  }
 }

@@ -1,6 +1,8 @@
 package com.elhadjium.PMBackend.controller;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,11 @@ import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.UserService;
 import com.elhadjium.PMBackend.util.JwtToken;
+import com.google.api.client.auth.openidconnect.IdToken.Payload;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -95,6 +102,25 @@ public class UserController {
 		String token = jwt.generateToken(userDetails);
 
 		return new LoginOutputDTO(userCusDetails.getUserId(), token);
+	}
+	
+	@PostMapping("loginWithGoogle")
+	public LoginOutputDTO loginWithGoogle(@RequestBody String googleTokenId) throws Exception {
+		File file = new File("jeTaime.txt");
+		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
+				.setAudience(Collections.singletonList("834948493456-5qgjhtcvu6v0ueso0nbmed40m4a3r2ev.apps.googleusercontent.com"))
+				.build();
+		GoogleIdToken googleIdToken = verifier.verify(googleTokenId);
+		if (googleIdToken != null) {
+			Payload payload = googleIdToken.getPayload();
+			String email = (String) payload.get("email");
+			UserDetails userDetail = userService.loadUserByUsername(email);
+			if (userDetail != null) {
+				return new LoginOutputDTO(((CustomUserDetails) userDetail).getUserId(), jwt.generateToken(userDetail));
+			}
+		}
+		
+		throw new PMBadCredentialsException("Incorrect credentials");
 	}
 	
 	@PostMapping("{id}/projects")

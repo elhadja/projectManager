@@ -15,6 +15,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpLoaderFactory } from '../app.module';
 import { RequestNewPasswordComponent } from './request-new-password/request-new-password.component';
 import { UpdatePasswordComponent } from './update-password/update-password.component';
+import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 
 const routes: Routes = [
   {path: '', component: LoginComponent},
@@ -40,14 +41,27 @@ const routes: Routes = [
     MatFormFieldModule,
     MatIconModule,
     MatButtonModule,
+    SocialLoginModule,
     TranslateModule.forChild({
-            loader: {provide: TranslateLoader, useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
-            }
-        }),
+      loader: {provide: TranslateLoader, useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     RouterModule.forChild(routes)
   ],
   providers: [
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('834948493456-5qgjhtcvu6v0ueso0nbmed40m4a3r2ev.apps.googleusercontent.com')
+          }
+        ]
+      } as SocialAuthServiceConfig
+    },
     LoginService,
     SignupService
   ]

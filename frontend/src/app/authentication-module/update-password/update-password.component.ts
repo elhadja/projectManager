@@ -6,8 +6,7 @@ import { MessageService } from 'src/app/services/message.service';
 
 @Component({
   selector: 'app-update-password',
-  templateUrl: './update-password.component.html',
-  styleUrls: ['./update-password.component.css']
+  templateUrl: './update-password.component.html'
 })
 export class UpdatePasswordComponent {
   public readonly componentName = 'updatePassswordComponent';

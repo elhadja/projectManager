@@ -5,8 +5,7 @@ import { MessageService } from 'src/app/services/message.service';
 
 @Component({
   selector: 'app-request-new-password',
-  templateUrl: './request-new-password.component.html',
-  styleUrls: ['./request-new-password.component.css']
+  templateUrl: './request-new-password.component.html'
 })
 export class RequestNewPasswordComponent {
   public userEmail: FormControl;

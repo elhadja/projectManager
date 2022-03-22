@@ -5,12 +5,12 @@
             <div class="d-flex flex-column justify-content-center">
                     <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Email ou Pseudo</mat-label>
-                        <input type="text" matInput [formControl]="userIdentifierFormControl" required minlength="2">
+                        <input type="text" matInput [formControl]="userIdentifierFormControl" required minlength="USER_IDENTIFIER_MIN_LENGTH">
                         <mat-error *ngIf="userIdentifierFormControl.hasError('required')">
                             this field is <strong>required</strong>
                         </mat-error>
                         <mat-error *ngIf="userIdentifierFormControl.hasError('minlength')">
-                            2 characteres <strong>minimum</strong>
+                            {{ USER_IDENTIFIER_MIN_LENGTH }} characteres <strong>minimum</strong>
                         </mat-error>
                     </mat-form-field >
                     <mat-form-field appearance="fill" class="w-100">

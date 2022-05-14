@@ -3,11 +3,11 @@ import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { UserApiService } from 'src/app/PMApi/user-api.service';
 import { MessageService } from 'src/app/services/message.service';
+import { RoutingService } from 'src/app/services/routing.service';
 
 @Component({
   selector: 'app-update-password',
-  templateUrl: './update-password.component.html',
-  styleUrls: ['./update-password.component.css']
+  templateUrl: './update-password.component.html'
 })
 export class UpdatePasswordComponent {
   public readonly componentName = 'updatePassswordComponent';
@@ -18,7 +18,8 @@ export class UpdatePasswordComponent {
 
   constructor(private readonly userApiService: UserApiService,
               private readonly messageService: MessageService,
-              private readonly route: ActivatedRoute) {
+              private readonly route: ActivatedRoute,
+              private readonly routingService: RoutingService) {
     this.password = new FormControl('', [Validators.required]);
     this.confirmPassword = new FormControl('', [Validators.required]);
     this.hidePassword = true;
@@ -32,6 +33,7 @@ export class UpdatePasswordComponent {
     const token = this.route.snapshot.queryParamMap.get('token');
     this.userApiService.reinitializePassword(this.password.value, token!).subscribe(() => {
       this.messageService.showSuccessMessage('Your password has been changed');
+      this.routingService.gotoLoginComponent();
     });
   }
 }

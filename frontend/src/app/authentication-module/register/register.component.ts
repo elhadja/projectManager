@@ -1,28 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { RoutingService } from 'src/app/services/routing.service';
 import { SignupService } from '../services/signup.service';
 
 @Component({
   selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  templateUrl: './register.component.html'
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
   public signupFormGroup: FormGroup;
   public hidePassword: boolean;
 
   constructor(private signupService: SignupService, private readonly routingService: RoutingService) {
-    this.hidePassword = false;
+    this.hidePassword = true;
 
     this.signupFormGroup = new FormGroup({
       email: new FormControl('', [Validators.email]),
       pseudo: new FormControl(''),
       password: new FormControl('')
     });
-   }
-
-  ngOnInit(): void {
   }
 
   public onSignup(): void {

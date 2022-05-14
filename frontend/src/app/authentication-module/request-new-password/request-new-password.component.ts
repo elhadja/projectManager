@@ -2,17 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { UserApiService } from 'src/app/PMApi/user-api.service';
 import { MessageService } from 'src/app/services/message.service';
+import { RoutingService } from 'src/app/services/routing.service';
 
 @Component({
   selector: 'app-request-new-password',
-  templateUrl: './request-new-password.component.html',
-  styleUrls: ['./request-new-password.component.css']
+  templateUrl: './request-new-password.component.html'
 })
 export class RequestNewPasswordComponent {
   public userEmail: FormControl;
 
   constructor(private readonly userApiService: UserApiService,
-             private readonly messageService: MessageService) { 
+             private readonly messageService: MessageService,
+             private readonly routingService: RoutingService) { 
     this.userEmail = new FormControl('', [Validators.required, Validators.email]);
   }
 
@@ -22,4 +23,11 @@ export class RequestNewPasswordComponent {
     });
   }
 
+  public gotoSignupComponent(): void {
+    this.routingService.gotoSignupComponent();
+  }
+
+  public gotoLoginComponent(): void {
+    this.routingService.gotoLoginComponent();
+  }
 }

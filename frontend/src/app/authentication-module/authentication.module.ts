@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
-import { RouterModule, Routes } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field'; 
 import { MatInputModule } from '@angular/material/input'; 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,15 +15,7 @@ import { HttpLoaderFactory } from '../app.module';
 import { RequestNewPasswordComponent } from './request-new-password/request-new-password.component';
 import { UpdatePasswordComponent } from './update-password/update-password.component';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
-
-const routes: Routes = [
-  {path: '', component: LoginComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'signup', component: RegisterComponent},
-  { path: 'password-request', component: RequestNewPasswordComponent },
-  { path: 'password-update', component: UpdatePasswordComponent },
-];
-
+import { AuthenticationRoutingModule } from './authentication-routing.module';
 
 @NgModule({
   declarations: [
@@ -42,12 +33,12 @@ const routes: Routes = [
     MatIconModule,
     MatButtonModule,
     SocialLoginModule,
+    AuthenticationRoutingModule,
     TranslateModule.forChild({
       loader: {provide: TranslateLoader, useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
     }),
-    RouterModule.forChild(routes)
   ],
   providers: [
     {

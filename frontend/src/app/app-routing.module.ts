@@ -7,11 +7,11 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 const routes: Routes = [
   { 
     path: '',
-    loadChildren: () => import('./authentication-module/authentication-module.module').then(m => m.AuthenticationModuleModule)
+    loadChildren: () => import('./authentication-module/authentication.module').then(m => m.AuthenticationModuleModule)
   },
   {
     path: PMConstants.AUTHENTICATION_MODULE_BASE_URI,
-    loadChildren: () => import('./authentication-module/authentication-module.module').then(m => m.AuthenticationModuleModule)
+    loadChildren: () => import('./authentication-module/authentication.module').then(m => m.AuthenticationModuleModule)
   },
   {
     path: PMConstants.PROJECT_MODULE_BASE_URI,

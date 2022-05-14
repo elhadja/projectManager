@@ -1,23 +1,27 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { RoutingService } from 'src/app/services/routing.service';
+import { AuthenticationConstants } from '../authentication-constant';
 import { LoginService } from '../services/login-service';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  templateUrl: './login.component.html'
 })
 export class LoginComponent {
   userIdentifierFormControl: FormControl;
   passwordFormControl: FormControl;
 
+  public readonly MIN_PASSWORD_LENGHT = AuthenticationConstants.MIN_PASSWORD_LENGTH;
+  public readonly MAX_PASSWORD_LENGHT = AuthenticationConstants.MAX_PASSWORD_LENGTH;
+  public readonly USER_IDENTIFIER_MIN_LENGTH = 2;
+
   public hidePassword: boolean;
   constructor(private loginService: LoginService,
              private routingService: RoutingService) { 
     this.hidePassword = true;
-    this.userIdentifierFormControl = new FormControl('elhadj', [Validators.required, Validators.minLength(2)]);
-    this.passwordFormControl = new FormControl('password', [Validators.required]);
+    this.userIdentifierFormControl = new FormControl('', [Validators.required, Validators.minLength(this.USER_IDENTIFIER_MIN_LENGTH)]);
+    this.passwordFormControl = new FormControl('', [Validators.required]);
   }
 
   public isValidForm(): boolean {

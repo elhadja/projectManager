@@ -1,8 +1,11 @@
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-4">
-            <h1 class="text-center">SIGNUP</h1>
-            <form [formGroup]="signupFormGroup" (ngSubmit)="onSignup()" class="d-flex flex-column">
+        <div class="col-5">
+            <div class="d-flex justify-content-center" style="margin: 20px;">
+                <img src="assets/images/project.png" width="70" height="70" alt="">
+            </div>
+            <h1 class="text-center">Sign up</h1>
+            <form [formGroup]="signupFormGroup" (ngSubmit)="onSignup()" class="d-flex flex-column bloc rounded">
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label>Email</mat-label>
                     <input type="email" matInput formControlName="email" required>
@@ -33,7 +36,7 @@
                     </mat-error>
                 </mat-form-field>
                 <button mat-stroked-button type="submit" [disabled]='!signupFormGroup.valid'>signup</button>
-                <span class="mt-4">You already have an account ? <a class="link" style="color: blue; text-decoration: underline;" (click)="gotoLoginComponent()">login</a></span>
+                <span class="mt-4">Already have an account ? <a class="link" style="color: blue; text-decoration: underline;" (click)="gotoLoginComponent()">login</a></span>
             </form>
         </div>
     </div>

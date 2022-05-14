@@ -2,7 +2,10 @@
 
 html, body { height: 100%; }
 
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-color: black;}
+body { 
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .dialogTitle {
     text-align: center;
@@ -38,7 +41,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; background-
 }
 
 .bloc {
-    margin-top: 5px;
-    padding: 5px;
-    border-top: 5px blue solid;
+    margin: 15px;
+    padding: 15px;
+    box-shadow: 2px 2px 5px gray;
 }

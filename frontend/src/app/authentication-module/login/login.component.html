@@ -4,8 +4,8 @@
             <div class="d-flex justify-content-center" style="margin: 20px;">
                 <img src="assets/images/project.png" width="70" height="70" alt="">
             </div>
-           <h1 class="text-center" style="color: white">Sign in to ProjectManager</h1>
-            <div class="d-flex flex-column justify-content-center" style="background-color: white; padding: 15px; margin: 15px; border-radius: 5px;">
+           <h1 class="text-center">Sign in to ProjectManager</h1>
+            <div class="d-flex flex-column justify-content-center bloc rounded">
                     <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Email ou Pseudo</mat-label>
                         <input type="text" matInput [formControl]="userIdentifierFormControl" required minlength="USER_IDENTIFIER_MIN_LENGTH">
@@ -32,7 +32,7 @@
                     <button mat-stroked-button (click)='onLogin()' [disabled]='!isValidForm()'>login</button>
                     <span class="mt-4">New to ProjectManager ? <a class="link" style="color: blue; text-decoration: underline; margin-top: 15px;" (click)="gotoSignupComponent()">Create an account</a></span>
             </div>
-            <div style="background-color: white; margin: 10px; padding: 10px;">
+            <div class="bloc rounded">
                 <button mat-stroked-button class="w-100" (click)='onLoginWithGoogle()'>
                     <img src="assets/images/google.jpg" width="20" height="20" alt="">
                     login with google

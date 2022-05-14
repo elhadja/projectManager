@@ -20,8 +20,8 @@ export class LoginComponent {
   constructor(private loginService: LoginService,
              private routingService: RoutingService) { 
     this.hidePassword = true;
-    this.userIdentifierFormControl = new FormControl('elhadj', [Validators.required, Validators.minLength(this.USER_IDENTIFIER_MIN_LENGTH)]);
-    this.passwordFormControl = new FormControl('password', [Validators.required]);
+    this.userIdentifierFormControl = new FormControl('', [Validators.required, Validators.minLength(this.USER_IDENTIFIER_MIN_LENGTH)]);
+    this.passwordFormControl = new FormControl('', [Validators.required]);
   }
 
   public isValidForm(): boolean {

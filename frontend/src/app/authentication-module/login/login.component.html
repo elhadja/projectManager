@@ -1,8 +1,11 @@
 <div class="container">
     <div class="row d-flex justify-content-center">
-        <div class="col-4">
-           <h1 class="text-center">LOGIN</h1>
-            <div class="d-flex flex-column justify-content-center">
+        <div class="col-5">
+            <div class="d-flex justify-content-center" style="margin: 20px;">
+                <img src="assets/images/project.png" width="70" height="70" alt="">
+            </div>
+           <h1 class="text-center" style="color: white">Sign in to ProjectManager</h1>
+            <div class="d-flex flex-column justify-content-center" style="background-color: white; padding: 15px; margin: 15px; border-radius: 5px;">
                     <mat-form-field appearance="fill" class="w-100">
                         <mat-label>Email ou Pseudo</mat-label>
                         <input type="text" matInput [formControl]="userIdentifierFormControl" required minlength="USER_IDENTIFIER_MIN_LENGTH">
@@ -13,20 +16,27 @@
                             {{ USER_IDENTIFIER_MIN_LENGTH }} characteres <strong>minimum</strong>
                         </mat-error>
                     </mat-form-field >
-                    <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>{{ 'loginComponent.passwordLabel' | translate }}</mat-label>
-                        <input matInput [formControl]="passwordFormControl" [type]="hidePassword ? 'password' : 'text'" required>
-                        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
-                        <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        </button>
-                        <mat-error *ngIf="passwordFormControl.hasError('required')">
-                            {{ 'loginComponent.requiredPassword' | translate }}
-                        </mat-error>
-                    </mat-form-field>
+                    <div style="margin-bottom: 25px;">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>{{ 'loginComponent.passwordLabel' | translate }}</mat-label>
+                            <input matInput [formControl]="passwordFormControl" [type]="hidePassword ? 'password' : 'text'" required>
+                            <mat-hint align="end"><a class="link" style="color: blue; text-decoration: underline;" (click)="onForgottenPassword()">Forgot your password ?</a></mat-hint>
+                            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                            <mat-error *ngIf="passwordFormControl.hasError('required')">
+                                {{ 'loginComponent.requiredPassword' | translate }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
                     <button mat-stroked-button (click)='onLogin()' [disabled]='!isValidForm()'>login</button>
-                    <button mat-stroked-button (click)='onLoginWithGoogle()'>login with google</button>
-                    <span class="mt-4">You don't have an account ? <a class="link" style="color: blue; text-decoration: underline;" (click)="gotoSignupComponent()">Signup</a></span>
-                    <span class="mt-4">You've forgotten your password ? <a class="link" style="color: blue; text-decoration: underline;" (click)="onForgottenPassword()">request a new one</a></span>
+                    <span class="mt-4">New to ProjectManager ? <a class="link" style="color: blue; text-decoration: underline; margin-top: 15px;" (click)="gotoSignupComponent()">Create an account</a></span>
+            </div>
+            <div style="background-color: white; margin: 10px; padding: 10px;">
+                <button mat-stroked-button class="w-100" (click)='onLoginWithGoogle()'>
+                    <img src="assets/images/google.jpg" width="20" height="20" alt="">
+                    login with google
+                </button>
             </div>
         </div>
     </div>

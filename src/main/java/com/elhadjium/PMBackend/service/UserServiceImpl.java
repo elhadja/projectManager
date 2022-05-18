@@ -22,12 +22,15 @@ import com.elhadjium.PMBackend.dao.InvitationToProjectDAO;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
+import com.elhadjium.PMBackend.dto.UserDTO;
 import com.elhadjium.PMBackend.entity.Backlog;
 import com.elhadjium.PMBackend.entity.CustomUserDetailsImpl;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.exception.PMEntityExistsException;
 import com.elhadjium.PMBackend.exception.PMEntityNotExistsException;
+import com.elhadjium.PMBackend.util.JavaUtil;
+
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -163,4 +166,27 @@ public class UserServiceImpl implements UserService {
         javaMailSender.send(message);
 	}
 
+	@Override
+	public UserAccount getUserById(Long userId) {
+		return userDAO.findById(userId).get();
+	}
+
+	@Override
+	@Transactional
+	public UserAccount updateUser(UserAccount user) {
+		UserAccount userToUpdate = userDAO.getById(user.getId());
+		if (!JavaUtil.isNullOrEmpty(user.getFirstName())) {
+			userToUpdate.setFirstName(user.getFirstName());
+		}
+		if (!JavaUtil.isNullOrEmpty(user.getLastName())) {
+			userToUpdate.setLastName(user.getLastName());
+		}
+		if (!JavaUtil.isNullOrEmpty(user.getPseudo())) {
+			userToUpdate.setPseudo(user.getPseudo());
+		}
+
+		userDAO.save(userToUpdate);
+		return userToUpdate;
+	}
+	
 }

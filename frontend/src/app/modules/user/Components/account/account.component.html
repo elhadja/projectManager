@@ -19,7 +19,7 @@
                     <mat-icon mat-list-icon>mail</mat-icon>
                     <div mat-line>{{ userDTO?.email }}</div>
                 </mat-list-item>
-                <mat-list-item>
+                <mat-list-item (click)="openUpdatePasswordDialog()">
                     <mat-icon mat-list-icon>key</mat-icon>
                     <div mat-line>****************</div>
                 </mat-list-item>

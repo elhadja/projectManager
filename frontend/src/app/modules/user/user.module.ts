@@ -11,6 +11,7 @@ import { AccountComponent } from './Components/account/account.component';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
+import { DialogUpdatePasswordComponent } from './Components/updatePassword/dialog-update-password/dialog-update-password.component';
 
 
 
@@ -37,7 +38,7 @@ const COMPONENTS = [
 
 @NgModule({
   declarations: [ 
-    ...COMPONENTS
+    ...COMPONENTS, DialogUpdatePasswordComponent
   ],
   imports: [
     ...ANGULAR_MAT_MODULES,

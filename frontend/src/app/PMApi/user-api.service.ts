@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { UserDTO as UserDTO } from '../dto/user.dto';
 import { LoginInputDTO } from '../dto/login.input.interface';
 import { API } from '../services/Api';
+import { UpdatePassworOutputDTO } from '../dto/update-password-output.dto';
 
 @Injectable()
 export class UserApiService {
@@ -30,5 +31,9 @@ export class UserApiService {
 
   public updateUser(user: UserDTO, userId: number): Observable<void> {
     return this.api.put(this.baseURI + '/' + userId, user);
+  }
+
+  public updatePassword(input: UpdatePassworOutputDTO, userId: number): Observable<void> {
+    return this.api.put(this.baseURI + '/' + userId + '/updatePassword', input);
   }
 }

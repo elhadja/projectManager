@@ -1,20 +1,22 @@
 package com.elhadjium.PMBackend.dto;
 
-public class GetUsersByCriteriaOutputDTO implements DTOValidator {
+public class UserDTO implements DTOValidator {
 	private long id;
 	private String firstname;
 	private String lastname;
 	private String pseudo;
+	private String email;
 	
-	public GetUsersByCriteriaOutputDTO(long id, String firstname, String lastname, String pseudo) {
+	public UserDTO(long id, String firstname, String lastname, String pseudo, String email) {
 		super();
 		this.id = id;
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.pseudo = pseudo;
+		this.email = email;
 	}
 	
-	public GetUsersByCriteriaOutputDTO() {
+	public UserDTO() {
 		
 	}
 
@@ -48,6 +50,14 @@ public class GetUsersByCriteriaOutputDTO implements DTOValidator {
 
 	public void setPseudo(String pseudo) {
 		this.pseudo = pseudo;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	@Override

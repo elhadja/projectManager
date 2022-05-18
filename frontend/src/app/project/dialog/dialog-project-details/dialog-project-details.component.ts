@@ -1,14 +1,11 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GetUserByCriteriaOutputDTO } from 'src/app/dto/GetUserByCriteriaOutputDTO';
-import { GetUserInvitationsInputDTO } from 'src/app/dto/GetUserInvitationInputDTO';
-import { GetUsersByCriteriaInputDTO } from 'src/app/dto/getUsersByCriteriaInputDTO';
+import { UserDTO } from 'src/app/dto/user.dto';
 import { projectInputDTO } from 'src/app/dto/project.input.dto';
 import { UpdateProjectOutputDTO } from 'src/app/dto/updateProjectOutputDTO';
 import { MessageService } from 'src/app/services/message.service';
 import { sessionManagerService } from 'src/app/services/sessionManager.service';
-import { DialogCreateProjectService } from '../../services/dialogCreateProject.service';
 import { DialogDetailsProjectService } from '../../services/dialogProjectDetails.service';
 
 interface ProjectUsersTableRow {
@@ -26,8 +23,8 @@ export class DialogProjectDetailsComponent implements OnInit {
   public projectName: FormControl;
   public projectDescription: FormControl;
   public projectUsersDataTable: ProjectUsersTableRow[];
-  public users: GetUsersByCriteriaInputDTO[];
-  public selectedUsers: GetUsersByCriteriaInputDTO[];
+  public users: UserDTO[];
+  public selectedUsers: UserDTO[];
   public userFirstName: FormControl;
   public userLastName: FormControl;
   public userPseudo: FormControl;

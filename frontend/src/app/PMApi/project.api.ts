@@ -5,7 +5,7 @@ import { AddSprintToProjectOutputDTO } from "../dto/addSprintToProjectOutputDTO"
 import { AddUserStoryOutputDTO } from "../dto/addUserStoryOutputDTO";
 import { CreateTaskOutputDTO } from "../dto/createTask.output.dto";
 import { GetSprintsInputDTO } from "../dto/getSprint.input.dto";
-import { GetUsersByCriteriaInputDTO } from "../dto/getUsersByCriteriaInputDTO";
+import { UserDTO } from "../dto/user.dto";
 import { GetUserStoriesInputDTO } from "../dto/getUserStoriesInputDTO";
 import { StartSprintOutputDTO } from "../dto/startSprintOutputDTO";
 import { API } from "../services/Api";
@@ -68,7 +68,7 @@ export class ProjectApiService {
         return this.api.post(this.baseURI + '/' + projectId + '/tasks', input);
     }
 
-    public getProjectUsers(projectId: number): Observable<GetUsersByCriteriaInputDTO[]> {
+    public getProjectUsers(projectId: number): Observable<UserDTO[]> {
         return this.api.get(this.baseURI + '/' + projectId + '/users');
     }
 

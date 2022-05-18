@@ -61,8 +61,8 @@ export class MenuBarComponent implements OnInit {
         }
       },
       {
-        label:'Profile',
-        disabled: true,
+        label:'Mon compte',
+        command: () => { this.routingService.gotoAccountComponent(); }
       }
     ];
   }

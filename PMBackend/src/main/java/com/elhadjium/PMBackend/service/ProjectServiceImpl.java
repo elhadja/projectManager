@@ -25,7 +25,7 @@ import com.elhadjium.PMBackend.dao.TaskTaskDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
-import com.elhadjium.PMBackend.dto.GetUsersByCriteriaOutputDTO;
+import com.elhadjium.PMBackend.dto.UserDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;

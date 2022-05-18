@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { GetSprintsInputDTO } from 'src/app/dto/getSprint.input.dto';
 import { GetTaskInputDTO } from 'src/app/dto/getTask.input.dto';
-import { GetUsersByCriteriaInputDTO } from 'src/app/dto/getUsersByCriteriaInputDTO';
+import { UserDTO } from 'src/app/dto/user.dto';
 import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
 import { MessageService } from 'src/app/services/message.service';
@@ -17,7 +17,7 @@ import { MessageService } from 'src/app/services/message.service';
 })
 export class DialogCreateTaskComponent implements OnInit {
   public taskFormGroup: FormGroup;
-  public responsables: GetUsersByCriteriaInputDTO[];
+  public responsables: UserDTO[];
   public userStories: GetUserStoriesInputDTO[];
   public taskDependencies: GetTaskInputDTO[];
   public sprints: GetSprintsInputDTO[];

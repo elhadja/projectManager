@@ -188,5 +188,14 @@ public class UserServiceImpl implements UserService {
 		userDAO.save(userToUpdate);
 		return userToUpdate;
 	}
+
+	@Override
+	@Transactional
+	public void updateUserPassword(Long id, String newUserPassword) {
+		UserAccount user = userDAO.findById(id).get();
+		if (user != null) {
+			user.setPassword(this.passwordEncodere.encode(newUserPassword));
+		}
+	}
 	
 }

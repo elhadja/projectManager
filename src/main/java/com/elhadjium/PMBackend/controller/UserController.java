@@ -39,6 +39,7 @@ import com.elhadjium.PMBackend.dto.LoginInputDTO;
 import com.elhadjium.PMBackend.dto.LoginOutputDTO;
 import com.elhadjium.PMBackend.dto.PasswordReinitialisationTokenInputDTO;
 import com.elhadjium.PMBackend.dto.ProjectManagerOutputDTO;
+import com.elhadjium.PMBackend.dto.UpdatePasswordInputDTO;
 import com.elhadjium.PMBackend.dto.signupInputDTO;
 import com.elhadjium.PMBackend.entity.CustomUserDetails;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
@@ -246,6 +247,11 @@ public class UserController {
 		user.setPseudo(userInput.getPseudo());
 		user.setEmail(userInput.getEmail());
 		userService.updateUser(user);
+	}
+	
+	@PutMapping("{id}/updatePassword")
+	public void updateUserPassword(@RequestBody UpdatePasswordInputDTO input, @PathVariable("id") String userId) {
+		userService.updateUserPassword(Long.valueOf(userId), input.getPassword());
 	}
 
 	// TODO handle Any Exception othan than PMruntimeException

@@ -11,6 +11,7 @@ export class PMConstants {
   public static USER_MODULE_BASE_URI = 'users';
   public static USER_MODULE_PROFILE = 'profil';
   public static USER_MODULE_ACCOUNT = 'account';
+  public static USER_MODULE_UPDATE_EMAIL = 'update-email';
 
   //ENUMERATIONS
   public static USER_STORY_STATUS_CLOSED = 'CLOSED';

@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogUpdatePasswordComponent } from './Components/updatePassword/dialog-update-password/dialog-update-password.component';
 import { DialogUpdateEmailComponent } from './Components/dialog-update-email/dialog-update-email.component';
+import { ConfirmUpdatePasswordComponent } from './Components/confirm-update-password/confirm-update-password.component';
 
 
 
@@ -20,6 +21,7 @@ import { DialogUpdateEmailComponent } from './Components/dialog-update-email/dia
 const routes : Routes = [
   {path: PMConstants.USER_MODULE_PROFILE, component: DialogUserProfilComponent},
   {path: PMConstants.USER_MODULE_ACCOUNT, component: AccountComponent},
+  {path: PMConstants.USER_MODULE_UPDATE_EMAIL, component: ConfirmUpdatePasswordComponent},
 ];
 
 const ANGULAR_MAT_MODULES = [

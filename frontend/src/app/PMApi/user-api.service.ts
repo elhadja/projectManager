@@ -5,6 +5,7 @@ import { UserDTO as UserDTO } from '../dto/user.dto';
 import { LoginInputDTO } from '../dto/login.input.interface';
 import { API } from '../services/Api';
 import { UpdatePassworOutputDTO } from '../dto/update-password-output.dto';
+import { PMConstants } from '../common/PMConstants';
 
 @Injectable()
 export class UserApiService {
@@ -40,7 +41,7 @@ export class UserApiService {
   public updateEmail(userId: number, newEmail: string): Observable<void> {
     return this.api.post(this.baseURI + '/' + userId + '/updateEmail', {
       email: newEmail,
-      url: this.host
+      url: this.host + '/' + PMConstants.USER_MODULE_BASE_URI + '/' + PMConstants.USER_MODULE_UPDATE_EMAIL
     });
   }
 }

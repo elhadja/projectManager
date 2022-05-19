@@ -12,6 +12,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogUpdatePasswordComponent } from './Components/updatePassword/dialog-update-password/dialog-update-password.component';
+import { DialogUpdateEmailComponent } from './Components/dialog-update-email/dialog-update-email.component';
 
 
 
@@ -38,7 +39,7 @@ const COMPONENTS = [
 
 @NgModule({
   declarations: [ 
-    ...COMPONENTS, DialogUpdatePasswordComponent
+    ...COMPONENTS, DialogUpdatePasswordComponent, DialogUpdateEmailComponent
   ],
   imports: [
     ...ANGULAR_MAT_MODULES,

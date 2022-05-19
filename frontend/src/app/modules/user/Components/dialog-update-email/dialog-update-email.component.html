@@ -1,0 +1,20 @@
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-12">
+            <h2 class="text-center">Change my mail</h2>
+            <p class="my-3">Enter your email address below and we'll send you a link to validate the new password.</p>
+            <mat-form-field appearance="fill" class="w-100">
+                <mat-label>Enter your new mail</mat-label>
+                <input matInput [formControl]="emailFormControl" type="email" required>
+                <mat-error *ngIf="emailFormControl.hasError('required')">
+                    the mail required
+                </mat-error>
+                <mat-error *ngIf="emailFormControl.hasError('email')">
+                    The mail is invalid
+                </mat-error>
+            </mat-form-field>
+
+            <button mat-stroked-button class="w-100 m-y" (click)='onValidate()' [disabled]='emailFormControl.invalid'>Validate</button>
+        </div>
+    </div>
+</div>

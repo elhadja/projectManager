@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { UserDTO } from 'src/app/dto/user.dto';
 import { UserApiService } from 'src/app/PMApi/user-api.service';
 import { sessionManagerService } from 'src/app/services/sessionManager.service';
+import { DialogUpdateEmailComponent } from '../dialog-update-email/dialog-update-email.component';
 import { DialogUpdatePasswordComponent } from '../updatePassword/dialog-update-password/dialog-update-password.component';
 import { DialogUserProfilComponent } from '../user-profile/dialog-user-profil.component';
 
@@ -40,5 +41,9 @@ export class AccountComponent implements OnInit {
 
   public openUpdatePasswordDialog(): void {
     this.matDialog.open(DialogUpdatePasswordComponent).afterClosed().subscribe(() => this.refresh());
+  }
+
+  public openChangeEmailDialog(): void {
+    this.matDialog.open(DialogUpdateEmailComponent).afterClosed().subscribe(() => this.refresh());
   }
 }

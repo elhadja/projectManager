@@ -36,4 +36,8 @@ export class UserApiService {
   public updatePassword(input: UpdatePassworOutputDTO, userId: number): Observable<void> {
     return this.api.put(this.baseURI + '/' + userId + '/updatePassword', input);
   }
+
+  public updateEmail(userId: number, newEmail: string): Observable<void> {
+    return this.api.post(this.baseURI + '/' + userId + '/updateEmail', newEmail);
+  }
 }

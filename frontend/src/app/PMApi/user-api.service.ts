@@ -38,6 +38,9 @@ export class UserApiService {
   }
 
   public updateEmail(userId: number, newEmail: string): Observable<void> {
-    return this.api.post(this.baseURI + '/' + userId + '/updateEmail', newEmail);
+    return this.api.post(this.baseURI + '/' + userId + '/updateEmail', {
+      email: newEmail,
+      url: this.host
+    });
   }
 }

@@ -23,7 +23,6 @@ export class DialogUpdateEmailComponent {
   public onValidate(): void {
     this.userApiService.updateEmail(this.sessionManagerService.getUserId(), this.emailFormControl.value).subscribe(() => {
       this.messageService.showSuccessMessage('You will receive an email for validating your new email');
-      this.matDialog.close();
     });
   }
 }

@@ -197,5 +197,13 @@ public class UserServiceImpl implements UserService {
 			user.setPassword(this.passwordEncodere.encode(newUserPassword));
 		}
 	}
-	
+
+	@Override
+	@Transactional
+	public void UpdateUserEmail(Long userId, String newEmail) {
+		UserAccount user = userDAO.findById(userId).get();
+		if (user != null) {
+			user.setEmail(newEmail);
+		}
+	}
 }

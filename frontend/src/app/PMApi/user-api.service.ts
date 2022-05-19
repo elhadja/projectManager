@@ -44,4 +44,8 @@ export class UserApiService {
       url: this.host + '/' + PMConstants.USER_MODULE_BASE_URI + '/' + PMConstants.USER_MODULE_UPDATE_EMAIL
     });
   }
+
+  public confirmUpdateEmail(userId: number, token: string): Observable<void> {
+    return this.api.post(this.baseURI + '/' + userId + '/confirm-update-email', token);
+  }
 }

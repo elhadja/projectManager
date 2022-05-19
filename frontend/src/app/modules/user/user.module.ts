@@ -41,7 +41,7 @@ const COMPONENTS = [
 
 @NgModule({
   declarations: [ 
-    ...COMPONENTS, DialogUpdatePasswordComponent, DialogUpdateEmailComponent
+    ...COMPONENTS, DialogUpdatePasswordComponent, DialogUpdateEmailComponent, ConfirmUpdatePasswordComponent
   ],
   imports: [
     ...ANGULAR_MAT_MODULES,

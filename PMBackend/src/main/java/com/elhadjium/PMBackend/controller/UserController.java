@@ -39,6 +39,7 @@ import com.elhadjium.PMBackend.dto.LoginInputDTO;
 import com.elhadjium.PMBackend.dto.LoginOutputDTO;
 import com.elhadjium.PMBackend.dto.PasswordReinitialisationTokenInputDTO;
 import com.elhadjium.PMBackend.dto.ProjectManagerOutputDTO;
+import com.elhadjium.PMBackend.dto.UpdateEmailInput;
 import com.elhadjium.PMBackend.dto.UpdatePasswordInputDTO;
 import com.elhadjium.PMBackend.dto.signupInputDTO;
 import com.elhadjium.PMBackend.entity.CustomUserDetails;
@@ -213,6 +214,14 @@ public class UserController {
 		userService.sendSimpleEmail(input.getEmail(), "Password Reinitialization", link.toString());
 	}
 	
+	private String buildReinitialisationLink(String frontendURI, String tokenId) {
+		StringBuilder link = new StringBuilder(frontendURI);
+		link.append("?token=");
+		link.append(jwt.generateToken(tokenId, System.currentTimeMillis() + (12 * 60 * 60 * 1000), "secret"));
+		
+		return link.toString();
+	}
+	
 	@PostMapping(UserControllerConstant.reinitializePassword + "/{token}")
 	public void reinitializePassword(@RequestBody String newUserPassword, @PathVariable("token") String jwToken) {
 		String email = null;
@@ -252,6 +261,29 @@ public class UserController {
 	@PutMapping("{id}/updatePassword")
 	public void updateUserPassword(@RequestBody UpdatePasswordInputDTO input, @PathVariable("id") String userId) {
 		userService.updateUserPassword(Long.valueOf(userId), input.getPassword());
+	}
+	
+	@PostMapping("{id}/updateEmail")
+	public void updateuserEmail(@PathVariable("id") String userId, @RequestBody UpdateEmailInput input) {
+		UserAccount user = userService.getUserById(Long.valueOf(userId));
+		if (user != null) {
+			userService.sendSimpleEmail(input.getEmail(), "Mail confirmation", buildReinitialisationLink(input.getUrl(), user.getEmail()));
+		} else {
+			throw new PMInvalidInputDTO("Invalid user identifier");
+		}
+	}
+
+	@PostMapping("{id}/confirm-update-email")
+	public void confirmUpdateEmail(@PathVariable("id") String userId, @RequestBody String token) {
+		String email = null;
+		try {
+			email = jwt.extractUsername(token);
+			userService.loadUserByUsername(email);
+		} catch (ExpiredJwtException | UsernameNotFoundException e) {
+			throw new PMInvalidInputDTO("This token has expired or are not valide");
+		}
+
+		userService.UpdateUserEmail(Long.valueOf(userId), email);
 	}
 
 	// TODO handle Any Exception othan than PMruntimeException

@@ -17,6 +17,7 @@ import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
 
 @Entity
+// TODO This class should be renamed as 'User' not valid in postgres
 public class UserAccount implements Serializable {
 	private static final long serialVersionUID = 1L;
 

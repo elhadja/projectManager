@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,11 +34,13 @@ import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserInvitationsOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserProjectOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
-import com.elhadjium.PMBackend.dto.GetUsersByCriteriaOutputDTO;
+import com.elhadjium.PMBackend.dto.UserDTO;
 import com.elhadjium.PMBackend.dto.LoginInputDTO;
 import com.elhadjium.PMBackend.dto.LoginOutputDTO;
 import com.elhadjium.PMBackend.dto.PasswordReinitialisationTokenInputDTO;
 import com.elhadjium.PMBackend.dto.ProjectManagerOutputDTO;
+import com.elhadjium.PMBackend.dto.UpdateEmailInput;
+import com.elhadjium.PMBackend.dto.UpdatePasswordInputDTO;
 import com.elhadjium.PMBackend.dto.signupInputDTO;
 import com.elhadjium.PMBackend.entity.CustomUserDetails;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
@@ -46,6 +49,7 @@ import com.elhadjium.PMBackend.exception.PMBadCredentialsException;
 import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.UserService;
+import com.elhadjium.PMBackend.util.JavaUtil;
 import com.elhadjium.PMBackend.util.JwtToken;
 import com.google.api.client.auth.openidconnect.IdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -165,11 +169,11 @@ public class UserController {
 	
 	// TODO add limit
 	@PostMapping
-	public List<GetUsersByCriteriaOutputDTO> getUsersByCriteria(@RequestBody GetUsersByCriteriaInputDTO input) throws Exception {
-		List<GetUsersByCriteriaOutputDTO> userListOutput = new ArrayList<GetUsersByCriteriaOutputDTO>();
+	public List<UserDTO> getUsersByCriteria(@RequestBody GetUsersByCriteriaInputDTO input) throws Exception {
+		List<UserDTO> userListOutput = new ArrayList<UserDTO>();
 		List<UserAccount> users = userService.getUsersByCriteria(input);
 		for (UserAccount user: users) {
-			userListOutput.add(new GetUsersByCriteriaOutputDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getPseudo()));
+			userListOutput.add(new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getPseudo(), null));
 		}
 		return userListOutput;
 	}
@@ -210,6 +214,14 @@ public class UserController {
 		userService.sendSimpleEmail(input.getEmail(), "Password Reinitialization", link.toString());
 	}
 	
+	private String buildReinitialisationLink(String frontendURI, String tokenId) {
+		StringBuilder link = new StringBuilder(frontendURI);
+		link.append("?token=");
+		link.append(jwt.generateToken(tokenId, System.currentTimeMillis() + (12 * 60 * 60 * 1000), "secret"));
+		
+		return link.toString();
+	}
+	
 	@PostMapping(UserControllerConstant.reinitializePassword + "/{token}")
 	public void reinitializePassword(@RequestBody String newUserPassword, @PathVariable("token") String jwToken) {
 		String email = null;
@@ -223,9 +235,55 @@ public class UserController {
 		userService.updateUserPassword(email, newUserPassword);
 	}
 	
+	// TODO remove
 	@GetMapping("test")
 	public String test() {
 		return messageSource.getMessage("good.morning.message", null, LocaleContextHolder.getLocale());
+	}
+
+	@GetMapping("{id}")
+	public UserDTO getUserById(@PathVariable("id") Long userId) throws Exception {
+		UserAccount user = userService.getUserById(userId);
+		return new UserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getPseudo(), user.getEmail());
+	}
+	
+	@PutMapping("{id}")
+	public void updateUser(@RequestBody UserDTO userInput, @PathVariable("id") String userId) {
+		UserAccount user = new UserAccount();
+		user.setId(Long.valueOf(userId));
+		user.setFirstName(userInput.getFirstname());
+		user.setLastName(userInput.getLastname());
+		user.setPseudo(userInput.getPseudo());
+		user.setEmail(userInput.getEmail());
+		userService.updateUser(user);
+	}
+	
+	@PutMapping("{id}/updatePassword")
+	public void updateUserPassword(@RequestBody UpdatePasswordInputDTO input, @PathVariable("id") String userId) {
+		userService.updateUserPassword(Long.valueOf(userId), input.getPassword());
+	}
+	
+	@PostMapping("{id}/updateEmail")
+	public void updateuserEmail(@PathVariable("id") String userId, @RequestBody UpdateEmailInput input) {
+		UserAccount user = userService.getUserById(Long.valueOf(userId));
+		if (user != null) {
+			userService.sendSimpleEmail(input.getEmail(), "Mail confirmation", buildReinitialisationLink(input.getUrl(), user.getEmail()));
+		} else {
+			throw new PMInvalidInputDTO("Invalid user identifier");
+		}
+	}
+
+	@PostMapping("{id}/confirm-update-email")
+	public void confirmUpdateEmail(@PathVariable("id") String userId, @RequestBody String token) {
+		String email = null;
+		try {
+			email = jwt.extractUsername(token);
+			userService.loadUserByUsername(email);
+		} catch (ExpiredJwtException | UsernameNotFoundException e) {
+			throw new PMInvalidInputDTO("This token has expired or are not valide");
+		}
+
+		userService.UpdateUserEmail(Long.valueOf(userId), email);
 	}
 
 	// TODO handle Any Exception othan than PMruntimeException

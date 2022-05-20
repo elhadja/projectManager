@@ -29,7 +29,7 @@ import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetSprintOutputDTO;
 import com.elhadjium.PMBackend.dto.GetTaskOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
-import com.elhadjium.PMBackend.dto.GetUsersByCriteriaOutputDTO;
+import com.elhadjium.PMBackend.dto.UserDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.TaskDepencieOutputDTO;
@@ -275,8 +275,8 @@ public class ProjectController {
 	
 	// TODO to be tested
 	@GetMapping("{project-id}/users")
-	public List<GetUsersByCriteriaOutputDTO> getProjectUsers(@PathVariable("project-id")String projectId) {
-		return Arrays.asList(Mapping.mapTo(projectService.getProjectUsers(JavaUtil.parseId(projectId)), GetUsersByCriteriaOutputDTO[].class));
+	public List<UserDTO> getProjectUsers(@PathVariable("project-id")String projectId) {
+		return Arrays.asList(Mapping.mapTo(projectService.getProjectUsers(JavaUtil.parseId(projectId)), UserDTO[].class));
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

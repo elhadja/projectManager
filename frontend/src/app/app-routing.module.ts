@@ -18,6 +18,10 @@ const routes: Routes = [
     loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
   },
   {
+    path: PMConstants.USER_MODULE_BASE_URI,
+    loadChildren: () => import('./modules/user/user.module').then(m => m.UserModule)
+  },
+  {
     path: 'notFound', component: NotFoundComponent
   },
   {

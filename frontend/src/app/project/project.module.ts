@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './home/home.component';
 import { RouterModule, Routes } from '@angular/router';
-import { RouteSecureService } from '../services/routeSecure.service';
 import {MatTableModule} from '@angular/material/table'; 
 import { HomeService } from './services/home.service';
 import { CreateProjectComponent } from './dialog/create-project/create-project.component';
@@ -41,9 +40,9 @@ import {MatExpansionModule} from '@angular/material/expansion';
 
 
 const routes: Routes = [
-  {path: '', canActivate: [RouteSecureService], component: HomeComponent},
-  {path: 'backlog/:backlog-id', canActivate: [RouteSecureService], component: BacklogComponent},
-  {path: 'task/:project-id', canActivate: [RouteSecureService], component: TaskComponent}
+  {path: '', component: HomeComponent},
+  {path: 'backlog/:backlog-id', component: BacklogComponent},
+  {path: 'task/:project-id', component: TaskComponent}
 ]
 
 const PRIME_NG_MODULES = [

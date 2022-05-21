@@ -22,6 +22,7 @@ import {SlideMenuModule} from 'primeng/slidemenu';
 import { UserApiService } from './PMApi/user-api.service';
 import { MomentModule } from 'angular2-moment';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
+import { PMSharedModule } from './modules/shared/shared.module';
 
 
 const SERVICES = [API, 
@@ -47,6 +48,7 @@ const SERVICES = [API,
     HttpClientModule,
     MenubarModule,
     MomentModule,
+    PMSharedModule,
     NgIdleKeepaliveModule.forRoot(),
     SharedModule,
     SlideMenuModule,

@@ -21,23 +21,21 @@ export class LoginService {
   public login(output: LoginOutputDTO): void {
     this.api.postWithoutHeaders(ApiConstant.USERS_BASE_URI + '/' + ApiConstant.LOGIN_URI, output)
       .subscribe((response) => {
-        this.initializeLocalStorage(response);
+        this.initializeSession(response);
         this.routingService.gotoProjectComponent();
       });
   }
 
-  private initializeLocalStorage(response: LoginInputDTO): void {
-    this.sessionManager.setUserid(response.id);
-    localStorage.setItem(PMConstants.SESSION_TOKEN_ID_KEY, response.token);
+  private initializeSession(response: LoginInputDTO): void {
+    this.sessionManager.start(response.token, response.id);
     this.api.setHttpOptions(response.token);
-
   }
 
   public loginWithGoogle(): void {
     this.socialAuthService.signIn(GoogleLoginProvider.PROVIDER_ID)
       .then((response) => { 
         this.userApiService.loginWithGoogle(response.idToken).subscribe((response) => {
-          this.initializeLocalStorage(response);
+          this.initializeSession(response);
           this.routingService.gotoProjectComponent(); 
         });
       })

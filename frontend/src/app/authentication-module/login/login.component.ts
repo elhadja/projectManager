@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { RoutingService } from 'src/app/services/routing.service';
+import { sessionManagerService } from 'src/app/services/sessionManager.service';
 import { AuthenticationConstants } from '../authentication-constant';
 import { LoginService } from '../services/login-service';
 
@@ -18,7 +19,11 @@ export class LoginComponent {
 
   public hidePassword: boolean;
   constructor(private loginService: LoginService,
-             private routingService: RoutingService) { 
+             private routingService: RoutingService,
+             private readonly sessionManagerService: sessionManagerService) { 
+    if (this.sessionManagerService.isActive()) {
+      routingService.gotoProjectComponent();
+    }
     this.hidePassword = true;
     this.userIdentifierFormControl = new FormControl('', [Validators.required, Validators.minLength(this.USER_IDENTIFIER_MIN_LENGTH)]);
     this.passwordFormControl = new FormControl('', [Validators.required]);

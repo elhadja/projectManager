@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-dialog-confirm',
@@ -9,7 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class DialogConfirmComponent {
 
   constructor(private readonly matDialogRef: MatDialogRef<DialogConfirmComponent>, 
-              @Inject(MAT_DIALOG_DATA) public data: {message: string}) {
+              @Inject(MAT_DIALOG_DATA) public data: {message: Subject<string>}) {
   }
 
 }

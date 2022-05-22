@@ -10,11 +10,12 @@ import { RoutingService } from './routing.service';
 @Injectable()
 export class sessionManagerService {
   // TODO create a wrapper for IDLE
-  public readonly IDLE_END = 10;
-  public readonly IDLE_TIMEOUT = 5;
+  public readonly IDLE_END = 60 * 30;
+  public readonly IDLE_TIMEOUT = 60 * 5;
 
-  public idleMessage = 'Vous allez être deconnecté dans ';
   public idleCountdown: number;
+
+  public $idleWarningMessageSubject: Subject<string>;
 
   public userLoggedEmitter: Subject<boolean>;
   public projectSelectedSubject: Subject<void>;
@@ -28,12 +29,14 @@ export class sessionManagerService {
     this.projectSelectedSubject = new Subject<void>();
     this.invalidId = -1;
     this.idleCountdown = this.IDLE_TIMEOUT;
+    this.$idleWarningMessageSubject = new Subject();
 
     idle.setIdle(this.IDLE_END);
     idle.setTimeout(this.IDLE_TIMEOUT);
 
     idle.onIdleStart.subscribe(() => {
-      matDialog.open(DialogConfirmComponent, { data: { message: this.idleMessage + ' ' + this.idleCountdown }}).afterClosed().subscribe(() => {
+      this.idleCountdown = this.IDLE_TIMEOUT;
+      matDialog.open(DialogConfirmComponent, { data: { message: this.$idleWarningMessageSubject }}).afterClosed().subscribe(() => {
         if (this.isActive()) {
           this.subscribeIdle();
         }
@@ -46,10 +49,12 @@ export class sessionManagerService {
       matDialog.closeAll();
       this.routingService.gotoLoginComponent();
     });
-
+    
     idle.onTimeoutWarning.subscribe((countdown) => { 
-      this.idleCountdown = countdown;
+      const time = countdown < 60 ? countdown + ' secondes' : Math.trunc(countdown/60) + 'min' + countdown%60 + 'secondes';
+      this.$idleWarningMessageSubject.next('You will be loged out in ' + time);
     });
+
   }
 
   public subscribeIdle(): void {

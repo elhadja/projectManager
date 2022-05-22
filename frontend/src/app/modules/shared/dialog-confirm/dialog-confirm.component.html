@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col">
             <h2 matDialogTitle>Information</h2>
-            <p matDialogContent> {{ data.message }} </p>
+            <p matDialogContent> {{ data.message | async }} </p>
             <div mat-dialog-actions>
                 <button mat-stroked-button mat-dialog-close>Ok</button>
             </div>

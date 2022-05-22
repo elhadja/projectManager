@@ -267,7 +267,7 @@ public class UserController {
 	public void updateuserEmail(@PathVariable("id") String userId, @RequestBody UpdateEmailInput input) {
 		UserAccount user = userService.getUserById(Long.valueOf(userId));
 		if (user != null) {
-			userService.sendSimpleEmail(input.getEmail(), "Mail confirmation", buildReinitialisationLink(input.getUrl(), user.getEmail()));
+			userService.sendSimpleEmail(input.getEmail(), "Mail confirmation", buildReinitialisationLink(input.getUrl(), user.getEmail() + "##" + input.getEmail()));
 		} else {
 			throw new PMInvalidInputDTO("Invalid user identifier");
 		}
@@ -275,15 +275,16 @@ public class UserController {
 
 	@PostMapping("{id}/confirm-update-email")
 	public void confirmUpdateEmail(@PathVariable("id") String userId, @RequestBody String token) {
-		String email = null;
+		String newEmail = null;
 		try {
-			email = jwt.extractUsername(token);
-			userService.loadUserByUsername(email);
+			String mails = jwt.extractUsername(token);
+			userService.loadUserByUsername(mails.split("##")[0]);
+			newEmail = mails.split("##")[1];
 		} catch (ExpiredJwtException | UsernameNotFoundException e) {
 			throw new PMInvalidInputDTO("This token has expired or are not valide");
 		}
 
-		userService.UpdateUserEmail(Long.valueOf(userId), email);
+		userService.UpdateUserEmail(Long.valueOf(userId), newEmail);
 	}
 
 	// TODO handle Any Exception othan than PMruntimeException

@@ -20,6 +20,9 @@ import { RoutingService } from './services/routing.service';
 import { SharedModule } from 'primeng/api';
 import {SlideMenuModule} from 'primeng/slidemenu';
 import { UserApiService } from './PMApi/user-api.service';
+import { MomentModule } from 'angular2-moment';
+import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
+import { PMSharedModule } from './modules/shared/shared.module';
 
 
 const SERVICES = [API, 
@@ -44,6 +47,9 @@ const SERVICES = [API,
     BrowserAnimationsModule,
     HttpClientModule,
     MenubarModule,
+    MomentModule,
+    PMSharedModule,
+    NgIdleKeepaliveModule.forRoot(),
     SharedModule,
     SlideMenuModule,
     TranslateModule.forRoot({

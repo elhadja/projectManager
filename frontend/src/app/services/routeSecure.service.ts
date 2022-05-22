@@ -1,18 +1,18 @@
-import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
-import { Observable } from "rxjs";
-import { PMConstants } from "../common/PMConstants";
-import { RoutingService } from "./routing.service";
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
+import { RoutingService } from './routing.service';
+import { sessionManagerService } from './sessionManager.service';
 
 @Injectable()
 export class RouteSecureService implements CanActivate {
-    constructor(private routingService: RoutingService) {
+  constructor(private routingService: RoutingService, private readonly sessionManagerService: sessionManagerService) {
+  }
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+    if (!this.sessionManagerService.isActive()) {
+      this.routingService.gotoLoginComponent();
     }
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-        if (localStorage.getItem(PMConstants.SESSION_TOKEN_ID_KEY) == null) {
-            this.routingService.gotoLoginComponent();
-        }
 
-        return true;
-    }
+    return true;
+  }
 }

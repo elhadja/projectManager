@@ -86,7 +86,7 @@ export class HomeComponent implements OnInit {
         project
       },
       width: '50%',
-      height: '100%',
+      height: '95%',
       disableClose: true
     });
 

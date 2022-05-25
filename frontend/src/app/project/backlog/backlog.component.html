@@ -33,9 +33,9 @@
                                                 [showTime]="true" [showButtonBar]="true" selectionMode="range" 
                                                 dataFormat="yyyy-mm-dd">
                                     </p-calendar>
-                                    <p-badge severity="info" styleClass="p-mr-2" [value]="sprintWrapper.totalStoryPoints"></p-badge>
-                                    <p-badge class="mx-1" severity="success" styleClass="p-mr-2" [value]="sprintWrapper.totalClosedUserStoriesStoryPoints"></p-badge>
-                                    <p-badge severity="danger" styleClass="p-mr-2" [value]="sprintWrapper.totalOpenedUserStoriesStoryPoints"></p-badge>
+                                    <p-badge matTooltip="total story points" severity="info" styleClass="p-mr-2" [value]="sprintWrapper.totalStoryPoints"></p-badge>
+                                    <p-badge matTooltip="todo" class="mx-1" severity="success" styleClass="p-mr-2" [value]="sprintWrapper.totalClosedUserStoriesStoryPoints"></p-badge>
+                                    <p-badge matTooltip="done" severity="danger" styleClass="p-mr-2" [value]="sprintWrapper.totalOpenedUserStoriesStoryPoints"></p-badge>
                                 </div>
                                 <div class="table-action">
                                     <button *ngIf="selectedUserStoriesFromSprint.length > 0" class="text-danger" mat-stroked-button (click)=onDeleteSelectedSprintsUserStories(sprintWrapper)>delete U.S</button>

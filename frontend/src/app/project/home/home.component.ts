@@ -152,6 +152,14 @@ export class HomeComponent implements OnInit {
   }
 
   public onDeleteInvitations(): void {
+    this.matDialog.open(DialogConfirmComponent).afterClosed().subscribe(accept => {
+      if (accept) {
+        this.deleteInvitations();
+      }
+    });
+  }
+
+  private deleteInvitations(): void {
     const ids:number[] = [];
     this.selectedInvitations.forEach((invitation) => {
       ids.push(invitation.invitationToProjectId);

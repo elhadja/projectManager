@@ -278,6 +278,12 @@ public class ProjectController {
 	public List<UserDTO> getProjectUsers(@PathVariable("project-id")String projectId) {
 		return Arrays.asList(Mapping.mapTo(projectService.getProjectUsers(JavaUtil.parseId(projectId)), UserDTO[].class));
 	}
+	
+	@PostMapping("{project-id}/users/{user-id}")
+	public void removeUserFromProject(@PathVariable("project-id") String projectId,
+									  @PathVariable("user-id") String userId) throws Exception {
+		projectService.removeUserFromProject(Long.valueOf(projectId), Long.valueOf(userId));
+	}
 
 	@ExceptionHandler({PMRuntimeException.class})
 	public ResponseEntity<?> handleException(PMRuntimeException ex) {

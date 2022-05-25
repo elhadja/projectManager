@@ -3,6 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GetUserInvitationsInputDTO } from 'src/app/dto/GetUserInvitationInputDTO';
 import { projectInputDTO } from 'src/app/dto/project.input.dto';
+import { ProjectApiService } from 'src/app/PMApi/project.api';
+import { MessageService } from 'src/app/services/message.service';
 import { RoutingService } from 'src/app/services/routing.service';
 import { sessionManagerService } from 'src/app/services/sessionManager.service';
 import { CreateProjectComponent } from '../dialog/create-project/create-project.component';
@@ -26,14 +28,16 @@ export class HomeComponent implements OnInit {
               private addProjectDialog: MatDialog,
               private dialogCreateProjectService: DialogCreateProjectService,
               private sessionService: sessionManagerService,
-              private readonly routingService: RoutingService) {
+              private readonly routingService: RoutingService,
+              private readonly projectApiService: ProjectApiService,
+              private readonly messageService: MessageService) {
     this.projects = [];
     this.invitations = [];
     this.selectedInvitations = [];
     this.dialogCreateProjectService.onCreateProjectSuccess.subscribe(() => {
       this.closeDialogAddProject();
       this.loadUserProject();
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -44,7 +48,7 @@ export class HomeComponent implements OnInit {
   private loadUserProject(): void {
     this.homeService.getUserProjects().subscribe((projects) => {
       this.projects = [...projects];
-    })
+    });
   }
 
   private loadUserInvitations(): void {
@@ -80,8 +84,8 @@ export class HomeComponent implements OnInit {
       data: {
         project
       },
-      width: "50%",
-      height: "100%",
+      width: '50%',
+      height: '100%',
       disableClose: true
     });
 
@@ -93,19 +97,21 @@ export class HomeComponent implements OnInit {
   }
 
   public onMoveProjectToDraft(projectId: number): void {
-
+    this.projectApiService.removeUserFromProject(projectId, this.sessionService.getUserId()).subscribe(() => {
+      this.messageService.showSuccessMessage('Project removed');
+    });
   }
 
   private closeDialogAddProject(): void {
-      this.addProjectDialog.closeAll();
+    this.addProjectDialog.closeAll();
   }
 
   public selectRow(invitation: GetUserInvitationsInputDTO): void {
-    console.log(invitation)
+    console.log(invitation);
   }
 
   public onRowSelect(event: Event): void {
-    console.log(this.selectedInvitations)
+    console.log(this.selectedInvitations);
   }
 
   public onRowUnselect(event: Event): void {
@@ -113,23 +119,23 @@ export class HomeComponent implements OnInit {
   }
 
   public onAcceptInvitations(): void {
-    let ids:number[] = [];
+    const ids:number[] = [];
     this.selectedInvitations.forEach((invitation) => {
       ids.push(invitation.invitationToProjectId);
-    })
+    });
 
-   this.homeService.acceptInvitationToProject(ids).subscribe(() => {
-    this.selectedInvitations =[];
-    this.loadUserProject();
-    this.loadUserInvitations();
-   });
+    this.homeService.acceptInvitationToProject(ids).subscribe(() => {
+      this.selectedInvitations =[];
+      this.loadUserProject();
+      this.loadUserInvitations();
+    });
   }
 
   public onDeleteInvitations(): void {
-    let ids:number[] = [];
-      this.selectedInvitations.forEach((invitation) => {
-        ids.push(invitation.invitationToProjectId);
-      })
+    const ids:number[] = [];
+    this.selectedInvitations.forEach((invitation) => {
+      ids.push(invitation.invitationToProjectId);
+    });
 
     this.homeService.cancelInvitationToProject(ids).subscribe(() => {
       this.selectedInvitations =[];

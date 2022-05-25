@@ -88,6 +88,11 @@ public class Project implements Serializable {
 		manager.getManagedProjects().add(this);
 	}
 	
+	public void removeManager(UserAccount manager) {
+		managers.remove(manager);
+		manager.getManagedProjects().remove(this);
+	}
+	
 	public void removeInvitation(InvitationToProject invitation) {
 		invitationsToProject.remove(invitation);
 		invitation.setProject(null);

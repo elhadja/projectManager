@@ -442,4 +442,24 @@ public class ProjectServiceImpl implements ProjectService {
 						.map(UserProject::getUser)
 						.collect(Collectors.toList());
 	}
+
+	@Override
+	@Transactional
+	public void removeUserFromProject(Long projectId, Long userId) {
+		Project project = projectDao.findById(projectId).get();
+		UserAccount user = project.getUsers().stream()
+											.map(UserProject::getUser)
+											.filter(_user -> _user.getId().equals(userId))
+											.findAny()
+											.orElse(null);
+		boolean isUserManager = project.getManagers().contains(user);
+		if (project.getManagers().size() == 1 && isUserManager) {
+			projectDao.deleteById(projectId);
+		} else if (isUserManager) {
+			project.removeManager(user);
+			project.removeUser(user);
+		} else {
+			project.removeUser(user);
+		}
+	}
 }

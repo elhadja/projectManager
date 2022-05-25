@@ -3,6 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GetUserInvitationsInputDTO } from 'src/app/dto/GetUserInvitationInputDTO';
 import { projectInputDTO } from 'src/app/dto/project.input.dto';
+import { DialogConfirmComponent } from 'src/app/modules/shared/dialog-confirm/dialog-confirm.component';
+import { ProjectApiService } from 'src/app/PMApi/project.api';
+import { MessageService } from 'src/app/services/message.service';
 import { RoutingService } from 'src/app/services/routing.service';
 import { sessionManagerService } from 'src/app/services/sessionManager.service';
 import { CreateProjectComponent } from '../dialog/create-project/create-project.component';
@@ -23,17 +26,19 @@ export class HomeComponent implements OnInit {
 
   constructor(private router: Router,
               private homeService: HomeService,
-              private addProjectDialog: MatDialog,
+              private matDialog: MatDialog,
               private dialogCreateProjectService: DialogCreateProjectService,
               private sessionService: sessionManagerService,
-              private readonly routingService: RoutingService) {
+              private readonly routingService: RoutingService,
+              private readonly projectApiService: ProjectApiService,
+              private readonly messageService: MessageService) {
     this.projects = [];
     this.invitations = [];
     this.selectedInvitations = [];
     this.dialogCreateProjectService.onCreateProjectSuccess.subscribe(() => {
       this.closeDialogAddProject();
       this.loadUserProject();
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -44,7 +49,7 @@ export class HomeComponent implements OnInit {
   private loadUserProject(): void {
     this.homeService.getUserProjects().subscribe((projects) => {
       this.projects = [...projects];
-    })
+    });
   }
 
   private loadUserInvitations(): void {
@@ -67,7 +72,7 @@ export class HomeComponent implements OnInit {
   }
 
   public onOpenAddProjectDialog(): void {
-    this.addProjectDialog.open(CreateProjectComponent);
+    this.matDialog.open(CreateProjectComponent);
   }
 
   public onClickOnProject(projectId: number): void{
@@ -76,12 +81,12 @@ export class HomeComponent implements OnInit {
   }
 
   public onOpenProjectDetails(project: projectInputDTO): void {
-    const dialogRef = this.addProjectDialog.open(DialogProjectDetailsComponent, {
+    const dialogRef = this.matDialog.open(DialogProjectDetailsComponent, {
       data: {
         project
       },
-      width: "50%",
-      height: "100%",
+      width: '50%',
+      height: '95%',
       disableClose: true
     });
 
@@ -93,19 +98,40 @@ export class HomeComponent implements OnInit {
   }
 
   public onMoveProjectToDraft(projectId: number): void {
-
+    const project = this.projects.find(project => project.projectId === projectId);
+    let message = 'You will be removed from this project.';
+    if (project != null 
+        && project.projectManagers.length === 1 
+        && project.projectManagers[0].id === this.sessionService.getUserId()) {
+      message = 'This project will be deleted permanently for all users.' +
+                    'If you do not want that, you can set a new manager and then remove this project from yours.';
+    } 
+    this.matDialog.open(DialogConfirmComponent, {
+      position: { top: '50px'},
+      role: 'alertdialog',
+      minWidth: '500px',
+      data: { message },
+    })
+      .afterClosed().subscribe(accept => {
+        if (accept == true) {
+          this.projectApiService.removeUserFromProject(projectId, this.sessionService.getUserId()).subscribe(() => {
+            this.messageService.showSuccessMessage('Project removed');
+            this.refresh();
+          });
+        }
+      });
   }
 
   private closeDialogAddProject(): void {
-      this.addProjectDialog.closeAll();
+    this.matDialog.closeAll();
   }
 
   public selectRow(invitation: GetUserInvitationsInputDTO): void {
-    console.log(invitation)
+    console.log(invitation);
   }
 
   public onRowSelect(event: Event): void {
-    console.log(this.selectedInvitations)
+    console.log(this.selectedInvitations);
   }
 
   public onRowUnselect(event: Event): void {
@@ -113,23 +139,31 @@ export class HomeComponent implements OnInit {
   }
 
   public onAcceptInvitations(): void {
-    let ids:number[] = [];
+    const ids:number[] = [];
     this.selectedInvitations.forEach((invitation) => {
       ids.push(invitation.invitationToProjectId);
-    })
+    });
 
-   this.homeService.acceptInvitationToProject(ids).subscribe(() => {
-    this.selectedInvitations =[];
-    this.loadUserProject();
-    this.loadUserInvitations();
-   });
+    this.homeService.acceptInvitationToProject(ids).subscribe(() => {
+      this.selectedInvitations =[];
+      this.loadUserProject();
+      this.loadUserInvitations();
+    });
   }
 
   public onDeleteInvitations(): void {
-    let ids:number[] = [];
-      this.selectedInvitations.forEach((invitation) => {
-        ids.push(invitation.invitationToProjectId);
-      })
+    this.matDialog.open(DialogConfirmComponent).afterClosed().subscribe(accept => {
+      if (accept) {
+        this.deleteInvitations();
+      }
+    });
+  }
+
+  private deleteInvitations(): void {
+    const ids:number[] = [];
+    this.selectedInvitations.forEach((invitation) => {
+      ids.push(invitation.invitationToProjectId);
+    });
 
     this.homeService.cancelInvitationToProject(ids).subscribe(() => {
       this.selectedInvitations =[];

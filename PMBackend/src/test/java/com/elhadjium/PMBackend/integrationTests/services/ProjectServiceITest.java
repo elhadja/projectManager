@@ -40,6 +40,8 @@ import com.elhadjium.PMBackend.entity.UserStoryStatus;
 import com.elhadjium.PMBackend.service.ProjectService;
 import com.elhadjium.PMBackend.service.UserService;
 
+import javassist.NotFoundException;
+
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ProjectServiceITest {
@@ -382,5 +384,81 @@ public class ProjectServiceITest {
 		Sprint sprintToCheck = list.get(0);
 		assertEquals(SprintStatus.CLOSED, sprintToCheck.getStatus());
 		sprintToCheck.getUserStories().forEach(us -> assertEquals(UserStoryStatus.CLOSED, sprintToCheck.getStatus()));
+	}
+	
+	@Test()
+	public void removeUserFromProject_shouldRemoveTheProject() throws Exception {
+		// prepare
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId2 = userService.signup(new UserAccount(null, null, null, "email2@test.com", "pseudo2", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		UpdateProjectInputDTO input = new UpdateProjectInputDTO();
+		input.setProjectUsersIds(List.of(userId, userId2));
+		input.setProjectManagersIds(List.of(userId));
+		input.setProjectName(project.getName());
+		projectService.updateProject(projectId, input);
+		
+		// when
+		projectService.removeUserFromProject(projectId, userId);
+		
+		// then
+		assertTrue(projectDAO.findById(projectId).isEmpty());
+	}
+
+	@Test
+	@Transactional
+	public void removeUserFromProject_shouldRemoveUserFromProject() throws Exception {
+		// prepare
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId2 = userService.signup(new UserAccount(null, null, null, "email2@test.com", "pseudo2", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		UpdateProjectInputDTO input = new UpdateProjectInputDTO();
+		input.setProjectUsersIds(List.of(userId, userId2));
+		input.setProjectManagersIds(List.of(userId));
+		input.setProjectName(project.getName());
+		projectService.updateProject(projectId, input);
+		
+		// when
+		projectService.removeUserFromProject(projectId, userId2);
+		
+		// then
+		UserAccount user = userService.getUserById(userId2);
+		assertTrue(user.getProjects().isEmpty());
+	}
+	
+	@Test
+	@Transactional
+	public void removeUserFromProject_shouldRemoveUserFromProjectAndAsManager() throws Exception {
+		// prepare
+		Long userId = userService.signup(new UserAccount(null, null, null, "email@test.com", "pseudo", "trickypassword"));
+		Long userId2 = userService.signup(new UserAccount(null, null, null, "email2@test.com", "pseudo2", "trickypassword"));
+		
+		Project project = new Project();
+		project.setName("project name");
+		Long projectId = userService.CreateUserProject(userId, project);
+		
+		UpdateProjectInputDTO input = new UpdateProjectInputDTO();
+		input.setProjectUsersIds(List.of(userId, userId2));
+		input.setProjectManagersIds(List.of(userId, userId2));
+		input.setProjectName(project.getName());
+		projectService.updateProject(projectId, input);
+		
+		// when
+		projectService.removeUserFromProject(projectId, userId2);
+		
+		// then
+		UserAccount user = userService.getUserById(userId2);
+		assertTrue(user.getProjects().isEmpty());
+		Project projectUpdated = projectDAO.findById(projectId).get();
+		assertTrue(projectUpdated.getManagers().size() == 1);
+		
 	}
 }

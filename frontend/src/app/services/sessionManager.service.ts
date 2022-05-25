@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
 import { Subject } from 'rxjs';
 import { PMConstants } from '../common/PMConstants';
-import { DialogConfirmComponent } from '../modules/shared/dialog-confirm/dialog-confirm.component';
+import { DialogInfosComponent } from '../modules/shared/dialog-infos/dialog-infos.component';
 import { API } from './Api';
 import { RoutingService } from './routing.service';
 
@@ -36,7 +36,7 @@ export class sessionManagerService {
 
     idle.onIdleStart.subscribe(() => {
       this.idleCountdown = this.IDLE_TIMEOUT;
-      matDialog.open(DialogConfirmComponent, { data: { message: this.$idleWarningMessageSubject }}).afterClosed().subscribe(() => {
+      matDialog.open(DialogInfosComponent, { data: { message: this.$idleWarningMessageSubject }}).afterClosed().subscribe(() => {
         if (this.isActive()) {
           this.subscribeIdle();
         }

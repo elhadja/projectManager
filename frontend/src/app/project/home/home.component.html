@@ -14,15 +14,16 @@
                     <ng-template pTemplate="caption">
                         <div class="d-flex justify-content-between">
                             <h3>Your projects</h3>
-                            <button mat-stroked-button (click)="onOpenAddProjectDialog()">add project</button>
+                            <button mat-stroked-button class="text-primary" (click)="onOpenAddProjectDialog()">add project</button>
                         </div>
                     </ng-template>
                     <ng-template pTemplate="colgroup">
                         <colgroup>
                             <col style="width:5%">
                             <col style="width:20%">
-                            <col style="width:60%">
+                            <col style="width:55%">
                             <col style="width:10%">
+                            <col style="width:5%">
                             <col style="width:5%">
                         </colgroup>
                     </ng-template>
@@ -32,7 +33,8 @@
                             <th>name</th>
                             <th>description</th>
                             <th>managers</th>
-                            <th>xxx</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-row>
@@ -45,18 +47,11 @@
                                     {{ manager.pseudo }}<br>
                                 </ng-container>
                             </td>
-                            <td>
-                                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-                                    <mat-icon>more_horiz</mat-icon>
-                                </button>
-                                <mat-menu #menu="matMenu">
-                                    <button mat-menu-item (click)="onOpenProjectDetails(row)">
-                                        <span>details</span>
-                                    </button>
-                                    <button mat-menu-item (click)="onMoveProjectToDraft(row.projectId)">
-                                        <span>delete</span>
-                                    </button>
-                                </mat-menu>
+                           <td class="action-icon" >
+                                <mat-icon (click) = "onMoveProjectToDraft(row.projectId)">delete_forever</mat-icon>
+                            </td>
+                            <td class="action-icon" >
+                                <mat-icon (click)="onOpenProjectDetails(row)">keyboard_arrow_right</mat-icon>
                             </td>
                         </tr>
                     </ng-template>
@@ -76,8 +71,8 @@
 
             <div class="bloc">
                 <h3>Invitations</h3>
-                <div *ngIf="selectedInvitations.length > 0" class="mb-2">
-                    <button mat-stroked-button class="text-success" (click)="onAcceptInvitations()">accept</button>
+                <div *ngIf="selectedInvitations.length > 0" class="mb-2 table-action">
+                    <button mat-stroked-button class="text-primary" (click)="onAcceptInvitations()">accept</button>
                     <button mat-stroked-button class="text-danger" (click)="onDeleteInvitations()">delete</button>
                 </div>
                 <p-table [value]="invitations" 

@@ -3,7 +3,7 @@
         <div class="col d-flex justify-content-between">
             <h3> {{ getComponentName() + '.projectDetails' | translate}}</h3>
             <div class="action-buttons">
-                <button mat-stroked-button (click)="onSaveProjectDetails()" class="text-success">save</button>
+                <button mat-stroked-button (click)="onSaveProjectDetails()" class="text-primary mx-2">save</button>
                 <button mat-stroked-button mat-dialog-close type="button" class="text-danger">cancel</button>
             </div>
         </div>
@@ -22,7 +22,7 @@
                         <div class="w-100 mx-auto">
                             <mat-form-field appearance="fill" class="w-100">
                                 <mat-label>{{ getComponentName() + '.projectDescription' | translate }}</mat-label>
-                                <input matInput [formControl]="projectDescription">
+                                <textarea matInput [formControl]="projectDescription"></textarea>
                             </mat-form-field>
                         </div>
                    </div>
@@ -30,7 +30,7 @@
             <mat-tab label="Gestion des utilisateurs">
                 <!-- send invitation -->
                 <div class="bloc">
-                    <h3>Send invitation</h3>
+                    <h3>Add users to project</h3>
                     <div>
                         <mat-form-field appearance="fill" >
                             <mat-label>firstname</mat-label>
@@ -44,18 +44,18 @@
                             <mat-label>pseudo</mat-label>
                             <input matInput [formControl]="userPseudo" minlength="2">
                         </mat-form-field>
-                        <button mat-stroked-button (click)="onSearchUsers()" class="mx-2">Search user</button>
+                        <button mat-stroked-button (click)="onSearchUsers()" class="mx-2 text-primary">Search user</button>
                     </div>
                     <div *ngIf="users != null  && users.length > 0">
                         <p-table [value]="users" 
                                 [(selection)]="selectedUsers" dataKey="id"
-                                responsiveLayout="scroll"
+                                [scrollable]="true" scrollHeight="200px"
                                 styleClass="p-datatable-sm">
                             <ng-template pTemplate="caption" class="d-flex justify-content-right">
                                 <button *ngIf="selectedUsers.length > 0"
                                     mat-stroked-button 
                                     (click)="onSendInvitations()" 
-                                    class="text-success">
+                                    class="text-primary">
                                     Send Invitations
                                 </button>
                             </ng-template>

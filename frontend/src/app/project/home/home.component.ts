@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GetUserInvitationsInputDTO } from 'src/app/dto/GetUserInvitationInputDTO';
 import { projectInputDTO } from 'src/app/dto/project.input.dto';
+import { DialogConfirmComponent } from 'src/app/modules/shared/dialog-confirm/dialog-confirm.component';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
 import { MessageService } from 'src/app/services/message.service';
 import { RoutingService } from 'src/app/services/routing.service';
@@ -25,7 +26,7 @@ export class HomeComponent implements OnInit {
 
   constructor(private router: Router,
               private homeService: HomeService,
-              private addProjectDialog: MatDialog,
+              private matDialog: MatDialog,
               private dialogCreateProjectService: DialogCreateProjectService,
               private sessionService: sessionManagerService,
               private readonly routingService: RoutingService,
@@ -71,7 +72,7 @@ export class HomeComponent implements OnInit {
   }
 
   public onOpenAddProjectDialog(): void {
-    this.addProjectDialog.open(CreateProjectComponent);
+    this.matDialog.open(CreateProjectComponent);
   }
 
   public onClickOnProject(projectId: number): void{
@@ -80,7 +81,7 @@ export class HomeComponent implements OnInit {
   }
 
   public onOpenProjectDetails(project: projectInputDTO): void {
-    const dialogRef = this.addProjectDialog.open(DialogProjectDetailsComponent, {
+    const dialogRef = this.matDialog.open(DialogProjectDetailsComponent, {
       data: {
         project
       },
@@ -97,13 +98,32 @@ export class HomeComponent implements OnInit {
   }
 
   public onMoveProjectToDraft(projectId: number): void {
-    this.projectApiService.removeUserFromProject(projectId, this.sessionService.getUserId()).subscribe(() => {
-      this.messageService.showSuccessMessage('Project removed');
-    });
+    const project = this.projects.find(project => project.projectId === projectId);
+    let message = 'You will be removed from this project.';
+    if (project != null 
+        && project.projectManagers.length === 1 
+        && project.projectManagers[0].id === this.sessionService.getUserId()) {
+      message = 'This project will be deleted permanently for all users.' +
+                    'If you do not want that, you can set a new manager and then remove this project from yours.';
+    } 
+    this.matDialog.open(DialogConfirmComponent, {
+      position: { top: '50px'},
+      role: 'alertdialog',
+      minWidth: '500px',
+      data: { message },
+    })
+      .afterClosed().subscribe(accept => {
+        if (accept == true) {
+          this.projectApiService.removeUserFromProject(projectId, this.sessionService.getUserId()).subscribe(() => {
+            this.messageService.showSuccessMessage('Project removed');
+            this.refresh();
+          });
+        }
+      });
   }
 
   private closeDialogAddProject(): void {
-    this.addProjectDialog.closeAll();
+    this.matDialog.closeAll();
   }
 
   public selectRow(invitation: GetUserInvitationsInputDTO): void {

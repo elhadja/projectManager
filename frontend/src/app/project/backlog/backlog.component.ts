@@ -2,9 +2,11 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
 import { PMConstants } from 'src/app/common/PMConstants';
 import { GetSprintsInputDTO } from 'src/app/dto/getSprint.input.dto';
 import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
+import { DialogConfirmComponent } from 'src/app/modules/shared/dialog-confirm/dialog-confirm.component';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
 import { MessageService } from 'src/app/services/message.service';
 import { DialogCreateSprintComponent } from '../dialog/dialog-create-sprint/dialog-create-sprint.component';
@@ -47,7 +49,7 @@ export class BacklogComponent implements OnInit {
       this.projectId = id != null ? +id : this.projectId;
     }
 
-    this.backlogTotalStoryPoints = '0'
+    this.backlogTotalStoryPoints = '0';
     this.userStories = [];
     this.sprintWrappers = [];
     this.selectedUserStoriesFromSprint = [];
@@ -83,14 +85,14 @@ export class BacklogComponent implements OnInit {
   }
 
   public getTotalStoryPoints(userStories: GetUserStoriesInputDTO[]): number {
-      let totalStoryPoint = 0;
-      userStories.forEach(us => {
-        if (us.storyPoint != null) {
-          totalStoryPoint += us.storyPoint;
-        }
-      });
+    let totalStoryPoint = 0;
+    userStories.forEach(us => {
+      if (us.storyPoint != null) {
+        totalStoryPoint += us.storyPoint;
+      }
+    });
 
-      return totalStoryPoint;
+    return totalStoryPoint;
   }
 
   // TODO put this mehtod on global service
@@ -99,11 +101,11 @@ export class BacklogComponent implements OnInit {
   }
 
   public getClosedUserStorytTotalStoryPoints(userStories: GetUserStoriesInputDTO[]): string {
-      return `${this.getTotalStoryPoints(userStories.filter(us => us.status === 'CLOSED'))}`;
+    return `${this.getTotalStoryPoints(userStories.filter(us => us.status === 'CLOSED'))}`;
   }
 
   public getOpenedUserStorytTotalStoryPoints(userStories: GetUserStoriesInputDTO[]): string {
-      return `${this.getTotalStoryPoints(userStories.filter(us => us.status === 'OPEN'))}`;
+    return `${this.getTotalStoryPoints(userStories.filter(us => us.status === 'OPEN'))}`;
   }
 
 
@@ -117,8 +119,8 @@ export class BacklogComponent implements OnInit {
             this.backlogTotalStoryPoints = (+(this.backlogTotalStoryPoints) + (+result.storyPoint)) + '';
           }
           this.userStories = [...this.userStories, result];
-          this.messageService.showSuccessMessage("User story created with success");
-        })
+          this.messageService.showSuccessMessage('User story created with success');
+        });
       }
     });
   }
@@ -137,8 +139,8 @@ export class BacklogComponent implements OnInit {
             sprintWrapper.totalClosedUserStoriesStoryPoints = this.getClosedUserStorytTotalStoryPoints(sprintWrapper.sprint.userStories);
             sprintWrapper.totalOpenedUserStoriesStoryPoints = this.getOpenedUserStorytTotalStoryPoints(sprintWrapper.sprint.userStories);
           }
-          this.messageService.showSuccessMessage("User story created with success");
-        })
+          this.messageService.showSuccessMessage('User story created with success');
+        });
       }
     });
   }
@@ -158,8 +160,8 @@ export class BacklogComponent implements OnInit {
             totalStoryPoints: '0',
             sprintRangeDates: [new Date, new Date]
           }];
-          this.messageService.showSuccessMessage("sprint created with success");
-        })
+          this.messageService.showSuccessMessage('sprint created with success');
+        });
       }
     });
 
@@ -168,7 +170,7 @@ export class BacklogComponent implements OnInit {
   public onOpenUserStory(row: GetUserStoriesInputDTO): void {
     const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {
       data: row,
-      width: "600px",
+      width: '600px',
       disableClose: true
     });
 
@@ -185,10 +187,10 @@ export class BacklogComponent implements OnInit {
     this.selectedUserStoriesFromBacklog.forEach(us => {
       this.projectApiService.deleteUserStory(this.projectId, us.id).subscribe(() => {
         this.userStories = this.userStories.filter(usToCheck => usToCheck.id !== us.id);
-        this.selectedUserStoriesFromBacklog = this.selectedUserStoriesFromBacklog.filter(usToCheck => usToCheck.id !== us.id)
+        this.selectedUserStoriesFromBacklog = this.selectedUserStoriesFromBacklog.filter(usToCheck => usToCheck.id !== us.id);
 
         if (this.selectedUserStoriesFromBacklog.length === 0) {
-          this.messageService.showSuccessMessage("All selected user stories are deleted from backlog");
+          this.messageService.showSuccessMessage('All selected user stories are deleted from backlog');
         }
       });
     });
@@ -198,10 +200,10 @@ export class BacklogComponent implements OnInit {
     this.selectedUserStoriesFromSprint.forEach(us => {
       this.projectApiService.deleteUserStory(this.projectId, us.id).subscribe(() => {
         sprintWrapper.sprint.userStories = sprintWrapper.sprint.userStories.filter((usToCheck: GetUserStoriesInputDTO) => usToCheck.id !== us.id);
-        this.selectedUserStoriesFromSprint = this.selectedUserStoriesFromSprint.filter(usToCheck => usToCheck.id !== us.id)
+        this.selectedUserStoriesFromSprint = this.selectedUserStoriesFromSprint.filter(usToCheck => usToCheck.id !== us.id);
 
         if (this.selectedUserStoriesFromSprint.length === 0) {
-          this.messageService.showSuccessMessage("All selected user stories are deleted from sprint");
+          this.messageService.showSuccessMessage('All selected user stories are deleted from sprint');
         }
       });
     });
@@ -213,15 +215,19 @@ export class BacklogComponent implements OnInit {
       endDate: sprintWrapper.sprintRangeDates[1]
     }).subscribe(() => {
       sprintWrapper.sprint.status = 'STARTED';
-      this.sprintWrappers = [...this.sprintWrappers]
+      this.sprintWrappers = [...this.sprintWrappers];
     });
   }
 
   public onTerminateSprint(sprintWrapper: SprintWrapper) {
-    this.projectApiService.terminateSprint(this.projectId, sprintWrapper.sprint.id).subscribe(() => {
-      sprintWrapper.sprint.status = 'CLOSED';
-      this.sprintWrappers = [...this.sprintWrappers];
-      this.initializeBacklog();
+    this.materialDialogservice.open(DialogConfirmComponent).afterClosed().subscribe((accept) => {
+      if (accept) {
+        this.projectApiService.terminateSprint(this.projectId, sprintWrapper.sprint.id).subscribe(() => {
+          sprintWrapper.sprint.status = 'CLOSED';
+          this.sprintWrappers = [...this.sprintWrappers];
+          this.initializeBacklog();
+        });
+      }
     });
   }
 
@@ -232,7 +238,7 @@ export class BacklogComponent implements OnInit {
         selectedUs.status = PMConstants.USER_STORY_STATUS_CLOSED;
         this.sprintWrappers = [...this.sprintWrappers];
       });
-    })
+    });
   }
 
   public onOpenSelectedSprintsUserStories(): void {
@@ -242,7 +248,7 @@ export class BacklogComponent implements OnInit {
         selectedUs.status = PMConstants.USER_STORY_STATUS_OPENED;
         this.sprintWrappers = [...this.sprintWrappers];
       });
-    })
+    });
   }
 
   public dropInBacklog(event: CdkDragDrop<GetUserStoriesInputDTO[]>) {
@@ -251,9 +257,9 @@ export class BacklogComponent implements OnInit {
     } else {
       this.projectApiService.moveUserStoryFromSprintToBacklog(this.projectId, event.previousContainer.data[event.previousIndex].id).subscribe();
       transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
     }
     this.userStories = [...this.userStories];
   }
@@ -263,10 +269,10 @@ export class BacklogComponent implements OnInit {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
-      let targetSprintId = this.sprintWrappers.find(sprintWrapper => {
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
+      const targetSprintId = this.sprintWrappers.find(sprintWrapper => {
         return sprintWrapper.sprint.userStories.some(us => us.id === event.container.data[event.currentIndex].id);
       })?.sprint.id;
       if (targetSprintId != null) {

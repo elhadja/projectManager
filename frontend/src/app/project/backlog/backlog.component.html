@@ -21,7 +21,7 @@
                     <p-table [value]="sprintWrapper.sprint.userStories" 
                             [(selection)]="selectedUserStoriesFromSprint"
                             responsiveLayout="scroll"
-                            styleClass="p-datatable-striped"
+                            styleClass="p-datatable-striped p-datatable-sm"
                             cdkDropList
                             [cdkDropListData]="sprintWrapper.sprint.userStories"
                             (cdkDropListDropped)="dropInSprint($event)"
@@ -37,18 +37,18 @@
                                     <p-badge class="mx-1" severity="success" styleClass="p-mr-2" [value]="sprintWrapper.totalClosedUserStoriesStoryPoints"></p-badge>
                                     <p-badge severity="danger" styleClass="p-mr-2" [value]="sprintWrapper.totalOpenedUserStoriesStoryPoints"></p-badge>
                                 </div>
-                                <div>
-                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" mat-stroked-button (click)=onDeleteSelectedSprintsUserStories(sprintWrapper)>delete U.S</button>
-                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" mat-stroked-button (click)=onCloseSelectedSprintsUserStories()>Close U.S</button>
-                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" mat-stroked-button (click)=onOpenSelectedSprintsUserStories()>Open U.S</button>
-                                    <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromSprint(sprintWrapper.sprint.id)>create U.S</button>
-                                    <button *ngIf="sprintWrapper.sprint.status === 'CREATED'; else terminate" mat-stroked-button 
+                                <div class="table-action">
+                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" class="text-danger" mat-stroked-button (click)=onDeleteSelectedSprintsUserStories(sprintWrapper)>delete U.S</button>
+                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onCloseSelectedSprintsUserStories()>Close U.S</button>
+                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onOpenSelectedSprintsUserStories()>Open U.S</button>
+                                    <button mat-stroked-button class="text-primary" (click)=onOpenCreateUserStoryDialogFromSprint(sprintWrapper.sprint.id)>create U.S</button>
+                                    <button class="text-primary" *ngIf="sprintWrapper.sprint.status === 'CREATED'; else terminate" mat-stroked-button 
                                             (click)="onStartSprint(sprintWrapper)"
                                             [disabled]="sprintWrapper.sprintRangeDates[0] == null || sprintWrapper.sprintRangeDates[1] == null">
                                         Start
                                     </button>
-                                    <ng-template #terminate>
-                                        <button mat-stroked-button (click)="onTerminateSprint(sprintWrapper)">Terminate</button>
+                                    <ng-template  #terminate>
+                                        <button class="text-danger" mat-stroked-button (click)="onTerminateSprint(sprintWrapper)">Terminate</button>
                                     </ng-template>
                                 </div>
                             </div>
@@ -96,6 +96,7 @@
                 <mat-expansion-panel-header> Backlog </mat-expansion-panel-header>
                 <p-table [value]="userStories" [(selection)]="selectedUserStoriesFromBacklog"
                         cdkDropList
+                        styleClass="p-datatable-sm"
                         [cdkDropListData]="userStories"
                         (cdkDropListDropped)="dropInBacklog($event)"
                 >
@@ -104,10 +105,10 @@
                             <div>
                                 <span style="vertical-align:baseline;">Backlog</span>
                             </div>
-                            <div>
-                                <button *ngIf="selectedUserStoriesFromBacklog.length > 0" mat-stroked-button (click)=onDeleteSelectedBacklogUserStories()>delete U.S</button>
-                                <button mat-stroked-button (click)=onOpenCreateUserStoryDialogFromBacklog()>create U.S</button>
-                                <button mat-stroked-button (click)=onOpenCreateSprintDialog()>create sprint</button>
+                            <div class="table-action">
+                                <button *ngIf="selectedUserStoriesFromBacklog.length > 0" class="text-danger" mat-stroked-button (click)=onDeleteSelectedBacklogUserStories()>delete U.S</button>
+                                <button mat-stroked-button class="text-primary" (click)=onOpenCreateUserStoryDialogFromBacklog()>create U.S</button>
+                                <button mat-stroked-button class="text-primary" (click)=onOpenCreateSprintDialog()>create sprint</button>
                             </div>
                         </div>
                     </ng-template>

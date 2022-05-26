@@ -29,7 +29,7 @@ import {BadgeModule} from 'primeng/badge';
 import { MatSelectModule } from '@angular/material/select';
 import { CalendarModule } from 'primeng/calendar';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { TaskComponent } from './task/task.component'
+import { TaskComponent } from './task/task.component';
 import { GuiModule } from '../modules/gui/gui.module';
 import { DialogCreateTaskComponent } from './dialog/dialog-create-task/dialog-create-task.component';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
@@ -37,41 +37,42 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatListModule} from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
 import {MatExpansionModule} from '@angular/material/expansion';
-
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'backlog/:backlog-id', component: BacklogComponent},
   {path: 'task/:project-id', component: TaskComponent}
-]
+];
 
 const PRIME_NG_MODULES = [
   TableModule,
   BadgeModule,
   CalendarModule,
   OverlayPanelModule
-]
+];
 
 const PM_MODULE = [
   GuiModule
-]
+];
 
 const MAT_MODULES = [
-    MatTableModule,
-    MatFormFieldModule,
-    MatDialogModule,
-    MatInputModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
-    MatTabsModule,
-    MatSelectModule,
-    MatButtonToggleModule,
-    DragDropModule,
-    MatListModule,
-    MatCardModule,
-    MatExpansionModule
-]
+  MatTableModule,
+  MatFormFieldModule,
+  MatDialogModule,
+  MatInputModule,
+  MatButtonModule,
+  MatMenuModule,
+  MatIconModule,
+  MatTabsModule,
+  MatSelectModule,
+  MatButtonToggleModule,
+  DragDropModule,
+  MatListModule,
+  MatCardModule,
+  MatExpansionModule,
+  MatTooltipModule
+];
 
 @NgModule({
   declarations: [
@@ -93,10 +94,10 @@ const MAT_MODULES = [
     [...MAT_MODULES],
     [...PRIME_NG_MODULES],
     TranslateModule.forChild({
-            loader: {provide: TranslateLoader, useFactory: HttpLoaderFactory,
-                deps: [HttpClient]
-            }
-        }),
+      loader: {provide: TranslateLoader, useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     RouterModule.forChild(routes)
   ],
   providers: [

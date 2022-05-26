@@ -5,6 +5,7 @@ import { DialogInfosComponent } from './dialog-infos/dialog-infos.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { TextLengthPipe } from './pipes/text-length.pipe';
 
 
 
@@ -13,6 +14,7 @@ import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.componen
     TableComponent,
     DialogInfosComponent,
     DialogConfirmComponent,
+    TextLengthPipe,
   ],
   imports: [
     MatDialogModule,
@@ -20,7 +22,9 @@ import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.componen
     CommonModule
   ],
   exports: [
-    DialogInfosComponent
+    DialogInfosComponent,
+    DialogConfirmComponent,
+    TextLengthPipe
   ]
 
 })

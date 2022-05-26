@@ -33,7 +33,7 @@ export class TaskComponent implements OnInit {
               private projectApiService: ProjectApiService,
               private messageService: MessageService) {
     this.selectedView = 0;
-    this.selectedSprint = 0.
+    this.selectedSprint = 0;
     this.projectId = 0;
     this.activeSprintId = 0;
 
@@ -58,7 +58,7 @@ export class TaskComponent implements OnInit {
   ngOnInit(): void {
     this.projectApiService.getProjectSprints(this.projectId).subscribe(sprints => {
       if (sprints != null && sprints.length > 0) {
-        this.projectSprints = sprints;
+        this.projectSprints = sprints.filter(sprint => sprint.status !== PMConstants.SPRINT_STATUS_CLOSED);
         this.selectedSprint = sprints.find(sprint => sprint.status === PMConstants.SPRINT_STATUS_STARTED)?.id ?? -1;
         if (this.selectedSprint === -1) {
           this.selectedSprint = sprints[0].id;

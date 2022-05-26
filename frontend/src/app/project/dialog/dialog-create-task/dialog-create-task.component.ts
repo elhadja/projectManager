@@ -31,7 +31,7 @@ export class DialogCreateTaskComponent implements OnInit {
             private readonly messageService: MessageService,
             private readonly dialogRef: MatDialogRef<DialogCreateTaskComponent>) {
     this.taskFormGroup = fb.group({
-      'description': fb.control('', [Validators.required]),
+      'description': fb.control('', [Validators.required, Validators.maxLength(255)]),
       'definitionOfDone': fb.array([fb.control('')]),
       'duration': fb.control(null),
       'user': fb.control(null),

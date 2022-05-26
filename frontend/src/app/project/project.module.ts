@@ -38,6 +38,7 @@ import {MatListModule} from '@angular/material/list';
 import {MatCardModule} from '@angular/material/card';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import { PMSharedModule } from '../modules/shared/shared.module';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -90,6 +91,7 @@ const MAT_MODULES = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    PMSharedModule,
     [...PM_MODULE],
     [...MAT_MODULES],
     [...PRIME_NG_MODULES],

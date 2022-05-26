@@ -5,7 +5,7 @@
             <form [formGroup]="taskFormGroup" (ngSubmit)="onSubmit()">
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label>Description</mat-label>
-                    <textarea type="text" matInput formControlName="description" rows="10" cols="200"></textarea>
+                    <textarea type="text" matInput formControlName="description" maxlength="255" rows="7" cols="200"></textarea>
                 </mat-form-field >
                 <div class="d-flex inline-form">
                     <mat-form-field appearance="fill">

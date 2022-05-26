@@ -20,7 +20,7 @@
                         {{ sprintWrapper.sprint.name }}
                     </mat-expansion-panel-header>
                     <p-table [value]="sprintWrapper.sprint.userStories" 
-                            [(selection)]="selectedUserStoriesFromSprint"
+                            [(selection)]="sprintWrapper.selectedUserStoriesFromSprint"
                             responsiveLayout="scroll"
                             styleClass="p-datatable-striped p-datatable-sm"
                             cdkDropList
@@ -39,9 +39,9 @@
                                     <p-badge matTooltip="todo" severity="danger" styleClass="p-mr-2" [value]="sprintWrapper.totalOpenedUserStoriesStoryPoints"></p-badge>
                                 </div>
                                 <div class="table-action">
-                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" class="text-danger" mat-stroked-button (click)=onDeleteSelectedSprintsUserStories(sprintWrapper)>delete U.S</button>
-                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onCloseSelectedSprintsUserStories(sprintWrapper)>Close U.S</button>
-                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onOpenSelectedSprintsUserStories(sprintWrapper)>Open U.S</button>
+                                    <button *ngIf="sprintWrapper.selectedUserStoriesFromSprint.length > 0" class="text-danger" mat-stroked-button (click)=onDeleteSelectedSprintsUserStories(sprintWrapper)>delete U.S</button>
+                                    <button *ngIf="sprintWrapper.selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onCloseSelectedSprintsUserStories(sprintWrapper)>Close U.S</button>
+                                    <button *ngIf="sprintWrapper.selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onOpenSelectedSprintsUserStories(sprintWrapper)>Open U.S</button>
                                     <button mat-stroked-button class="text-primary" (click)=onOpenCreateUserStoryDialogFromSprint(sprintWrapper.sprint.id)>create U.S</button>
                                     <button class="text-primary" *ngIf="sprintWrapper.sprint.status === 'CREATED'; else terminate" mat-stroked-button 
                                             (click)="onStartSprint(sprintWrapper)"

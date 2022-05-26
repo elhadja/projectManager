@@ -15,6 +15,7 @@ import { BacklogService } from '../services/backlog.service';
 
 interface SprintWrapper {
   sprint: GetSprintsInputDTO,
+  selectedUserStoriesFromSprint: GetUserStoriesInputDTO[];
   totalStoryPoints: string,
   totalClosedUserStoriesStoryPoints: string,
   totalOpenedUserStoriesStoryPoints: string
@@ -31,7 +32,6 @@ export class BacklogComponent implements OnInit {
   public readonly projectId: number;
   public backlogTotalStoryPoints: string;
   public sprintWrappers: SprintWrapper[];
-  public selectedUserStoriesFromSprint: GetUserStoriesInputDTO[];
   public selectedUserStoriesFromBacklog: GetUserStoriesInputDTO[];
 
   constructor(private materialDialogservice: MatDialog,
@@ -52,7 +52,6 @@ export class BacklogComponent implements OnInit {
     this.backlogTotalStoryPoints = '0';
     this.userStories = [];
     this.sprintWrappers = [];
-    this.selectedUserStoriesFromSprint = [];
     this.selectedUserStoriesFromBacklog = [];
   }
 
@@ -62,6 +61,7 @@ export class BacklogComponent implements OnInit {
       sprints.forEach(sprint => {
         this.sprintWrappers.push({
           sprint: sprint,
+          selectedUserStoriesFromSprint: [],
           totalStoryPoints: `${this.getTotalStoryPoints(sprint.userStories)}`,
           totalClosedUserStoriesStoryPoints: this.getClosedUserStorytTotalStoryPoints(sprint.userStories),
           totalOpenedUserStoriesStoryPoints: this.getOpenedUserStorytTotalStoryPoints(sprint.userStories),
@@ -150,6 +150,7 @@ export class BacklogComponent implements OnInit {
           result.userStories = [];
           this.sprintWrappers = [...this.sprintWrappers, {
             sprint: result,
+            selectedUserStoriesFromSprint: [],
             totalClosedUserStoriesStoryPoints: '0',
             totalOpenedUserStoriesStoryPoints: '0',
             totalStoryPoints: '0',
@@ -192,12 +193,12 @@ export class BacklogComponent implements OnInit {
   }
 
   public onDeleteSelectedSprintsUserStories(sprintWrapper: SprintWrapper): void {
-    this.selectedUserStoriesFromSprint.forEach(us => {
+    sprintWrapper.selectedUserStoriesFromSprint.forEach(us => {
       this.projectApiService.deleteUserStory(this.projectId, us.id).subscribe(() => {
         sprintWrapper.sprint.userStories = sprintWrapper.sprint.userStories.filter((usToCheck: GetUserStoriesInputDTO) => usToCheck.id !== us.id);
-        this.selectedUserStoriesFromSprint = this.selectedUserStoriesFromSprint.filter(usToCheck => usToCheck.id !== us.id);
+        sprintWrapper.selectedUserStoriesFromSprint = sprintWrapper.selectedUserStoriesFromSprint.filter(usToCheck => usToCheck.id !== us.id);
 
-        if (this.selectedUserStoriesFromSprint.length === 0) {
+        if (sprintWrapper.selectedUserStoriesFromSprint.length === 0) {
           this.messageService.showSuccessMessage('All selected user stories are deleted from sprint');
         }
       });
@@ -227,9 +228,9 @@ export class BacklogComponent implements OnInit {
   }
 
   public onCloseSelectedSprintsUserStories(sprintWrapper: SprintWrapper): void {
-    this.selectedUserStoriesFromSprint.forEach(selectedUs => {
+    sprintWrapper.selectedUserStoriesFromSprint.forEach(selectedUs => {
       this.projectApiService.closeUserStories(this.projectId, selectedUs.id).subscribe(() => {
-        this.selectedUserStoriesFromSprint = this.selectedUserStoriesFromSprint.filter(us => us.id !== selectedUs.id);
+        sprintWrapper.selectedUserStoriesFromSprint = sprintWrapper.selectedUserStoriesFromSprint.filter(us => us.id !== selectedUs.id);
         selectedUs.status = PMConstants.USER_STORY_STATUS_CLOSED;
         this.actualizeStorypoints(sprintWrapper);
         this.sprintWrappers = [...this.sprintWrappers];
@@ -238,9 +239,9 @@ export class BacklogComponent implements OnInit {
   }
 
   public onOpenSelectedSprintsUserStories(sprintWrapper :SprintWrapper): void {
-    this.selectedUserStoriesFromSprint.forEach(selectedUs => {
+    sprintWrapper.selectedUserStoriesFromSprint.forEach(selectedUs => {
       this.projectApiService.openUserStories(this.projectId, selectedUs.id).subscribe(() => {
-        this.selectedUserStoriesFromSprint = this.selectedUserStoriesFromSprint.filter(us => us.id !== selectedUs.id);
+        sprintWrapper.selectedUserStoriesFromSprint = sprintWrapper.selectedUserStoriesFromSprint.filter(us => us.id !== selectedUs.id);
         selectedUs.status = PMConstants.USER_STORY_STATUS_OPENED;
         this.actualizeStorypoints(sprintWrapper);
         this.sprintWrappers = [...this.sprintWrappers];

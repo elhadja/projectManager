@@ -1,9 +1,9 @@
 <div class="container-fluid">
     <div class="row my-3">
         <div class="col d-flex justify-content-center">
-            <mat-button-toggle-group [(ngModel)]="selectedView">
-                <mat-button-toggle value="0">By Sprint</mat-button-toggle>
-                <mat-button-toggle value="1">Kanban</mat-button-toggle>
+            <mat-button-toggle-group [value]="0" [(ngModel)]="selectedView">
+                <mat-button-toggle [value]="0">By Sprint</mat-button-toggle>
+                <mat-button-toggle [value]="1">Kanban</mat-button-toggle>
             </mat-button-toggle-group>
         </div>
     </div>
@@ -22,11 +22,15 @@
                     </mat-option>
                 </mat-select>
             </mat-form-field >
-             <p-table [value]="tasksToDisplay" [(selection)]="selectedTasks">
+             <p-table [value]="tasksToDisplay" 
+                                [(selection)]="selectedTasks" 
+                               styleClass="p-datatable-sm">
                 <ng-template pTemplate="caption">
-                    <div class="d-flex flex-row justify-content-right">
-                       <div>
-                            <pm-button [label]="'add Task'" (click)="onCreateTask()"></pm-button>
+                    
+                    <div class="d-flex flex-row justify-content-between">
+                        <h3>Sprint's tasks</h3>
+                       <div class="table-action">
+                            <pm-button class="text-primary" [label]="'add Task'" (click)="onCreateTask()"></pm-button>
                             <button *ngIf="selectedTasks.length > 0" mat-stroked-button class="text-danger" (click)=onDeleteSelectedTasks()>delete tasks</button>
                         </div>
                     </div>
@@ -40,7 +44,6 @@
                         <col style="width:30%">
                         <col style="width:5%">
                         <col style="width:15%">
-                        <col style="width:25%">
                         <col style="width:5%">
                         <col style="width:5%">
                     </colgroup>
@@ -51,14 +54,13 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="id">ID</th>
+                        <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
                         <th>US IDs</th>
                         <th>Description</th>
-                        <th pSortableColumn="duration">Duration</th>
+                        <th pSortableColumn="duration">Duration <p-sortIcon field="duration"></p-sortIcon></th>
                         <th>dependencies</th>
-                        <th>dod</th>
-                        <th pSortableColumn="userPseudo">user</th>
-                        <th pSortableColumn="status">status</th>
+                        <th pSortableColumn="userPseudo">user <p-sortIcon field="userPseudo"></p-sortIcon></th>
+                        <th pSortableColumn="status">status <p-sortIcon field="status"></p-sortIcon></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
@@ -72,16 +74,11 @@
                                 {{ usId }}
                             </ng-container>
                         </td>
-                        <td>{{row.description }}</td>
+                        <td [matTooltipDisabled]="row.description.length < 100"  [matTooltip]="row.description">{{row.description | textLength: 100 }}</td>
                         <td>{{ row.duration }}</td>
                         <td>
                             <ng-container *ngFor="let dependency of row.dependencies">
                                 {{ dependency.id }} &emsp;
-                            </ng-container>
-                        </td>
-                        <td>
-                            <ng-container *ngFor="let dod of dodAsArray(row.definitionOfDone)">
-                                {{ dod }} <br>
                             </ng-container>
                         </td>
                         <td>{{ row.userPseudo }}</td>
@@ -90,8 +87,8 @@
                 </ng-template>
                 <ng-template pTemplate="emptymessage" let-columns>
                     <tr>
-                        <td colspan = "3">
-                            No records found
+                        <td class="text-center" colspan = "8">
+                            No tasks in selected sprint
                         </td>
                     </tr>
                 </ng-template>
@@ -103,7 +100,7 @@
     <div class="row" *ngIf="selectedView == 1">
         <ng-container *ngIf="activeSprintId > 0; else noActiveSprint">
             <div class="col-4">
-                <mat-card>
+                <mat-card style="background-color: #f8f9fa;">
                     <mat-card-title>TODO</mat-card-title>
                     <mat-card-content>
                         <mat-list 
@@ -127,7 +124,7 @@
                 </mat-card>
         </div>
             <div class="col-4">
-                <mat-card>
+                <mat-card style="background-color: #f8f9fa;">
                     <mat-card-title>DOING</mat-card-title>
                     <mat-card-content>
                         <mat-list 
@@ -152,7 +149,7 @@
                 </mat-card>
             </div>
             <div class="col-4">
-                <mat-card>
+                <mat-card style="background-color: #f8f9fa;">
                     <mat-card-title>DONE</mat-card-title>
                     <mat-card-content>
                         <mat-list 

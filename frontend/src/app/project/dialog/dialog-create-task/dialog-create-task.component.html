@@ -5,18 +5,18 @@
             <form [formGroup]="taskFormGroup" (ngSubmit)="onSubmit()">
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label>Description</mat-label>
-                    <textarea type="text" matInput formControlName="description" rows="10" cols="200"></textarea>
+                    <textarea type="text" matInput formControlName="description" maxlength="255" rows="7" cols="200" required></textarea>
                 </mat-form-field >
                 <div class="d-flex inline-form">
                     <mat-form-field appearance="fill">
                         <mat-label>Choose a sprint</mat-label>
-                        <mat-select formControlName="sprint" (selectionChange)="onSprintSelected()">
+                        <mat-select formControlName="sprint" (selectionChange)="onSprintSelected()" required>
                             <mat-option *ngFor="let sprint of sprints" [value]="sprint.id">{{sprint.name}}</mat-option>
                         </mat-select>
                     </mat-form-field >
                     <mat-form-field appearance="fill">
                         <mat-label>User Story</mat-label>
-                        <mat-select (selectionChange)="onUserStorySelected()" formControlName="selectedUserStories" multiple>
+                        <mat-select (selectionChange)="onUserStorySelected()" formControlName="selectedUserStories" multiple required>
                             <mat-option *ngFor="let us of userStories" [value]="us.id">{{us.summary}}</mat-option>
                         </mat-select>
                     </mat-form-field >
@@ -50,10 +50,10 @@
                     <button type="button" mat-stroked-button (click)="removeDefinitionOfDone()">-</button>
                 </div>
 
-                <div class="mt-2">
-                    <button *ngIf="updateMode; else createButton" type="submit" mat-stroked-button [disabled]="taskFormGroup.invalid">update</button>
+                <div mat-dialog-actions class="mt-2">
+                    <button *ngIf="updateMode; else createButton" type="submit" class="text-primary" mat-stroked-button [disabled]="taskFormGroup.invalid">update</button>
                     <ng-template #createButton>
-                        <button type="submit" mat-stroked-button class="text-success" [disabled]="taskFormGroup.invalid">create</button>
+                        <button type="submit" mat-stroked-button [class.text-primary]="taskFormGroup.valid" [disabled]="taskFormGroup.invalid">create</button>
                     </ng-template>
                     <button type="button" class="text-danger" (click)="onCancel()" mat-stroked-button>cancel</button>
                 </div>

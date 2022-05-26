@@ -14,7 +14,7 @@
                     </mat-error>
                 </mat-form-field >
 
-                <button mat-stroked-button type="submit" class="text-primary mr-1" [disabled]="sprintForm.invalid">validate</button>
+                <button mat-stroked-button type="submit" [class.text-primary]="sprintForm.valid" class="mr-1" [disabled]="sprintForm.invalid">validate</button>
                 <button mat-stroked-button mat-dialog-close type="button" class="text-danger" >cancel</button>
             </form>
         </div>

@@ -10,10 +10,11 @@
         <div class="col" style="max-height: 750px; overflow-y: auto;">
            <!-- sprints -->
             <ng-container *ngFor="let sprintWrapper of sprintWrappers">
+                <!-- TODO Replace STRING CONSTANTS (CLOSED, OPENED) BY VARIABLES -->
                 <mat-expansion-panel 
                     *ngIf="sprintWrapper.sprint.status !== 'CLOSED'"
                     class="my-1" 
-
+                    [expanded]="sprintWrapper.sprint.status === 'STARTED'"
                 >
                     <mat-expansion-panel-header>
                         {{ sprintWrapper.sprint.name }}
@@ -80,8 +81,8 @@
                                 <td>
                                     <p-tableCheckbox [value]="row"></p-tableCheckbox>
                                 </td>
-                                <td>{{row.id}}</td>
-                                <td (click)="onOpenUserStory(row)">{{row.summary}}</td>
+                                <td class="link" (click)="onOpenUserStory(row)">{{row.id}}</td>
+                                <td>{{row.summary}}</td>
                                 <td>{{row.storyPoint}}</td>
                                 <td>{{row.importance}}</td>
                                 <td>
@@ -146,8 +147,8 @@
                             <td>
                                 <p-tableCheckbox [value]="row"></p-tableCheckbox>
                             </td>
-                            <td>{{row.id}}</td>
-                            <td (click)="onOpenUserStory(row)">{{row.summary}}</td>
+                            <td class="link" (click)="onOpenUserStory(row)">{{row.id}}</td>
+                            <td>{{row.summary}}</td>
                             <td>{{row.storyPoint}}</td>
                             <td>{{row.importance}}</td>
                         </tr>

@@ -1,7 +1,7 @@
 <div class="ng-container">
     <div class="row">
         <div class="col">
-            <h3 class="text-center">Create/Update User Story</h3>
+            <h2 mat-dialog-title class="text-center">User story</h2>
             <form [formGroup]="userStoryForm" (ngSubmit)="onValidate()">
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label>Summary</mat-label>
@@ -29,7 +29,7 @@
                         </mat-select>
                     </mat-form-field >
                 </div>
-               <button mat-stroked-button class="mr-2 text-success" type="submit"
+               <button mat-stroked-button class="mr-2 text-primary" type="submit"
                        [disabled]="userStoryForm.invalid">{{ isUpdateMode ? 'Update' : 'Create' }}
                 </button>
                 <button mat-stroked-button type="button" class="text-danger" (click)="onCancel()">annuler</button>

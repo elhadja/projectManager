@@ -83,7 +83,7 @@
                                     <p-tableCheckbox [value]="row"></p-tableCheckbox>
                                 </td>
                                 <td class="link" (click)="onOpenUserStory(row)">{{row.id}}</td>
-                                <td>{{row.summary}}</td>
+                                <td>{{row.summary | textLength:80}}</td>
                                 <td>{{row.storyPoint}}</td>
                                 <td>{{row.importance}}</td>
                                 <td>
@@ -149,7 +149,7 @@
                                 <p-tableCheckbox [value]="row"></p-tableCheckbox>
                             </td>
                             <td class="link" (click)="onOpenUserStory(row)">{{row.id}}</td>
-                            <td>{{row.summary}}</td>
+                            <td>{{row.summary | textLength:80}}</td>
                             <td>{{row.storyPoint}}</td>
                             <td>{{row.importance}}</td>
                         </tr>

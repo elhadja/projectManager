@@ -5,7 +5,7 @@
             <form [formGroup]="userStoryForm" (ngSubmit)="onValidate()">
                 <mat-form-field appearance="fill" class="w-100">
                     <mat-label>Summary</mat-label>
-                    <input type="text" matInput formControlName="summary" required minlength="2">
+                    <textarea type="text" matInput formControlName="summary" rows="5" required minlength="2" maxlength="200"></textarea>
                     <mat-error *ngIf="summary != null && summary.hasError('required')">
                         this field is <strong>required</strong>
                     </mat-error>
@@ -29,7 +29,8 @@
                         </mat-select>
                     </mat-form-field >
                 </div>
-               <button mat-stroked-button class="mr-2 text-primary" type="submit"
+               <button mat-stroked-button class="mr-2" type="submit"
+                        [class.text-primary]="userStoryForm.valid"
                        [disabled]="userStoryForm.invalid">{{ isUpdateMode ? 'Update' : 'Create' }}
                 </button>
                 <button mat-stroked-button type="button" class="text-danger" (click)="onCancel()">annuler</button>

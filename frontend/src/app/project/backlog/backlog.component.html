@@ -34,13 +34,13 @@
                                                 dataFormat="yyyy-mm-dd">
                                     </p-calendar>
                                     <p-badge matTooltip="total story points" severity="info" styleClass="p-mr-2" [value]="sprintWrapper.totalStoryPoints"></p-badge>
-                                    <p-badge matTooltip="todo" class="mx-1" severity="success" styleClass="p-mr-2" [value]="sprintWrapper.totalClosedUserStoriesStoryPoints"></p-badge>
-                                    <p-badge matTooltip="done" severity="danger" styleClass="p-mr-2" [value]="sprintWrapper.totalOpenedUserStoriesStoryPoints"></p-badge>
+                                    <p-badge matTooltip="done" class="mx-1" severity="success" styleClass="p-mr-2" [value]="sprintWrapper.totalClosedUserStoriesStoryPoints"></p-badge>
+                                    <p-badge matTooltip="todo" severity="danger" styleClass="p-mr-2" [value]="sprintWrapper.totalOpenedUserStoriesStoryPoints"></p-badge>
                                 </div>
                                 <div class="table-action">
                                     <button *ngIf="selectedUserStoriesFromSprint.length > 0" class="text-danger" mat-stroked-button (click)=onDeleteSelectedSprintsUserStories(sprintWrapper)>delete U.S</button>
-                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onCloseSelectedSprintsUserStories()>Close U.S</button>
-                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onOpenSelectedSprintsUserStories()>Open U.S</button>
+                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onCloseSelectedSprintsUserStories(sprintWrapper)>Close U.S</button>
+                                    <button *ngIf="selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onOpenSelectedSprintsUserStories(sprintWrapper)>Open U.S</button>
                                     <button mat-stroked-button class="text-primary" (click)=onOpenCreateUserStoryDialogFromSprint(sprintWrapper.sprint.id)>create U.S</button>
                                     <button class="text-primary" *ngIf="sprintWrapper.sprint.status === 'CREATED'; else terminate" mat-stroked-button 
                                             (click)="onStartSprint(sprintWrapper)"
@@ -84,8 +84,15 @@
                                 <td (click)="onOpenUserStory(row)">{{row.summary}}</td>
                                 <td>{{row.storyPoint}}</td>
                                 <td>{{row.importance}}</td>
-                                <td>{{row.status}}</td>
-                            </tr>
+                                <td>
+                                    <ng-container  *ngIf="row.status === 'OPENED'; else closed">
+                                        <p-badge matTooltip="opened" [matTooltipPosition]="'right'" severity="danger" styleClass="p-mr-2"></p-badge>
+                                    </ng-container>
+                                    <ng-template #closed>
+                                        <p-badge matTooltip="closed" [matTooltipPosition]="'right'" severity="success" styleClass="p-mr-2"></p-badge>
+                                    </ng-template>
+                                </td>
+                           </tr>
                         </ng-template>
                     </p-table>
     

@@ -7,6 +7,7 @@ import { PMConstants } from 'src/app/common/PMConstants';
 import { GetSprintsInputDTO } from 'src/app/dto/getSprint.input.dto';
 import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
 import { DialogConfirmComponent } from 'src/app/modules/shared/dialog-confirm/dialog-confirm.component';
+import { TypeScriptUtil } from 'src/app/modules/shared/typescript.util';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
 import { MessageService } from 'src/app/services/message.service';
 import { DialogCreateSprintComponent } from '../dialog/dialog-create-sprint/dialog-create-sprint.component';
@@ -62,9 +63,9 @@ export class BacklogComponent implements OnInit {
       sprints.forEach(sprint => {
         this.sprintWrappers.push({
           sprint: sprint,
+          totalStoryPoints: `${this.getTotalStoryPoints(sprint.userStories)}`,
           totalClosedUserStoriesStoryPoints: this.getClosedUserStorytTotalStoryPoints(sprint.userStories),
           totalOpenedUserStoriesStoryPoints: this.getOpenedUserStorytTotalStoryPoints(sprint.userStories),
-          totalStoryPoints: `${this.getTotalStoryPoints(sprint.userStories)}`,
           sprintRangeDates: [sprint.startDate !== null ? new Date(Date.parse(sprint.startDate)): new Date,
             sprint.endDate !== null ? new Date(Date.parse(sprint.endDate)) : new Date]
         });
@@ -95,17 +96,12 @@ export class BacklogComponent implements OnInit {
     return totalStoryPoint;
   }
 
-  // TODO put this mehtod on global service
-  public toString(num: number): string {
-    return `${num}`;
-  }
-
   public getClosedUserStorytTotalStoryPoints(userStories: GetUserStoriesInputDTO[]): string {
-    return `${this.getTotalStoryPoints(userStories.filter(us => us.status === 'CLOSED'))}`;
+    return `${this.getTotalStoryPoints(userStories.filter(us => us.status === PMConstants.USER_STORY_STATUS_CLOSED))}`;
   }
 
   public getOpenedUserStorytTotalStoryPoints(userStories: GetUserStoriesInputDTO[]): string {
-    return `${this.getTotalStoryPoints(userStories.filter(us => us.status === 'OPEN'))}`;
+    return `${this.getTotalStoryPoints(userStories.filter(us => us.status === PMConstants.USER_STORY_STATUS_OPENED))}`;
   }
 
 
@@ -135,7 +131,7 @@ export class BacklogComponent implements OnInit {
           const sprintWrapper = this.sprintWrappers.find(sprintWrapper => sprintWrapper.sprint.id === sprintId);
           if (sprintWrapper != null) {
             sprintWrapper.sprint.userStories = [...sprintWrapper.sprint.userStories, result];
-            sprintWrapper.totalStoryPoints =  this.toString(this.getTotalStoryPoints(sprintWrapper.sprint.userStories));
+            sprintWrapper.totalStoryPoints =  TypeScriptUtil.toString(this.getTotalStoryPoints(sprintWrapper.sprint.userStories));
             sprintWrapper.totalClosedUserStoriesStoryPoints = this.getClosedUserStorytTotalStoryPoints(sprintWrapper.sprint.userStories);
             sprintWrapper.totalOpenedUserStoriesStoryPoints = this.getOpenedUserStorytTotalStoryPoints(sprintWrapper.sprint.userStories);
           }
@@ -231,21 +227,23 @@ export class BacklogComponent implements OnInit {
     });
   }
 
-  public onCloseSelectedSprintsUserStories(): void {
+  public onCloseSelectedSprintsUserStories(sprintWrapper: SprintWrapper): void {
     this.selectedUserStoriesFromSprint.forEach(selectedUs => {
       this.projectApiService.closeUserStories(this.projectId, selectedUs.id).subscribe(() => {
         this.selectedUserStoriesFromSprint = this.selectedUserStoriesFromSprint.filter(us => us.id !== selectedUs.id);
         selectedUs.status = PMConstants.USER_STORY_STATUS_CLOSED;
+        this.actualizeStorypoints(sprintWrapper);
         this.sprintWrappers = [...this.sprintWrappers];
       });
     });
   }
 
-  public onOpenSelectedSprintsUserStories(): void {
+  public onOpenSelectedSprintsUserStories(sprintWrapper :SprintWrapper): void {
     this.selectedUserStoriesFromSprint.forEach(selectedUs => {
       this.projectApiService.openUserStories(this.projectId, selectedUs.id).subscribe(() => {
         this.selectedUserStoriesFromSprint = this.selectedUserStoriesFromSprint.filter(us => us.id !== selectedUs.id);
         selectedUs.status = PMConstants.USER_STORY_STATUS_OPENED;
+        this.actualizeStorypoints(sprintWrapper);
         this.sprintWrappers = [...this.sprintWrappers];
       });
     });
@@ -256,11 +254,23 @@ export class BacklogComponent implements OnInit {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       this.projectApiService.moveUserStoryFromSprintToBacklog(this.projectId, event.previousContainer.data[event.previousIndex].id).subscribe();
+
+      const sourceSprintWrapper = this.sprintWrappers.find(sprintWrapper => {
+        return sprintWrapper.sprint.userStories.some(us => us.id === event.previousContainer.data[event.previousIndex].id);
+      });
+
       transferArrayItem(event.previousContainer.data,
         event.container.data,
         event.previousIndex,
         event.currentIndex);
+
+      if (sourceSprintWrapper != null) {
+        this.actualizeStorypoints(sourceSprintWrapper);
+      }
+      this.backlogTotalStoryPoints = `${this.getTotalStoryPoints(this.userStories)}`;
     }
+
+    this.sprintWrappers = [...this.sprintWrappers];
     this.userStories = [...this.userStories];
   }
 
@@ -268,20 +278,33 @@ export class BacklogComponent implements OnInit {
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
+      const sourceSprintWrapper = this.sprintWrappers.find(sprintWrapper => {
+        return sprintWrapper.sprint.userStories.some(us => us.id === event.previousContainer.data[event.previousIndex].id);
+      });
       transferArrayItem(event.previousContainer.data,
         event.container.data,
         event.previousIndex,
         event.currentIndex);
-      const targetSprintId = this.sprintWrappers.find(sprintWrapper => {
+      const targetSprintWrapper = this.sprintWrappers.find(sprintWrapper => {
         return sprintWrapper.sprint.userStories.some(us => us.id === event.container.data[event.currentIndex].id);
-      })?.sprint.id;
-      if (targetSprintId != null) {
-        this.projectApiService.moveUserStoryToSprint(this.projectId, event.container.data[event.currentIndex].id, targetSprintId).subscribe();
+      });
+      if (targetSprintWrapper != null) {
+        this.projectApiService.moveUserStoryToSprint(this.projectId, event.container.data[event.currentIndex].id, targetSprintWrapper.sprint.id).subscribe();
+        this.actualizeStorypoints(targetSprintWrapper);
+      } 
+      if (sourceSprintWrapper != null) {
+        this.actualizeStorypoints(sourceSprintWrapper);
       } else {
-        // should not happen
+        this.backlogTotalStoryPoints = `${this.getTotalStoryPoints(this.userStories)}`;
       }
     }
     this.sprintWrappers = [...this.sprintWrappers];
+  }
+
+  private actualizeStorypoints(sprintWrapper: SprintWrapper): void {
+    sprintWrapper.totalStoryPoints = `${this.getTotalStoryPoints(sprintWrapper.sprint.userStories)}`;
+    sprintWrapper.totalClosedUserStoriesStoryPoints = `${this.getClosedUserStorytTotalStoryPoints(sprintWrapper.sprint.userStories)}`;
+    sprintWrapper.totalOpenedUserStoriesStoryPoints = `${this.getOpenedUserStorytTotalStoryPoints(sprintWrapper.sprint.userStories)}`;
   }
 
 }

@@ -33,6 +33,7 @@ export class BacklogComponent implements OnInit {
   public backlogTotalStoryPoints: string;
   public sprintWrappers: SprintWrapper[];
   public selectedUserStoriesFromBacklog: GetUserStoriesInputDTO[];
+  public isActiveSprint: boolean;
 
   constructor(private materialDialogservice: MatDialog,
               private backlogService: BacklogService,
@@ -49,6 +50,7 @@ export class BacklogComponent implements OnInit {
       this.projectId = id != null ? +id : this.projectId;
     }
 
+    this.isActiveSprint = false;
     this.backlogTotalStoryPoints = '0';
     this.userStories = [];
     this.sprintWrappers = [];
@@ -59,6 +61,9 @@ export class BacklogComponent implements OnInit {
     this.initializeBacklog();
     this.projectApiService.getProjectSprints(this.projectId).subscribe((sprints) => {
       sprints.forEach(sprint => {
+        if (sprint.status === PMConstants.SPRINT_STATUS_STARTED) {
+          this.isActiveSprint = true;
+        }
         this.sprintWrappers.push({
           sprint: sprint,
           selectedUserStoriesFromSprint: [],
@@ -220,6 +225,7 @@ export class BacklogComponent implements OnInit {
       if (accept) {
         this.projectApiService.terminateSprint(this.projectId, sprintWrapper.sprint.id).subscribe(() => {
           sprintWrapper.sprint.status = 'CLOSED';
+          this.isActiveSprint = false;
           this.sprintWrappers = [...this.sprintWrappers];
           this.initializeBacklog();
         });
@@ -306,5 +312,12 @@ export class BacklogComponent implements OnInit {
     sprintWrapper.totalClosedUserStoriesStoryPoints = `${this.getClosedUserStorytTotalStoryPoints(sprintWrapper.sprint.userStories)}`;
     sprintWrapper.totalOpenedUserStoriesStoryPoints = `${this.getOpenedUserStorytTotalStoryPoints(sprintWrapper.sprint.userStories)}`;
   }
+  
+  get SPRINT_STATUS_STARTED(): string {
+    return PMConstants.SPRINT_STATUS_STARTED;
+  }
 
+  get now(): Date {
+    return new Date();
+  }
 }

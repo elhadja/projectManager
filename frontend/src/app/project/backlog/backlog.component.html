@@ -32,6 +32,7 @@
                                 <div class="flex-grow-1">
                                     <p-calendar [(ngModel)]="sprintWrapper.sprintRangeDates"
                                                 [showTime]="true" [showButtonBar]="true" selectionMode="range" 
+                                                [minDate]="now"
                                                 dataFormat="yyyy-mm-dd">
                                     </p-calendar>
                                     <p-badge matTooltip="total story points" severity="info" styleClass="p-mr-2" [value]="sprintWrapper.totalStoryPoints"></p-badge>
@@ -43,9 +44,9 @@
                                     <button *ngIf="sprintWrapper.selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onCloseSelectedSprintsUserStories(sprintWrapper)>Close U.S</button>
                                     <button *ngIf="sprintWrapper.selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onOpenSelectedSprintsUserStories(sprintWrapper)>Open U.S</button>
                                     <button mat-stroked-button class="text-primary" (click)=onOpenCreateUserStoryDialogFromSprint(sprintWrapper.sprint.id)>create U.S</button>
-                                    <button class="text-primary" *ngIf="sprintWrapper.sprint.status === 'CREATED'; else terminate" mat-stroked-button 
+                                    <button [class.text-primary]="!isActiveSprint" *ngIf="sprintWrapper.sprint.status === 'CREATED'; else terminate" mat-stroked-button 
                                             (click)="onStartSprint(sprintWrapper)"
-                                            [disabled]="sprintWrapper.sprintRangeDates[0] == null || sprintWrapper.sprintRangeDates[1] == null">
+                                            [disabled]="isActiveSprint && sprintWrapper.sprint.status !== SPRINT_STATUS_STARTED">
                                         Start
                                     </button>
                                     <ng-template  #terminate>

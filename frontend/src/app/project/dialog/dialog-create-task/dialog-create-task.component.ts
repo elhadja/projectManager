@@ -9,6 +9,7 @@ import { UserDTO } from 'src/app/dto/user.dto';
 import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
 import { MessageService } from 'src/app/services/message.service';
+import { PMConstants } from 'src/app/common/PMConstants';
 
 @Component({
   selector: 'app-dialog-create-task',
@@ -47,18 +48,14 @@ export class DialogCreateTaskComponent implements OnInit {
     this.userStories = [];
     this.sprints = [];
     this.taskDependencies = [];
-   }
+  }
 
   ngOnInit(): void {
-    this.projectApiService.getProjectSprints(this.projectId).subscribe(sprints => {
-      this.sprints = sprints;
-    });
-
     forkJoin({
       projectSprints: this.projectApiService.getProjectSprints(this.projectId),
       projectUsers: this.projectApiService.getProjectUsers(this.projectId)
     }).subscribe(result => {
-      this.sprints = result.projectSprints;
+      this.sprints = result.projectSprints.filter(sprint => sprint.status !== PMConstants.SPRINT_STATUS_CLOSED);
       this.responsables = result.projectUsers;
       if (this.data.task != null) {
         this.initializeForm(this.data.task);
@@ -76,7 +73,7 @@ export class DialogCreateTaskComponent implements OnInit {
 
   private initializeForm(task: GetTaskInputDTO): void {
     this.description?.setValue(task.description);
-    for (let dod of task.definitionOfDone?.split(';') ?? []) {
+    for (const dod of task.definitionOfDone?.split(';') ?? []) {
       this.definitionOfDone.push(new FormControl(dod));
     }
     if (this.definitionOfDone.length > 1) {
@@ -104,7 +101,7 @@ export class DialogCreateTaskComponent implements OnInit {
       definitionOfDone: this.ArrayOfStringToString(this.definitionOfDone.value),
       dependenciesIDs: this.dependencies?.value
     }).subscribe(() => {
-      this.messageService.showSuccessMessage("task created");
+      this.messageService.showSuccessMessage('task created');
       this.closeDialog();
     });
   }
@@ -113,18 +110,18 @@ export class DialogCreateTaskComponent implements OnInit {
     this.projectApiService.updateTask(this.projectId,
                                      this.data.task?.id as number,
                                      { userId: this.user?.value,
-                                      userStoriesIDs: this.selectedUserStories?.value,
-                                      description: this.description?.value,
-                                      duration: this.duration?.value,
-                                      definitionOfDone: this.ArrayOfStringToString(this.definitionOfDone.value),
-                                      dependenciesIDs: this.dependencies?.value }).subscribe(() => {
-      this.messageService.showSuccessMessage("task modified succesfully");
+                                       userStoriesIDs: this.selectedUserStories?.value,
+                                       description: this.description?.value,
+                                       duration: this.duration?.value,
+                                       definitionOfDone: this.ArrayOfStringToString(this.definitionOfDone.value),
+                                       dependenciesIDs: this.dependencies?.value }).subscribe(() => {
+      this.messageService.showSuccessMessage('task modified succesfully');
       this.closeDialog();
     });
   }
 
   private ArrayOfStringToString(arr: string[]): string {
-    let res = "";
+    let res = '';
     arr.forEach(s => res += (s + ';'));
     if (res.length > 0) {
       res = res.substring(0, res.length-1);

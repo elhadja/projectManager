@@ -50,10 +50,10 @@
                     <button type="button" mat-stroked-button (click)="removeDefinitionOfDone()">-</button>
                 </div>
 
-                <div class="mt-2">
-                    <button *ngIf="updateMode; else createButton" type="submit" mat-stroked-button [disabled]="taskFormGroup.invalid">update</button>
+                <div mat-dialog-actions class="mt-2">
+                    <button *ngIf="updateMode; else createButton" type="submit" class="text-primary" mat-stroked-button [disabled]="taskFormGroup.invalid">update</button>
                     <ng-template #createButton>
-                        <button type="submit" mat-stroked-button class="text-success" [disabled]="taskFormGroup.invalid">create</button>
+                        <button type="submit" mat-stroked-button class="text-primary" [disabled]="taskFormGroup.invalid">create</button>
                     </ng-template>
                     <button type="button" class="text-danger" (click)="onCancel()" mat-stroked-button>cancel</button>
                 </div>

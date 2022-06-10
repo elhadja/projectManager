@@ -1,5 +1,8 @@
 package com.elhadjium.PMBackend.controller;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -25,6 +28,7 @@ import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.dto.AddSprintToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.AddTaskInputDTO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
+import com.elhadjium.PMBackend.dto.CustomRevisionEntityDTO;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetSprintOutputDTO;
 import com.elhadjium.PMBackend.dto.GetTaskOutputDTO;
@@ -36,6 +40,7 @@ import com.elhadjium.PMBackend.dto.TaskDepencieOutputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateTaskDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
+import com.elhadjium.PMBackend.entity.CustomRevisionEntity;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.TaskStatus;
@@ -204,6 +209,22 @@ public class ProjectController {
 		List<Sprint> sprints = projectService.getProjectSprints(JavaUtil.parseId(projectId));
 		sprints.forEach(sprint -> {
 			outputList.add(Mapping.mapTo(sprint, GetSprintOutputDTO.class));
+		});
+		outputList.forEach(sprintOutput -> {
+			sprintOutput.getUserStories().forEach(userStoryOutput -> {
+				List<CustomRevisionEntity> activities = projectService.getUserStoryAudit(userStoryOutput.getId());
+				userStoryOutput.setActivities(new ArrayList<>());
+				activities.forEach(activity -> {
+					CustomRevisionEntityDTO activityDTO = new CustomRevisionEntityDTO();
+					activityDTO.setId(activity.getId());
+					activityDTO.setModifiedBy(activity.getModifiedBy());
+					Date date = new Date(activity.getTimestamp());
+					DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
+					activityDTO.setDate(df.format(date));
+					activityDTO.setComment(activity.getComment());
+					userStoryOutput.getActivities().add(activityDTO);
+				});
+			});
 		});
 
 		return outputList;

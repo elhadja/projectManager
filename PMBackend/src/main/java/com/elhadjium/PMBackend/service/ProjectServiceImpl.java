@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.envers.AuditReaderFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,7 @@ import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.Backlog;
+import com.elhadjium.PMBackend.entity.CustomRevisionEntity;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.SprintStatus;
@@ -308,6 +311,8 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	@Transactional
 	public List<Sprint> getProjectSprints(Long projectId) {
+		//AuditReaderFactory.get()
+		List<CustomRevisionEntity> revs = userStoryDAO.getAudit(47L);
 		return projectDao.findById(projectId).get().getSprints();
 	}
 
@@ -461,5 +466,10 @@ public class ProjectServiceImpl implements ProjectService {
 		} else {
 			project.removeUser(user);
 		}
+	}
+
+	@Override
+	public List<CustomRevisionEntity> getUserStoryAudit(Long id) {
+		return userStoryDAO.getAudit(id);
 	}
 }

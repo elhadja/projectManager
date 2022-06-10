@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.elhadjium.PMBackend.entity.CustomRevisionEntity;
 import com.elhadjium.PMBackend.entity.UserStory;
 
-public interface UserStoryDAO extends JpaRepository<UserStory, Long>, UserStoryDAOCustom {
-	List<UserStory> findBySprintId(Long sprintId);
+public interface UserStoryDAOCustom {
+	public List<CustomRevisionEntity> getAudit(Long usId);
 }

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PMConstants } from 'src/app/common/PMConstants';
 import { AddUserStoryOutputDTO } from 'src/app/dto/addUserStoryOutputDTO';
+import { CustomRevisionEntityDTO } from 'src/app/dto/custom-revision-entity.dto';
 import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
 
 interface LabelValue {
@@ -19,18 +20,20 @@ export class DialogCreateUerStoryComponent implements OnInit {
   public userStoryForm: FormGroup;
   public userStoryImportanceValues: LabelValue[];
   public isUpdateMode: boolean;
+  public userStoresActivities: CustomRevisionEntityDTO[];
 
   constructor(private fb: FormBuilder,
              private matDialogRef: MatDialogRef<DialogCreateUerStoryComponent, AddUserStoryOutputDTO>,
              @Inject(MAT_DIALOG_DATA) public dialogData: GetUserStoriesInputDTO) {
     this.userStoryForm = fb.group({
-      "summary": fb.control('', [Validators.required, Validators.maxLength(200)]),
-      "description": fb.control(''),
-      "storyPoint": fb.control(''),
-      "importance": fb.control(null)
+      'summary': fb.control('', [Validators.required, Validators.maxLength(200)]),
+      'description': fb.control(''),
+      'storyPoint': fb.control(''),
+      'importance': fb.control(null)
     });
     this.userStoryImportanceValues = [];
     this.isUpdateMode = dialogData != null;
+    this.userStoresActivities = [];
   }
 
   ngOnInit(): void {
@@ -38,18 +41,65 @@ export class DialogCreateUerStoryComponent implements OnInit {
       {value: PMConstants.USER_STORY_STATUS_IMPORTANCE_HIGHT, label: 'hight'},
       {value: PMConstants.USER_STORY_STATUS_IMPORTANCE_NORMAL, label: 'normal'},
       {value: PMConstants.USER_STORY_STATUS_IMPORTANCE_LOW, label: 'low'}
-    ]
+    ];
 
     if (this.isUpdateMode) {
       this.initializeUserStoryForm();
+      /*
+      this.dialogData.activities = [
+        {
+          id: 1,
+          modifiedBy: 'elhadja007',
+          date: '2022-06-10',
+          comment: 'a fait quelque chose sur cette vue'
+        },
+        {
+          id: 1,
+          modifiedBy: 'elhadja007',
+          date: '2022-06-10',
+          comment: 'a fait quelque chose sur cette vue encore'
+        },
+        {
+          id: 1,
+          modifiedBy: 'elhadja007',
+          date: '2022-06-10',
+          comment: 'a fait quelque chose sur cette vue encore'
+        },
+        {
+          id: 1,
+          modifiedBy: 'elhadja007',
+          date: '2022-06-10',
+          comment: 'a fait quelque chose sur cette vue encore'
+        },
+        {
+          id: 1,
+          modifiedBy: 'elhadja007',
+          date: '2022-06-10',
+          comment: 'a fait quelque chose sur cette vue encore'
+        },
+        {
+          id: 1,
+          modifiedBy: 'elhadja007',
+          date: '2022-06-10',
+          comment: 'a fait quelque chose sur cette vue encore'
+        },
+        {
+          id: 1,
+          modifiedBy: 'elhadja007',
+          date: '2022-06-10',
+          comment: 'a fait quelque chose sur cette vue encore'
+        },
+      ];
+      */
     }
+
   }
 
   private initializeUserStoryForm(): void {
-      this.summary?.setValue(this.dialogData.summary);
-      this.description?.setValue(this.dialogData.description);
-      this.storyPoint?.setValue(this.dialogData.storyPoint);
-      this.importance?.setValue(this.dialogData.importance);
+    this.summary?.setValue(this.dialogData.summary);
+    this.description?.setValue(this.dialogData.description);
+    this.storyPoint?.setValue(this.dialogData.storyPoint);
+    this.importance?.setValue(this.dialogData.importance);
   }
 
   public onValidate(): void {

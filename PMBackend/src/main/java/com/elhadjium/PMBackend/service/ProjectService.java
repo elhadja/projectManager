@@ -7,6 +7,7 @@ import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
+import com.elhadjium.PMBackend.entity.CustomRevisionEntity;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.TaskStatus;
@@ -39,4 +40,5 @@ public interface ProjectService {
 	public List<UserAccount> getProjectUsers(long projectId);
 	public void removeTask(Set<Long> taskIds);
 	public void removeUserFromProject(Long projectId, Long userId);
+	public List<CustomRevisionEntity> getUserStoryAudit(Long id);
 }

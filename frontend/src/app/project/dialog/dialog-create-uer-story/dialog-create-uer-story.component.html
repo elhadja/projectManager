@@ -37,4 +37,20 @@
             </form>
         </div>
     </div>
+    <div class="row my-3" *ngIf="dialogData != null && dialogData.activities != null && dialogData.activities.length > 0">
+        <div class="col">
+            <div class="d-flex justify-content-between">
+                <h2>Activities</h2>
+                <button mat-stroked-button>Hide Activities</button>
+            </div>
+            <div>
+                <mat-list>
+                    <mat-list-item *ngFor="let activity of dialogData.activities">
+                        <h3 matLine> <span style="font-weight: bold;">{{activity.modifiedBy}}</span> {{ activity.comment }} </h3>
+                        <span matLine class="text-sm">{{activity.date}}</span>
+                    </mat-list-item>
+                </mat-list>
+            </div>
+        </div>
+    </div>
 </div>

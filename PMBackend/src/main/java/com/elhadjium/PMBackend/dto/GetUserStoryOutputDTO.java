@@ -13,6 +13,7 @@ public class GetUserStoryOutputDTO {
 	private UserStoryStatus status;
 	private UserStoryImportance importance;
 	private List<GetTaskOutputDTO> tasks;
+	private List<CustomRevisionEntityDTO> activities;
 
 	public Long getId() {
 		return id;
@@ -68,5 +69,13 @@ public class GetUserStoryOutputDTO {
 
 	public void setTasks(List<GetTaskOutputDTO> tasks) {
 		this.tasks = tasks;
+	}
+
+	public List<CustomRevisionEntityDTO> getActivities() {
+		return activities;
+	}
+
+	public void setActivities(List<CustomRevisionEntityDTO> activities) {
+		this.activities = activities;
 	}
 }

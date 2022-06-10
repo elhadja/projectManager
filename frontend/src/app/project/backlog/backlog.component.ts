@@ -110,7 +110,7 @@ export class BacklogComponent implements OnInit {
 
 
   public onOpenCreateUserStoryDialogFromBacklog(): void {
-    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {disableClose: true});
+    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {disableClose: true });
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         this.backlogService.createUserStoryInBacklog(this.projectId, result).subscribe((userSotryId) => {
@@ -172,6 +172,7 @@ export class BacklogComponent implements OnInit {
     const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {
       data: row,
       width: '600px',
+      height: '90%',
       disableClose: true
     });
 

@@ -9,6 +9,7 @@ import { DialogConfirmComponent } from 'src/app/modules/shared/dialog-confirm/di
 import { TypeScriptUtil } from 'src/app/modules/shared/typescript.util';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
 import { MessageService } from 'src/app/services/message.service';
+import { sessionManagerService } from 'src/app/services/sessionManager.service';
 import { DialogCreateSprintComponent } from '../dialog/dialog-create-sprint/dialog-create-sprint.component';
 import { DialogCreateUerStoryComponent } from '../dialog/dialog-create-uer-story/dialog-create-uer-story.component';
 import { BacklogService } from '../services/backlog.service';
@@ -39,7 +40,8 @@ export class BacklogComponent implements OnInit {
               private backlogService: BacklogService,
               private messageService: MessageService,
               private projectApiService: ProjectApiService,
-              private route: ActivatedRoute) { 
+              private route: ActivatedRoute,
+              private readonly _sessionManagerService: sessionManagerService) { 
 
     this.projectId = 0;
     const help = this.route.snapshot.paramMap.get('backlog-id');
@@ -169,6 +171,9 @@ export class BacklogComponent implements OnInit {
   }
 
   public onOpenUserStory(row: GetUserStoriesInputDTO): void {
+    this.projectApiService.getUserStoryActivities(this._sessionManagerService.getProjectId(), row.id).subscribe((activities) => {
+      row.activities = activities.filter(a => a.comment != null && a.comment !== '').sort((a,b) => b.id - a.id);
+    });
     const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {
       data: row,
       width: '600px',

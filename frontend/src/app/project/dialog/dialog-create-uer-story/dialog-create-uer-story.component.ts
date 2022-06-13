@@ -21,6 +21,7 @@ export class DialogCreateUerStoryComponent implements OnInit {
   public userStoryImportanceValues: LabelValue[];
   public isUpdateMode: boolean;
   public userStoresActivities: CustomRevisionEntityDTO[];
+  public showActivities: boolean;
 
   constructor(private fb: FormBuilder,
              private matDialogRef: MatDialogRef<DialogCreateUerStoryComponent, AddUserStoryOutputDTO>,
@@ -34,6 +35,8 @@ export class DialogCreateUerStoryComponent implements OnInit {
     this.userStoryImportanceValues = [];
     this.isUpdateMode = dialogData != null;
     this.userStoresActivities = [];
+
+    this.showActivities = false;
   }
 
   ngOnInit(): void {
@@ -45,52 +48,6 @@ export class DialogCreateUerStoryComponent implements OnInit {
 
     if (this.isUpdateMode) {
       this.initializeUserStoryForm();
-      /*
-      this.dialogData.activities = [
-        {
-          id: 1,
-          modifiedBy: 'elhadja007',
-          date: '2022-06-10',
-          comment: 'a fait quelque chose sur cette vue'
-        },
-        {
-          id: 1,
-          modifiedBy: 'elhadja007',
-          date: '2022-06-10',
-          comment: 'a fait quelque chose sur cette vue encore'
-        },
-        {
-          id: 1,
-          modifiedBy: 'elhadja007',
-          date: '2022-06-10',
-          comment: 'a fait quelque chose sur cette vue encore'
-        },
-        {
-          id: 1,
-          modifiedBy: 'elhadja007',
-          date: '2022-06-10',
-          comment: 'a fait quelque chose sur cette vue encore'
-        },
-        {
-          id: 1,
-          modifiedBy: 'elhadja007',
-          date: '2022-06-10',
-          comment: 'a fait quelque chose sur cette vue encore'
-        },
-        {
-          id: 1,
-          modifiedBy: 'elhadja007',
-          date: '2022-06-10',
-          comment: 'a fait quelque chose sur cette vue encore'
-        },
-        {
-          id: 1,
-          modifiedBy: 'elhadja007',
-          date: '2022-06-10',
-          comment: 'a fait quelque chose sur cette vue encore'
-        },
-      ];
-      */
     }
 
   }

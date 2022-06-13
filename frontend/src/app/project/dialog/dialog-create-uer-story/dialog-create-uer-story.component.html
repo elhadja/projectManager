@@ -41,9 +41,9 @@
         <div class="col">
             <div class="d-flex justify-content-between">
                 <h2>Activities</h2>
-                <button mat-stroked-button>Hide Activities</button>
+                <button mat-stroked-button class="text-primary" (click)="showActivities = !showActivities">{{ showActivities ? "Hide Activities" : "Show Activities" }}</button>
             </div>
-            <div>
+            <div *ngIf="showActivities">
                 <mat-list>
                     <mat-list-item *ngFor="let activity of dialogData.activities">
                         <h3 matLine> <span style="font-weight: bold;">{{activity.modifiedBy}}</span> {{ activity.comment }} </h3>

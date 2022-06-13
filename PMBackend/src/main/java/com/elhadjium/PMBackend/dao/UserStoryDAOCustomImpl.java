@@ -25,6 +25,7 @@ public class UserStoryDAOCustomImpl implements UserStoryDAOCustom {
 	public List<CustomRevisionEntity> getAudit(Long usId) {
 		String sqlQuery = "select _rev.id, _rev.timestamp, _rev.modified_by, case"
 							+ "	when revtype = 0 then '" + messageSource.getMessage(MessageConstant.H_USER_STORY_CREATED, null, LocaleContextHolder.getLocale()) + "'"
+							+ " when revtype = 1 and backlog_mod = 1 and backlog_id is not  null then '" + messageSource.getMessage(MessageConstant.h_USER_STORY_MOVED_TO_BACKLOG, null, LocaleContextHolder.getLocale()) + "'"
 							+ "	when revtype = 1 and status_mod = 1 and status = 'OPENED' then '" + messageSource.getMessage(MessageConstant.H_USER_STORY_OPENED, null, LocaleContextHolder.getLocale()) + "'"
 							+ " when revtype = 1 and status_mod = 1 and status = 'CLOSED' then '" + messageSource.getMessage(MessageConstant.H_USER_STORY_CLOSED, null, LocaleContextHolder.getLocale()) + "'"
 							+ " when revtype = 1 and sprint_mod = 1 then concat('" + messageSource.getMessage(MessageConstant.H_USER_STORY_MOVED_TO_SPRINT, null, LocaleContextHolder.getLocale()) + " ', sprint_id)"

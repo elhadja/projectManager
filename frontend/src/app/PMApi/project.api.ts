@@ -8,6 +8,7 @@ import { UserDTO } from '../dto/user.dto';
 import { GetUserStoriesInputDTO } from '../dto/getUserStoriesInputDTO';
 import { StartSprintOutputDTO } from '../dto/startSprintOutputDTO';
 import { API } from '../services/Api';
+import { CustomRevisionEntityDTO } from '../dto/custom-revision-entity.dto';
 
 @Injectable()
 export class ProjectApiService {
@@ -101,5 +102,9 @@ export class ProjectApiService {
 
   public removeUserFromProject(projectId: number, userId: number): Observable<void> {
     return this.api.post(this.baseURI + '/' + projectId + '/users/' + userId, null);
+  }
+
+  public getUserStoryActivities(projectId: number, usId: number): Observable<CustomRevisionEntityDTO[]> {
+    return this.api.get(this.baseURI + '/' + projectId + '/user-stories/' + usId + '/activities');
   }
 }

@@ -210,22 +210,6 @@ public class ProjectController {
 		sprints.forEach(sprint -> {
 			outputList.add(Mapping.mapTo(sprint, GetSprintOutputDTO.class));
 		});
-		outputList.forEach(sprintOutput -> {
-			sprintOutput.getUserStories().forEach(userStoryOutput -> {
-				List<CustomRevisionEntity> activities = projectService.getUserStoryAudit(userStoryOutput.getId());
-				userStoryOutput.setActivities(new ArrayList<>());
-				activities.forEach(activity -> {
-					CustomRevisionEntityDTO activityDTO = new CustomRevisionEntityDTO();
-					activityDTO.setId(activity.getId());
-					activityDTO.setModifiedBy(activity.getModifiedBy());
-					Date date = new Date(activity.getTimestamp());
-					DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
-					activityDTO.setDate(df.format(date));
-					activityDTO.setComment(activity.getComment());
-					userStoryOutput.getActivities().add(activityDTO);
-				});
-			});
-		});
 
 		return outputList;
 	}
@@ -304,6 +288,25 @@ public class ProjectController {
 	public void removeUserFromProject(@PathVariable("project-id") String projectId,
 									  @PathVariable("user-id") String userId) throws Exception {
 		projectService.removeUserFromProject(Long.valueOf(projectId), Long.valueOf(userId));
+	}
+	
+	// TODO Remove unused path variable
+	@GetMapping("{project-id}/user-stories/{us-id}/activities")
+	public List<CustomRevisionEntityDTO> getUserStoryActivities(@PathVariable("project-id") String projectId, @PathVariable("us-id") String usId) {
+		List<CustomRevisionEntityDTO> output = new ArrayList<>();
+		List<CustomRevisionEntity> activities = projectService.getUserStoryAudit(Long.valueOf(usId));
+		activities.forEach(activity -> {
+			CustomRevisionEntityDTO activityDTO = new CustomRevisionEntityDTO();
+			activityDTO.setId(activity.getId());
+			activityDTO.setModifiedBy(activity.getModifiedBy());
+			Date date = new Date(activity.getTimestamp());
+			DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
+			activityDTO.setDate(df.format(date));
+			activityDTO.setComment(activity.getComment());
+			output.add(activityDTO);
+		});
+	
+		return output;
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

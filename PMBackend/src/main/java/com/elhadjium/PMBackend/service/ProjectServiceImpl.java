@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.common.Mapping;
+import com.elhadjium.PMBackend.dao.CustomRevisionEntityDAO;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.SprintDAO;
 import com.elhadjium.PMBackend.dao.TaskDAO;
@@ -70,6 +71,9 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Autowired
 	private TaskTaskDAO taskTaskDao;
+	
+	@Autowired
+	private CustomRevisionEntityDAO customRevisionEntityDAO;
 	
 	// TODO integration testing
 	@Transactional
@@ -471,5 +475,10 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	public List<CustomRevisionEntity> getUserStoryAudit(Long id) {
 		return userStoryDAO.getAudit(id);
+	}
+
+	@Override
+	public List<CustomRevisionEntity> getTaskAudit(Long id) {
+		return customRevisionEntityDAO.getTaskActivities(id);
 	}
 }

@@ -296,17 +296,33 @@ public class ProjectController {
 		List<CustomRevisionEntityDTO> output = new ArrayList<>();
 		List<CustomRevisionEntity> activities = projectService.getUserStoryAudit(Long.valueOf(usId));
 		activities.forEach(activity -> {
-			CustomRevisionEntityDTO activityDTO = new CustomRevisionEntityDTO();
-			activityDTO.setId(activity.getId());
-			activityDTO.setModifiedBy(activity.getModifiedBy());
-			Date date = new Date(activity.getTimestamp());
-			DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
-			activityDTO.setDate(df.format(date));
-			activityDTO.setComment(activity.getComment());
-			output.add(activityDTO);
+			output.add(getDTO(activity));
 		});
 	
 		return output;
+	}
+	
+	@GetMapping("{project-id}/tasks/{task-id}/activities")
+	public List<CustomRevisionEntityDTO> getTaskActivities(@PathVariable("project-id") String projectId, @PathVariable("task-id") String taskId) {
+		List<CustomRevisionEntityDTO> output = new ArrayList<>();
+		List<CustomRevisionEntity> activities = projectService.getTaskAudit(Long.valueOf(taskId));
+		activities.forEach(activity -> {
+			output.add(getDTO(activity));
+		});
+	
+		return output;
+	}
+	
+	private CustomRevisionEntityDTO getDTO(CustomRevisionEntity in) {
+		CustomRevisionEntityDTO activityDTO = new CustomRevisionEntityDTO();
+		activityDTO.setId(in.getId());
+		activityDTO.setModifiedBy(in.getModifiedBy());
+		Date date = new Date(in.getTimestamp());
+		DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
+		activityDTO.setDate(df.format(date));
+		activityDTO.setComment(in.getComment());
+
+		return activityDTO;
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

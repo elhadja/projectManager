@@ -41,4 +41,5 @@ public interface ProjectService {
 	public void removeTask(Set<Long> taskIds);
 	public void removeUserFromProject(Long projectId, Long userId);
 	public List<CustomRevisionEntity> getUserStoryAudit(Long id);
+	public List<CustomRevisionEntity> getTaskAudit(Long id);
 }

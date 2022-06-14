@@ -107,4 +107,8 @@ export class ProjectApiService {
   public getUserStoryActivities(projectId: number, usId: number): Observable<CustomRevisionEntityDTO[]> {
     return this.api.get(this.baseURI + '/' + projectId + '/user-stories/' + usId + '/activities');
   }
+  public getTaskActivities(projectId: number, taskId: number): Observable<CustomRevisionEntityDTO[]> {
+    return this.api.get(this.baseURI + '/' + projectId + '/tasks/' + taskId + '/activities');
+  }
+
 }

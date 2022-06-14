@@ -1,6 +1,6 @@
 <div class="container">
     <div class="row">
-        <div class="col" style="height: 800px">
+        <div class="col">
             <h1 class="text-center">Crate task</h1>
             <form [formGroup]="taskFormGroup" (ngSubmit)="onSubmit()">
                 <mat-form-field appearance="fill" class="w-100">
@@ -60,4 +60,7 @@
             </form>
         </div>
     </div>
+
+    <pm-activity *ngIf="data.task != null && data.task.activities != null" [activities]="data.task.activities">
+    </pm-activity>
 </div>

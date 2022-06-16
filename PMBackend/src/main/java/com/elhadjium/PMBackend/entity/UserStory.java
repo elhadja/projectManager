@@ -17,6 +17,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 @Entity
 public class UserStory implements Serializable {
 	/**
@@ -29,8 +32,10 @@ public class UserStory implements Serializable {
 	private Long id;
 	
 	@ManyToOne
+	@Audited(withModifiedFlag = true, targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	private Backlog backlog;
 	
+	@Audited(withModifiedFlag = true)
 	@ManyToOne
 	private Sprint sprint;
 	
@@ -40,6 +45,7 @@ public class UserStory implements Serializable {
 	@Column(nullable = false)
 	private String summary;
 	
+	@Audited(withModifiedFlag = true)
 	@Enumerated(EnumType.STRING)
 	private UserStoryStatus status;
 

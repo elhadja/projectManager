@@ -2,13 +2,17 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
 import { PMConstants } from 'src/app/common/PMConstants';
+import { CustomRevisionEntityDTO } from 'src/app/dto/custom-revision-entity.dto';
 import { GetSprintsInputDTO } from 'src/app/dto/getSprint.input.dto';
 import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
+import { DialogActivityComponent } from 'src/app/modules/shared/dialog-activity/dialog-activity.component';
 import { DialogConfirmComponent } from 'src/app/modules/shared/dialog-confirm/dialog-confirm.component';
 import { TypeScriptUtil } from 'src/app/modules/shared/typescript.util';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
 import { MessageService } from 'src/app/services/message.service';
+import { sessionManagerService } from 'src/app/services/sessionManager.service';
 import { DialogCreateSprintComponent } from '../dialog/dialog-create-sprint/dialog-create-sprint.component';
 import { DialogCreateUerStoryComponent } from '../dialog/dialog-create-uer-story/dialog-create-uer-story.component';
 import { BacklogService } from '../services/backlog.service';
@@ -39,7 +43,8 @@ export class BacklogComponent implements OnInit {
               private backlogService: BacklogService,
               private messageService: MessageService,
               private projectApiService: ProjectApiService,
-              private route: ActivatedRoute) { 
+              private route: ActivatedRoute,
+              private readonly _sessionManagerService: sessionManagerService) { 
 
     this.projectId = 0;
     const help = this.route.snapshot.paramMap.get('backlog-id');
@@ -110,7 +115,7 @@ export class BacklogComponent implements OnInit {
 
 
   public onOpenCreateUserStoryDialogFromBacklog(): void {
-    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {disableClose: true});
+    const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {disableClose: true });
     dialogRef.afterClosed().subscribe((result) => {
       if (result != null) {
         this.backlogService.createUserStoryInBacklog(this.projectId, result).subscribe((userSotryId) => {
@@ -169,9 +174,13 @@ export class BacklogComponent implements OnInit {
   }
 
   public onOpenUserStory(row: GetUserStoriesInputDTO): void {
+    this.projectApiService.getUserStoryActivities(this._sessionManagerService.getProjectId(), row.id).subscribe((activities) => {
+      row.activities = activities.filter(a => a.comment != null && a.comment !== '').sort((a,b) => b.id - a.id);
+    });
     const dialogRef = this.materialDialogservice.open(DialogCreateUerStoryComponent, {
       data: row,
       width: '600px',
+      height: '90%',
       disableClose: true
     });
 
@@ -311,6 +320,16 @@ export class BacklogComponent implements OnInit {
     sprintWrapper.totalStoryPoints = `${this.getTotalStoryPoints(sprintWrapper.sprint.userStories)}`;
     sprintWrapper.totalClosedUserStoriesStoryPoints = `${this.getClosedUserStorytTotalStoryPoints(sprintWrapper.sprint.userStories)}`;
     sprintWrapper.totalOpenedUserStoriesStoryPoints = `${this.getOpenedUserStorytTotalStoryPoints(sprintWrapper.sprint.userStories)}`;
+  }
+
+  public showSprintActivities(sprint: GetSprintsInputDTO): void {
+    const activitiesSubject = new Subject<CustomRevisionEntityDTO[]>();
+    this.projectApiService.getSprintActivities(1, sprint.id).subscribe(activities => activitiesSubject.next(activities));
+    this.materialDialogservice.open(DialogActivityComponent, {
+      width: '50%',
+      minHeight: '30%',
+      data: { activities: activitiesSubject}
+    });
   }
   
   get SPRINT_STATUS_STARTED(): string {

@@ -1,5 +1,5 @@
-import { Summary } from "@angular/compiler";
-import { GetTaskInputDTO } from "./getTask.input.dto";
+import { CustomRevisionEntityDTO } from './custom-revision-entity.dto';
+import { GetTaskInputDTO } from './getTask.input.dto';
 
 export interface GetUserStoriesInputDTO {
     id: number,
@@ -8,5 +8,6 @@ export interface GetUserStoriesInputDTO {
     storyPoint?: number
     status?: string,
     importance?: string,
-    tasks: GetTaskInputDTO[]
+    tasks: GetTaskInputDTO[],
+    activities?: CustomRevisionEntityDTO[]
 }

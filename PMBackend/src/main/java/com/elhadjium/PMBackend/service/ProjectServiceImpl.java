@@ -12,12 +12,15 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.envers.AuditReaderFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.common.Mapping;
+import com.elhadjium.PMBackend.dao.CustomRevisionEntityDAO;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.SprintDAO;
 import com.elhadjium.PMBackend.dao.TaskDAO;
@@ -30,6 +33,7 @@ import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.StartSprintDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.entity.Backlog;
+import com.elhadjium.PMBackend.entity.CustomRevisionEntity;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.SprintStatus;
@@ -67,6 +71,9 @@ public class ProjectServiceImpl implements ProjectService {
 	
 	@Autowired
 	private TaskTaskDAO taskTaskDao;
+	
+	@Autowired
+	private CustomRevisionEntityDAO customRevisionEntityDAO;
 	
 	// TODO integration testing
 	@Transactional
@@ -308,6 +315,8 @@ public class ProjectServiceImpl implements ProjectService {
 	@Override
 	@Transactional
 	public List<Sprint> getProjectSprints(Long projectId) {
+		//AuditReaderFactory.get()
+		List<CustomRevisionEntity> revs = userStoryDAO.getAudit(47L);
 		return projectDao.findById(projectId).get().getSprints();
 	}
 
@@ -461,5 +470,20 @@ public class ProjectServiceImpl implements ProjectService {
 		} else {
 			project.removeUser(user);
 		}
+	}
+
+	@Override
+	public List<CustomRevisionEntity> getUserStoryAudit(Long id) {
+		return userStoryDAO.getAudit(id);
+	}
+
+	@Override
+	public List<CustomRevisionEntity> getTaskAudit(Long id) {
+		return customRevisionEntityDAO.getTaskActivities(id);
+	}
+
+	@Override
+	public List<CustomRevisionEntity> getSprintAudit(Long id) {
+		return customRevisionEntityDAO.getSprintActivities(id);
 	}
 }

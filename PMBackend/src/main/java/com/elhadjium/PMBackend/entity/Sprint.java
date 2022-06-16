@@ -17,6 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.envers.AuditMappedBy;
+import org.hibernate.envers.Audited;
+
 import com.elhadjium.PMBackend.Project;
 
 @Entity
@@ -29,6 +32,7 @@ public class Sprint {
 	@Basic(optional = false)
 	private String name;
 	
+	@Audited(withModifiedFlag = true)
 	@Enumerated(EnumType.STRING)
 	private SprintStatus status;
 	

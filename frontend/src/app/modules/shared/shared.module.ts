@@ -6,6 +6,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { TextLengthPipe } from './pipes/text-length.pipe';
+import { ActivityComponent } from './activity/activity.component';
+import { MatListModule } from '@angular/material/list';
+import { DialogActivityComponent } from './dialog-activity/dialog-activity.component';
 
 
 
@@ -15,16 +18,20 @@ import { TextLengthPipe } from './pipes/text-length.pipe';
     DialogInfosComponent,
     DialogConfirmComponent,
     TextLengthPipe,
+    ActivityComponent,
+    DialogActivityComponent,
   ],
   imports: [
     MatDialogModule,
     MatButtonModule,
+    MatListModule,
     CommonModule
   ],
   exports: [
     DialogInfosComponent,
     DialogConfirmComponent,
-    TextLengthPipe
+    TextLengthPipe,
+    ActivityComponent
   ]
 
 })

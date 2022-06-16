@@ -106,9 +106,9 @@ export class TaskComponent implements OnInit {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
       transferArrayItem(event.previousContainer.data,
-                        event.container.data,
-                        event.previousIndex,
-                        event.currentIndex);
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex);
     }
   }
 
@@ -121,7 +121,15 @@ export class TaskComponent implements OnInit {
   }
 
   private openTask(popupData: {projectId: number, task?: GetTaskInputDTO}): void {
-    const dialogRef = this.matDialog.open(DialogCreateTaskComponent, { data: popupData, disableClose: true });
+    if (popupData.task != null) {
+      this.projectApiService.getTaskActivities(1, popupData.task.id).subscribe((activities) => {
+        if (popupData.task != null) {
+          popupData.task.activities = [...activities];
+        }
+      });
+    }
+
+    const dialogRef = this.matDialog.open(DialogCreateTaskComponent, { data: popupData, disableClose: true, height: '95%' });
     dialogRef.afterClosed().subscribe(() => {
       this.ngOnInit(); //TODO should be optimized by getting only tasks related to the current sprint
     });
@@ -132,19 +140,19 @@ export class TaskComponent implements OnInit {
     this.tasksToDisplay = [];
     if (!this.tasksToDisplayBySprint?.has(this.selectedSprint)) {
       this.projectSprints.find(sprint => sprint.id === this.selectedSprint)
-                        ?.userStories.forEach(us => {
-                          us.tasks.forEach(task => {
-                            if (this.tasksToDisplay.every(addedTask => addedTask.id !== task.id)) {
-                              if (task.userStoriesIDs == null) {
-                                task.userStoriesIDs = [];
-                              }
-                              task.userStoriesIDs.push(us.id);  // TODO task's userstories should be send by services
-                              this.tasksToDisplay.push(task)
-                            } else {
-                              this.tasksToDisplay.find(t => t.id === task.id)?.userStoriesIDs.push(us.id);
-                            }
-                          });
-                        });
+        ?.userStories.forEach(us => {
+          us.tasks.forEach(task => {
+            if (this.tasksToDisplay.every(addedTask => addedTask.id !== task.id)) {
+              if (task.userStoriesIDs == null) {
+                task.userStoriesIDs = [];
+              }
+              task.userStoriesIDs.push(us.id);  // TODO task's userstories should be send by services
+              this.tasksToDisplay.push(task)
+            } else {
+              this.tasksToDisplay.find(t => t.id === task.id)?.userStoriesIDs.push(us.id);
+            }
+          });
+        });
       this.tasksToDisplayBySprint?.set(this.selectedSprint, this.tasksToDisplay);
       this.tasksToDisplay = [...this.tasksToDisplay];
     } else {
@@ -155,7 +163,7 @@ export class TaskComponent implements OnInit {
   }
 
   public dodAsArray(dod: string): string[] {
-    return dod != null && dod.length > 0 ? dod.split(";") : [];
+    return dod != null && dod.length > 0 ? dod.split(';') : [];
   }
 
   public onDeleteSelectedTasks(): void {
@@ -164,7 +172,7 @@ export class TaskComponent implements OnInit {
       this.projectApiService.deleteTasks(this.projectId, taskIDs).subscribe(() => {
         this.tasksToDisplay = [...this.tasksToDisplay.filter(task => taskIDs.every(deletedTaskId => deletedTaskId !==task.id))];
         this.selectedTasks = [];
-        this.messageService.showSuccessMessage("toutes les tâches ont été supprimées");
+        this.messageService.showSuccessMessage('toutes les tâches ont été supprimées');
       });
     }
   }

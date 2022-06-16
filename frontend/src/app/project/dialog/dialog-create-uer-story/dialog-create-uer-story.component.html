@@ -37,4 +37,6 @@
             </form>
         </div>
     </div>
+    <pm-activity *ngIf="dialogData != null && dialogData.activities != null" [activities]="dialogData.activities">
+    </pm-activity>
 </div>

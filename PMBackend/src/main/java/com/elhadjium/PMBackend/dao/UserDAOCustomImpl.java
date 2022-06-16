@@ -8,6 +8,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.envers.AuditReaderFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +19,7 @@ import com.elhadjium.PMBackend.util.JavaUtil;
 public class UserDAOCustomImpl implements UserDAOCustom {
 	@Autowired
 	EntityManager em;
-
+	
 	@Override
 	public List<UserAccount> getUsersByCriteria(String pseudo, String firstname, String lastname) {
 		CriteriaBuilder cb = em.getCriteriaBuilder();

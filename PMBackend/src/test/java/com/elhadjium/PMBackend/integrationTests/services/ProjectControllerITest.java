@@ -7,9 +7,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.DirtiesContext;
 
 import com.elhadjium.PMBackend.Project;
@@ -19,6 +25,7 @@ import com.elhadjium.PMBackend.dao.UserStoryDAO;
 import com.elhadjium.PMBackend.dto.AddSprintToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
 import com.elhadjium.PMBackend.dto.GetUserStoryOutputDTO;
+import com.elhadjium.PMBackend.entity.CustomUserDetailsImpl;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.entity.UserStory;
@@ -26,7 +33,7 @@ import com.elhadjium.PMBackend.service.ProjectService;
 import com.elhadjium.PMBackend.service.UserService;
 
 @SpringBootTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD) // TODO Too slow
 public class ProjectControllerITest {
 	@Autowired
 	private ProjectController projectController;
@@ -42,6 +49,11 @@ public class ProjectControllerITest {
 	
 	@Autowired
 	private UserStoryDAO userStoryDAO;
+	
+	@BeforeEach
+	public void setup() {
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(new  CustomUserDetailsImpl(), null));
+	}
 
 	@Test
 	public void getBacklogUserStories_shouldBeOk() throws Exception {

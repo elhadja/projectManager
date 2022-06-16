@@ -1,5 +1,8 @@
 package com.elhadjium.PMBackend.controller;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -25,6 +28,7 @@ import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.dto.AddSprintToProjectInputDTO;
 import com.elhadjium.PMBackend.dto.AddTaskInputDTO;
 import com.elhadjium.PMBackend.dto.AddUserStoryDTO;
+import com.elhadjium.PMBackend.dto.CustomRevisionEntityDTO;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetSprintOutputDTO;
 import com.elhadjium.PMBackend.dto.GetTaskOutputDTO;
@@ -36,6 +40,7 @@ import com.elhadjium.PMBackend.dto.TaskDepencieOutputDTO;
 import com.elhadjium.PMBackend.dto.UpdateProjectInputDTO;
 import com.elhadjium.PMBackend.dto.UpdateTaskDTO;
 import com.elhadjium.PMBackend.dto.UpdateUsertStoryInputDTO;
+import com.elhadjium.PMBackend.entity.CustomRevisionEntity;
 import com.elhadjium.PMBackend.entity.Sprint;
 import com.elhadjium.PMBackend.entity.Task;
 import com.elhadjium.PMBackend.entity.TaskStatus;
@@ -283,6 +288,48 @@ public class ProjectController {
 	public void removeUserFromProject(@PathVariable("project-id") String projectId,
 									  @PathVariable("user-id") String userId) throws Exception {
 		projectService.removeUserFromProject(Long.valueOf(projectId), Long.valueOf(userId));
+	}
+	
+	// TODO Remove unused path variable
+	@GetMapping("{project-id}/user-stories/{us-id}/activities")
+	public List<CustomRevisionEntityDTO> getUserStoryActivities(@PathVariable("project-id") String projectId, @PathVariable("us-id") String usId) {
+		List<CustomRevisionEntityDTO> output = new ArrayList<>();
+		List<CustomRevisionEntity> activities = projectService.getUserStoryAudit(Long.valueOf(usId));
+		activities.forEach(activity -> {
+			output.add(getDTO(activity));
+		});
+	
+		return output;
+	}
+	
+	@GetMapping("{project-id}/tasks/{task-id}/activities")
+	public List<CustomRevisionEntityDTO> getTaskActivities(@PathVariable("project-id") String projectId, @PathVariable("task-id") String taskId) {
+		List<CustomRevisionEntityDTO> output = new ArrayList<>();
+		List<CustomRevisionEntity> activities = projectService.getTaskAudit(Long.valueOf(taskId));
+		activities.forEach(activity -> {
+			output.add(getDTO(activity));
+		});
+	
+		return output;
+	}
+	
+	@GetMapping("{project-id}/sprints/{sprint-id}/activities")
+	public List<CustomRevisionEntityDTO> getSprintActivities(@PathVariable("project-id") String projectId, @PathVariable("sprint-id") String sprintId) {
+		List<CustomRevisionEntity> activities = projectService.getSprintAudit(Long.valueOf(sprintId));
+		return activities.stream().map(activity -> getDTO(activity)).collect(Collectors.toList());
+	}
+
+	
+	private CustomRevisionEntityDTO getDTO(CustomRevisionEntity in) {
+		CustomRevisionEntityDTO activityDTO = new CustomRevisionEntityDTO();
+		activityDTO.setId(in.getId());
+		activityDTO.setModifiedBy(in.getModifiedBy());
+		Date date = new Date(in.getTimestamp());
+		DateFormat df = new SimpleDateFormat("dd-MM-yy HH:mm:ss");
+		activityDTO.setDate(df.format(date));
+		activityDTO.setComment(in.getComment());
+
+		return activityDTO;
 	}
 
 	@ExceptionHandler({PMRuntimeException.class})

@@ -7,7 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.envers.Audited;
+
 @Entity
+@Audited(withModifiedFlag = true)
 public class UserStoryTasK implements Serializable {
 	/**
 	 * 

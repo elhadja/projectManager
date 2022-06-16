@@ -18,6 +18,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.RelationTargetAuditMode;
+
 @Entity
 public class Task implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -27,15 +30,18 @@ public class Task implements Serializable {
 	private Long id;
 
 	@ManyToOne
+	@Audited(withModifiedFlag = true, targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
 	private UserAccount user;
 	
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Audited
 	private Set<UserStoryTasK> taskUserStories = new HashSet<UserStoryTasK>();
 	
 	@OneToMany(mappedBy = "task" ,cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<TaskTask> taskTaskSet = new HashSet<TaskTask>();
 	
 	@Enumerated(EnumType.STRING)
+	@Audited(withModifiedFlag = true)
 	private TaskStatus status;
 	
 	@Column(nullable = true)

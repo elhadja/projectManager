@@ -8,6 +8,7 @@ import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.componen
 import { TextLengthPipe } from './pipes/text-length.pipe';
 import { ActivityComponent } from './activity/activity.component';
 import { MatListModule } from '@angular/material/list';
+import { DialogActivityComponent } from './dialog-activity/dialog-activity.component';
 
 
 
@@ -18,6 +19,7 @@ import { MatListModule } from '@angular/material/list';
     DialogConfirmComponent,
     TextLengthPipe,
     ActivityComponent,
+    DialogActivityComponent,
   ],
   imports: [
     MatDialogModule,

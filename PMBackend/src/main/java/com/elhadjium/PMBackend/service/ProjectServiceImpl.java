@@ -481,4 +481,9 @@ public class ProjectServiceImpl implements ProjectService {
 	public List<CustomRevisionEntity> getTaskAudit(Long id) {
 		return customRevisionEntityDAO.getTaskActivities(id);
 	}
+
+	@Override
+	public List<CustomRevisionEntity> getSprintAudit(Long id) {
+		return customRevisionEntityDAO.getSprintActivities(id);
+	}
 }

@@ -30,9 +30,11 @@
                         <ng-template pTemplate="caption">
                             <div class="d-flex justify-content-between">
                                 <div class="flex-grow-1">
+                                    <mat-icon class="pm-pointer" (click)="showSprintActivities(sprintWrapper.sprint)">history</mat-icon>
                                     <p-calendar [(ngModel)]="sprintWrapper.sprintRangeDates"
                                                 [showTime]="true" [showButtonBar]="true" selectionMode="range" 
                                                 [minDate]="now"
+                                                class="px-2"
                                                 dataFormat="yyyy-mm-dd">
                                     </p-calendar>
                                     <p-badge matTooltip="total story points" severity="info" styleClass="p-mr-2" [value]="sprintWrapper.totalStoryPoints"></p-badge>

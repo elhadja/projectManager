@@ -313,6 +313,13 @@ public class ProjectController {
 		return output;
 	}
 	
+	@GetMapping("{project-id}/sprints/{sprint-id}/activities")
+	public List<CustomRevisionEntityDTO> getSprintActivities(@PathVariable("project-id") String projectId, @PathVariable("sprint-id") String sprintId) {
+		List<CustomRevisionEntity> activities = projectService.getSprintAudit(Long.valueOf(sprintId));
+		return activities.stream().map(activity -> getDTO(activity)).collect(Collectors.toList());
+	}
+
+	
 	private CustomRevisionEntityDTO getDTO(CustomRevisionEntity in) {
 		CustomRevisionEntityDTO activityDTO = new CustomRevisionEntityDTO();
 		activityDTO.setId(in.getId());

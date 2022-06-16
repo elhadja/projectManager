@@ -2,9 +2,12 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
 import { PMConstants } from 'src/app/common/PMConstants';
+import { CustomRevisionEntityDTO } from 'src/app/dto/custom-revision-entity.dto';
 import { GetSprintsInputDTO } from 'src/app/dto/getSprint.input.dto';
 import { GetUserStoriesInputDTO } from 'src/app/dto/getUserStoriesInputDTO';
+import { DialogActivityComponent } from 'src/app/modules/shared/dialog-activity/dialog-activity.component';
 import { DialogConfirmComponent } from 'src/app/modules/shared/dialog-confirm/dialog-confirm.component';
 import { TypeScriptUtil } from 'src/app/modules/shared/typescript.util';
 import { ProjectApiService } from 'src/app/PMApi/project.api';
@@ -317,6 +320,16 @@ export class BacklogComponent implements OnInit {
     sprintWrapper.totalStoryPoints = `${this.getTotalStoryPoints(sprintWrapper.sprint.userStories)}`;
     sprintWrapper.totalClosedUserStoriesStoryPoints = `${this.getClosedUserStorytTotalStoryPoints(sprintWrapper.sprint.userStories)}`;
     sprintWrapper.totalOpenedUserStoriesStoryPoints = `${this.getOpenedUserStorytTotalStoryPoints(sprintWrapper.sprint.userStories)}`;
+  }
+
+  public showSprintActivities(sprint: GetSprintsInputDTO): void {
+    const activitiesSubject = new Subject<CustomRevisionEntityDTO[]>();
+    this.projectApiService.getSprintActivities(1, sprint.id).subscribe(activities => activitiesSubject.next(activities));
+    this.materialDialogservice.open(DialogActivityComponent, {
+      width: '50%',
+      minHeight: '30%',
+      data: { activities: activitiesSubject}
+    });
   }
   
   get SPRINT_STATUS_STARTED(): string {

@@ -32,22 +32,19 @@ public class Sprint {
 	@Basic(optional = false)
 	private String name;
 	
-	@Audited
+	@Audited(withModifiedFlag = true)
 	@Enumerated(EnumType.STRING)
 	private SprintStatus status;
 	
-	@Audited
 	@Convert(converter = LocalDateTimeStringConverter.class)
 	private String startDate;
 	
-	@Audited
 	@Convert(converter = LocalDateTimeStringConverter.class)
 	private String endDate;
 	
 	@ManyToOne(optional = false)
 	private Project project;
 	
-	@AuditMappedBy(mappedBy = "sprint")
 	@OneToMany(mappedBy = "sprint", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private List<UserStory> userStories = new ArrayList<UserStory>();
 

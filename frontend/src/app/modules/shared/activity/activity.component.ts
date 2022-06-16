@@ -9,10 +9,15 @@ import { CustomRevisionEntityDTO } from 'src/app/dto/custom-revision-entity.dto'
 export class ActivityComponent {
   @Input()
   public activities: CustomRevisionEntityDTO[];
+  @Input()
+  public manageVisibility: boolean;
+  @Input()
   public showActivities: boolean;
 
   constructor() {
     this.showActivities = false;
+    this.manageVisibility = true;
+
     this.activities = [];
   }
 }

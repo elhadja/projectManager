@@ -15,4 +15,7 @@ public class MessageConstant {
 	public static String H_TASK_NEW_US_COMMENT = "h_task_new_us_comment";
 	public static String H_TASK_REMOVED_US_COMMENT = "h_task_removed_us_comment";
 
+	public static String H_SPRINT_CREATED = "h_sprint_created";
+	public static String H_SPRINT_STARTED = "h_sprint_started";
+	public static String H_SPRINT_CLOSED = "h_sprint_closed";
 }

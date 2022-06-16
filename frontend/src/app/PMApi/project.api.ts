@@ -111,4 +111,7 @@ export class ProjectApiService {
     return this.api.get(this.baseURI + '/' + projectId + '/tasks/' + taskId + '/activities');
   }
 
+  public getSprintActivities(projectId: number, sprintId: number): Observable<CustomRevisionEntityDTO[]> {
+    return this.api.get(this.baseURI + '/' + projectId + '/sprints/' + sprintId + '/activities');
+  }
 }

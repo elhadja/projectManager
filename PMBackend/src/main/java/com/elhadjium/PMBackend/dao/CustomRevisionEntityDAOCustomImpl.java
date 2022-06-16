@@ -15,6 +15,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.entity.CustomRevisionEntity;
+import com.elhadjium.PMBackend.entity.SprintStatus;
 import com.elhadjium.PMBackend.entity.TaskStatus;
 import com.elhadjium.PMBackend.service.contant.MessageConstant;
 
@@ -43,6 +44,25 @@ public class CustomRevisionEntityDAOCustomImpl implements CustomRevisionEntityDA
 				.setParameter("removed_us_comment", messageSource.getMessage(MessageConstant.H_TASK_REMOVED_US_COMMENT, null, LocaleContextHolder.getLocale()))
 				.setParameter("task_id", taskId)
 				.getResultList();
+		}
+	
+		return result;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CustomRevisionEntity> getSprintActivities(Long sprintId) {
+		List<CustomRevisionEntity> result = new ArrayList<>();
+		String sqlQuery = resourceFileAsString("/sql/getSprintAudit.sql");
+		if (sqlQuery != null) {
+			result = em.createNativeQuery(sqlQuery, CustomRevisionEntity.class)
+						.setParameter("created_comment", messageSource.getMessage(MessageConstant.H_SPRINT_CREATED, null, LocaleContextHolder.getLocale()))
+						.setParameter("started", SprintStatus.STARTED.toString())
+						.setParameter("started_comment", messageSource.getMessage(MessageConstant.H_SPRINT_STARTED, null, LocaleContextHolder.getLocale()))
+						.setParameter("closed", SprintStatus.CLOSED.toString())
+						.setParameter("closed_comment", messageSource.getMessage(MessageConstant.H_SPRINT_CLOSED, null, LocaleContextHolder.getLocale()))
+						.setParameter("sprint_id", sprintId)
+						.getResultList();
 		}
 	
 		return result;

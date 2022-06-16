@@ -1,0 +1,5 @@
+<pm-activity *ngIf="activities != null && activities.length > 0; else elseBlock" [activities]="activities" [manageVisibility]="false" [showActivities]="true">
+</pm-activity>
+<ng-template #elseBlock>
+    <h3 class="text-center">No activities</h3>
+</ng-template>

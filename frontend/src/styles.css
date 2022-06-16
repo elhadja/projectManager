@@ -28,6 +28,10 @@ body {
     cursor: pointer;
 }
 
+.pm-pointer:hover {
+    cursor: pointer;
+}
+
 .movable {
     cursor: move;
 }

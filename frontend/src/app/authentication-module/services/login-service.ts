@@ -27,7 +27,7 @@ export class LoginService {
   }
 
   private initializeSession(response: LoginInputDTO): void {
-    this.sessionManager.start(response.token, response.id);
+    this.sessionManager.start(response.token, response.expires, response.id);
     this.api.setHttpOptions(response.token);
   }
 

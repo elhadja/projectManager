@@ -23,6 +23,7 @@ import { UserApiService } from './PMApi/user-api.service';
 import { MomentModule } from 'angular2-moment';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { PMSharedModule } from './modules/shared/shared.module';
+import { AppErrorHandler } from './services/app_error_handler.service';
 
 
 const SERVICES = [API, 
@@ -31,7 +32,8 @@ const SERVICES = [API,
   sessionManagerService,
   ProjectApiService,
   RoutingService,
-  UserApiService
+  UserApiService,
+  AppErrorHandler
 ];
 
 @NgModule({

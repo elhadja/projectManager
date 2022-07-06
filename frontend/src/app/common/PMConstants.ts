@@ -33,4 +33,5 @@ export class PMConstants {
   public static SESSION_USER_ID_KEY = "USER_ID";
   public static SESSION_PROJECT_ID_KEY = "PROJECT_ID";
   public static SESSION_TOKEN_ID_KEY = "TOKEN";
+  public static SESSION_EXPIRATION = "EXPIRES_IN";
 }

@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { PMConstants } from '../common/PMConstants';
+import { AppErrorHandler } from './app_error_handler.service';
 import { MessageService } from './message.service';
 
 @Injectable()
@@ -13,7 +14,8 @@ export class API {
         headers?: HttpHeaders;
     } | undefined;
 
-  constructor(private httpClient: HttpClient, private messageService: MessageService) {
+  constructor(private httpClient: HttpClient, private messageService: MessageService,
+    private readonly appErrorHandler: AppErrorHandler) {
     this.baseURI = environment.api_base_uri;
     this.httpOptions = undefined;
     const token = localStorage.getItem(PMConstants.SESSION_TOKEN_ID_KEY);
@@ -23,32 +25,32 @@ export class API {
   public postWithoutHeaders(uri: string, body: any): Observable<any> {
     return this.httpClient.post(this.baseURI + uri, body)
       .pipe(
-        catchError(this.f)
+        catchError(this.appErrorHandler.handleApiRequestError)
       );
   }
 
   public post(uri: string, body: any): Observable<any> {
     return this.httpClient.post(this.baseURI + uri, body, this.httpOptions)
       .pipe(
-        catchError(this.f)
+        catchError(this.appErrorHandler.handleApiRequestError)
       );
   }
 
 
   public put(uri: string, body: any): Observable<any> {
     return this.httpClient.put(this.baseURI + uri, body, this.httpOptions).pipe(
-      catchError(this.f)
+      catchError(this.appErrorHandler.handleApiRequestError)
     );
   }
 
   public get(uri: string): Observable<any> {
     return this.httpClient.get(this.baseURI + uri, this.httpOptions).pipe(
-      catchError(this.f)
+      catchError(this.appErrorHandler.handleApiRequestError)
     );
   }
   public delete(uri: string): Observable<any> {
     return this.httpClient.delete(this.baseURI + uri, this.httpOptions).pipe(
-      catchError(this.f)
+      catchError(this.appErrorHandler.handleApiRequestError)
     );
   }
 
@@ -73,20 +75,4 @@ export class API {
     }
   }
 
-  // TODO handle errors properly
-  private f = (error: HttpErrorResponse): Observable<never> => {
-    if (error.status === 401) {
-      if (error.error != null) {
-        this.messageService.showErrorMessage(error.error.message);
-      } else {
-        this.messageService.showErrorMessage('Invalid login');
-      }
-    } else if (error.status === 500) {
-      this.messageService.showErrorMessage('Internal server error, please contact an administrator');
-    } else {
-      this.messageService.showErrorMessage(error.error.message);
-    }
-
-    return throwError(error);
-  };
 }

@@ -8,6 +8,8 @@ import java.util.function.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.elhadjium.PMBackend.common.PMConstants;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -16,7 +18,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 // TODO should be tested (at least generate token)
 @Service
 public class JwtToken {
-	private String SECRET_KEY = "secret";
+	public static String SECRET_KEY = "secret";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -63,5 +65,9 @@ public class JwtToken {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+    
+    public Long getApiTokenExpiration() {
+		return System.currentTimeMillis() + DateTimeUtil.hourToMillisecondes(PMConstants.API_TOKEN_EXPIRATION_IN_HOUR);
     }
 }

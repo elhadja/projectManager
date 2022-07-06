@@ -49,6 +49,7 @@ import com.elhadjium.PMBackend.exception.PMBadCredentialsException;
 import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.UserService;
+import com.elhadjium.PMBackend.util.DateTimeUtil;
 import com.elhadjium.PMBackend.util.JavaUtil;
 import com.elhadjium.PMBackend.util.JwtToken;
 import com.google.api.client.auth.openidconnect.IdToken.Payload;
@@ -74,7 +75,7 @@ public class UserController {
 	@Autowired
 	private MessageSource messageSource;
 	
-	
+	// TODO to remove
 	@PostMapping("testEmail")
 	public void sendEmail(@RequestBody String messageText) {
 		userService.sendSimpleEmail("elhadja007@gmail.com", "test mail service", "this message is just to test that mail sending are working on project manager webpp");
@@ -103,9 +104,10 @@ public class UserController {
 
 		CustomUserDetails userCusDetails = (CustomUserDetails) userService.loadUserByUsername(input.getUserIdentifier());
 		UserDetails userDetails = userService.loadUserByUsername(input.getUserIdentifier());
-		String token = jwt.generateToken(userDetails);
+		Long tokenExpiration = jwt.getApiTokenExpiration();
+		String token = jwt.generateToken(userDetails.getUsername(), tokenExpiration, JwtToken.SECRET_KEY);
 
-		return new LoginOutputDTO(userCusDetails.getUserId(), token);
+		return new LoginOutputDTO(userCusDetails.getUserId(), token, tokenExpiration);
 	}
 	
 	@PostMapping("loginWithGoogle")
@@ -120,7 +122,9 @@ public class UserController {
 			String email = (String) payload.get("email");
 			UserDetails userDetail = userService.loadUserByUsername(email);
 			if (userDetail != null) {
-				return new LoginOutputDTO(((CustomUserDetails) userDetail).getUserId(), jwt.generateToken(userDetail));
+				Long tokenExpiration = jwt.getApiTokenExpiration();
+				String token = jwt.generateToken(userDetail.getUsername(), tokenExpiration, JwtToken.SECRET_KEY);
+				return new LoginOutputDTO(((CustomUserDetails) userDetail).getUserId(), token, tokenExpiration);
 			}
 		}
 		

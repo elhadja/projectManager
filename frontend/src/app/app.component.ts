@@ -14,7 +14,6 @@ export class AppComponent {
               private readonly sessionManagerService: sessionManagerService,
               private readonly routingService: RoutingService) {
     translate.setDefaultLang('fr');
-    translate.use('en');
 
     if (sessionManagerService.isActive()) {
       sessionManagerService.subscribeIdle();

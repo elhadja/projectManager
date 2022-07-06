@@ -29,6 +29,14 @@ export class LoginComponent {
     this.passwordFormControl = new FormControl('', [Validators.required]);
   }
 
+  public get componentName(): string {
+    return 'LoginComponent';
+  }
+
+  public get global(): string {
+    return 'Global';
+  }
+
   public isValidForm(): boolean {
     return this.userIdentifierFormControl.valid && this.passwordFormControl.valid;
   }

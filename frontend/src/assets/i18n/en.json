@@ -1,7 +1,17 @@
 {
-    "loginComponent": {
+    "Global": {
+        "requiredField": "Required field"
+    },
+    "LoginComponent": {
         "requiredPassword": "Password is required",
-        "passwordLabel": "enter your fucking password"
+        "passwordLabel": "Password",
+        "emailOrUsernameLabel": "Email or username",
+        "forgotYourPasswordLabel": "Forgot your password",
+        "loginButton": "Login",
+        "newToProjectManagerLabel": "New to ProjectManager ?",
+        "createAnAccount": "Create an account",
+        "loginWithGoogle": "Login with Google",
+        "LoginComponentTitle": "Sign in to ProjectManager"
     },
     "HomeComponent": {
         "projects": "Projects"

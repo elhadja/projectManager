@@ -1,6 +1,16 @@
 {
-    "loginComponent": {
+    "Global": {
+        "requiredField": "Ce champs est obligatoire"
+    },
+    "LoginComponent": {
         "requiredPassword": "Le mot de passe est obligatoire",
-        "passwordLabel": "Entrer votre mot de passe"
+        "passwordLabel": "Mot de passe",
+        "emailOrUsernameLabel": "email ou pseudo",
+        "forgotYourPasswordLabel": "Vous avez oublié votre mot de passe ?",
+        "loginButton": "Se connecter",
+        "newToProjectManagerLabel": "Nouveau chez ProjectManager ?",
+        "createAnAccount": "Créer un compte",
+        "loginWithGoogle": "Se connecter avec Google",
+        "LoginComponentTitle": "Se connecter à ProjectManager"
     }
 }

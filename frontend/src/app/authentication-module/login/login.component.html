@@ -4,38 +4,39 @@
             <div class="d-flex justify-content-center" style="margin: 20px;">
                 <img src="assets/images/project.png" width="70" height="70" alt="">
             </div>
-           <h1 class="text-center">Sign in to ProjectManager</h1>
+           <h1 class="text-center">{{ componentName + '.LoginComponentTitle' | translate }}</h1>
             <div class="d-flex flex-column justify-content-center bloc rounded">
                     <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Email ou Pseudo</mat-label>
+                        <mat-label>{{ componentName + '.emailOrUsernameLabel' | translate }}</mat-label>
                         <input type="text" matInput [formControl]="userIdentifierFormControl" required minlength="USER_IDENTIFIER_MIN_LENGTH">
                         <mat-error *ngIf="userIdentifierFormControl.hasError('required')">
-                            this field is <strong>required</strong>
+                            {{ global + '.requiredField' | translate }}
                         </mat-error>
                         <mat-error *ngIf="userIdentifierFormControl.hasError('minlength')">
+                            <!-- TODO i18n -->
                             {{ USER_IDENTIFIER_MIN_LENGTH }} characteres <strong>minimum</strong>
                         </mat-error>
                     </mat-form-field >
                     <div style="margin-bottom: 25px;">
                         <mat-form-field appearance="fill" class="w-100">
-                            <mat-label>{{ 'loginComponent.passwordLabel' | translate }}</mat-label>
+                            <mat-label>{{ componentName + '.passwordLabel' | translate }}</mat-label>
                             <input matInput [formControl]="passwordFormControl" [type]="hidePassword ? 'password' : 'text'" required>
-                            <mat-hint align="end"><a class="link" style="color: blue; text-decoration: underline;" (click)="onForgottenPassword()">Forgot your password ?</a></mat-hint>
+                            <mat-hint align="end"><a class="link" style="color: blue; text-decoration: underline;" (click)="onForgottenPassword()">{{ componentName + '.forgotYourPasswordLabel' | translate }}</a></mat-hint>
                             <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
                             <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                             </button>
                             <mat-error *ngIf="passwordFormControl.hasError('required')">
-                                {{ 'loginComponent.requiredPassword' | translate }}
+                                {{ global + '.requiredField' | translate }}
                             </mat-error>
                         </mat-form-field>
                     </div>
-                    <button mat-stroked-button (click)='onLogin()' [disabled]='!isValidForm()'>login</button>
-                    <span class="mt-4">New to ProjectManager ? <a class="link" style="color: blue; text-decoration: underline; margin-top: 15px;" (click)="gotoSignupComponent()">Create an account</a></span>
+                    <button mat-stroked-button (click)='onLogin()' [disabled]='!isValidForm()'>{{ componentName + '.loginButton' | translate }}</button>
+                    <span class="mt-4">{{ componentName + '.newToProjectManagerLabel' | translate}} <a class="link" style="color: blue; text-decoration: underline; margin-top: 15px;" (click)="gotoSignupComponent()">{{ componentName + '.createAnAccount' | translate }}</a></span>
             </div>
             <div class="bloc rounded">
                 <button mat-stroked-button class="w-100" (click)='onLoginWithGoogle()'>
                     <img src="assets/images/google.jpg" width="20" height="20" alt="">
-                    login with google
+                    {{ componentName + '.loginWithGoogle' | translate }}
                 </button>
             </div>
         </div>

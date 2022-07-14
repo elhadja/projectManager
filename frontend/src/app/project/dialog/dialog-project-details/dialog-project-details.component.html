@@ -1,50 +1,50 @@
 <div class="container">
     <div class="row">
         <div class="col d-flex justify-content-between">
-            <h3> {{ getComponentName() + '.projectDetails' | translate}}</h3>
+            <h3> {{ componentName + '.componentTitle' | translate}}</h3>
             <div class="action-buttons">
-                <button mat-stroked-button (click)="onSaveProjectDetails()" class="text-primary mx-2">save</button>
-                <button mat-stroked-button mat-dialog-close type="button" class="text-danger">cancel</button>
+                <button mat-stroked-button (click)="onSaveProjectDetails()" class="text-primary mx-2">{{ global + '.validateButton' | translate }}</button>
+                <button mat-stroked-button mat-dialog-close type="button" class="text-danger">{{ global + '.cancelButton' | translate }}</button>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col d-flex flex-column">
             <mat-tab-group mat-align-tabs="start">
-                <mat-tab label="Home" class="my-2">
+                <mat-tab label="{{ componentName + '.homeTab' | translate }}" class="my-2">
                     <div class="d-flex flex-column justify-content-center">
                         <div class="w-100 mt-2 mx-auto">
                             <mat-form-field appearance="fill" class="w-100">
-                                <mat-label>{{ getComponentName() + '.projectName' | translate }}</mat-label>
+                                <mat-label>{{ componentName + '.projectName' | translate }}</mat-label>
                                 <input matInput [formControl]="projectName" minlength="2">
                             </mat-form-field>
                         </div>
                         <div class="w-100 mx-auto">
                             <mat-form-field appearance="fill" class="w-100">
-                                <mat-label>{{ getComponentName() + '.projectDescription' | translate }}</mat-label>
+                                <mat-label>{{ componentName + '.projectDescription' | translate }}</mat-label>
                                 <textarea matInput [formControl]="projectDescription"></textarea>
                             </mat-form-field>
                         </div>
                    </div>
                </mat-tab>
-            <mat-tab label="Gestion des utilisateurs">
+            <mat-tab label="{{ componentName + '.manageUsers' | translate }}">
                 <!-- send invitation -->
                 <div class="bloc">
-                    <h3>Add users to project</h3>
+                    <h3>{{ componentName + '.addUserToProject' | translate }}</h3>
                     <div>
                         <mat-form-field appearance="fill" >
-                            <mat-label>firstname</mat-label>
+                            <mat-label>{{ componentName + '.firstname' | translate }}</mat-label>
                             <input matInput [formControl]="userFirstName" minlength="2">
                         </mat-form-field>
                         <mat-form-field appearance="fill" class="mx-2">
-                            <mat-label>lastname</mat-label>
+                            <mat-label>{{ componentName + '.lastname' | translate }}</mat-label>
                             <input matInput [formControl]="userLastName" class="mx-2" minlength="2">
                         </mat-form-field>
                         <mat-form-field appearance="fill">
-                            <mat-label>pseudo</mat-label>
+                            <mat-label>{{ componentName + '.pseudo' | translate }}</mat-label>
                             <input matInput [formControl]="userPseudo" minlength="2">
                         </mat-form-field>
-                        <button mat-stroked-button (click)="onSearchUsers()" class="mx-2 text-primary">Search user</button>
+                        <button mat-stroked-button (click)="onSearchUsers()" class="mx-2 text-primary">{{ global + '.searchButton' | translate }}</button>
                     </div>
                     <div *ngIf="users != null  && users.length > 0">
                         <p-table [value]="users" 
@@ -56,7 +56,7 @@
                                     mat-stroked-button 
                                     (click)="onSendInvitations()" 
                                     class="text-primary">
-                                    Send Invitations
+                                    {{ searchUserTable + '.sendInvitationButton' | translate }}
                                 </button>
                             </ng-template>
 
@@ -65,9 +65,9 @@
                                     <th style="width: 3rem">
                                         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                     </th>
-                                    <th>firstname</th>
-                                    <th>lastname</th>
-                                    <th>pseudo</th>
+                                    <th>{{ searchUserTable + '.firstname' | translate }}</th>
+                                    <th>{{ searchUserTable + '.lastname' | translate }}</th>
+                                    <th>{{ searchUserTable + '.pseudo' | translate }}</th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-row>
@@ -86,11 +86,11 @@
                 <!-- project users -->
                 <div class="bloc">
                     <p-table [value]="projectUsersDataTable" styleClass="p-datatable-sm" responsiveLayout="scroll">
-                        <ng-template pTemplate="caption">project's users</ng-template>
+                        <ng-template pTemplate="caption">{{ participantsTableName + '.title' | translate }}</ng-template>
                         <ng-template pTemplate="header">
                             <tr>
-                                <th>Pseudo</th>
-                                <th>Is Manager</th>
+                                <th>{{ participantsTableName + '.pseudo' | translate }}</th>
+                                <th>{{ participantsTableName + '.manager' | translate }}</th>
                                 <th></th>
                             </tr>
                         </ng-template>

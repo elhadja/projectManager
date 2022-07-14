@@ -70,10 +70,6 @@ export class DialogProjectDetailsComponent implements OnInit {
     this.projectUsersDataTable = [...this.projectUsersDataTable];
   }
 
-  public getComponentName(): string {
-    return 'DialogProjectDetailsComponent';
-  }
-
   public onSendInvitations(): void {
     this.selectedUsers.forEach((user) => {
       this.dialogProjectDetailsService.inviteUsersToProject({
@@ -153,5 +149,22 @@ export class DialogProjectDetailsComponent implements OnInit {
   public onUpdateisManager(row: ProjectUsersTableRow): void {
     row.isManager = !row.isManager;
     row.isManager ? this.currentManagersPseudos.add(row.pseudo) : this.currentManagersPseudos.delete(row.pseudo);
+  }
+
+  public get componentName(): string {
+    return 'DialogProjectDetailsComponent';
+  }
+
+  public get participantsTableName(): string {
+    return `${this.componentName}.participantsTable`;
+  }
+
+  public get searchUserTable(): string {
+    return `${this.componentName}.searchUserTable`;
+  }
+
+
+  public get global(): string {
+    return 'Global';
   }
 }

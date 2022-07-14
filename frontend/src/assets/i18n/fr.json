@@ -7,7 +7,9 @@
         "addButton": "Ajouter",
         "deleteButton": "Supprimer",
         "acceptButton": "Accepter",
-        "createButton": "Créer"
+        "createButton": "Créer",
+        "cancelButton": "Annuler",
+        "searchButton": "Rechercher"
     },
     "LoginComponent": {
         "requiredPassword": "Le mot de passe est obligatoire",
@@ -62,5 +64,29 @@
         "componentTitle": "Créer un projet",
         "projectNameLabel": "Nom du projet",
         "projectDescriptionLabel": "Description du projet"
+    },
+    "DialogProjectDetailsComponent": {
+        "componentTitle": "Détails du projet",
+        "homeTab": "Accueil",
+        "manageUsers": "Gestion des participants",
+        "projectName": "Nom du projet",
+        "projectDescription": "Description du project",
+        "projectManagers": "Gestionnaires",
+        "projectUsers": "participants",
+        "addUserToProject": "Ajouter des participants",
+        "firstname": "Prénom",
+        "lastname": "Nom",
+        "pseudo": "Pseudo",
+        "searchUserTable": {
+            "sendInvitationButton": "Enoyer une invitation",
+            "firstname": "Prénom",
+            "lastname": "Nom",
+            "pseudo": "Pseudo"
+        },
+        "participantsTable": {
+           "title": "Participants",
+           "pseudo": "Pseudo",
+           "manager": "Gestionnaire"
+        }
     }
 }

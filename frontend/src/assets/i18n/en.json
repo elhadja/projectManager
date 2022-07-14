@@ -7,7 +7,9 @@
         "addButton": "Add",
         "deleteButton": "Delete",
         "acceptButton": "Accepte",
-        "createButton": "Create"
+        "createButton": "Create",
+        "cancelButton": "Cancel",
+        "searchButton": "Search"
     },
     "LoginComponent": {
         "requiredPassword": "Password is required",
@@ -37,13 +39,6 @@
         "login": "Log in",
         "signup": "Sign up"
     },
-    "DialogProjectDetailsComponent": {
-        "projectDetails": "Project Details",
-        "projectName": "Project name",
-        "projectDescription": "Project Description",
-        "projectManagers": "manager",
-        "projectUsers": "users"
-    },
     "UpdatePasswordComponent": {
         "componentTitle": "Reset your password",
         "newPasswordLabel": "New password",
@@ -69,5 +64,29 @@
         "componentTitle": "Create project",
         "projectNameLabel": "Project name",
         "projectDescriptionLabel": "Project description"
+    },
+    "DialogProjectDetailsComponent": {
+        "componentTitle": "Project details",
+        "homeTab": "Home",
+        "manageUsers": "Participants management",
+        "projectName": "Project name",
+        "projectDescription": "Project description",
+        "projectManagers": "managers",
+        "projectUsers": "participants",
+        "addUserToProject": "Add participants",
+        "firstname": "firstname",
+        "lastname": "lastname",
+        "pseudo": "Username",
+        "searchUserTable": {
+            "sendInvitationButton": "Send invitation",
+            "firstname": "firstname",
+            "lastname": "lastname",
+            "pseudo": "Username"
+        },
+        "participantsTable": {
+           "title": "Participants",
+           "pseudo": "Username",
+           "manager": "Gestionnaire"
+        }
     }
 }

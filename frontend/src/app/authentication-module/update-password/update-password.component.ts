@@ -10,8 +10,6 @@ import { RoutingService } from 'src/app/services/routing.service';
   templateUrl: './update-password.component.html'
 })
 export class UpdatePasswordComponent {
-  public readonly componentName = 'updatePassswordComponent';
-
   public password: FormControl;
   public confirmPassword: FormControl;
   public hidePassword: boolean;
@@ -36,4 +34,13 @@ export class UpdatePasswordComponent {
       this.routingService.gotoLoginComponent();
     });
   }
+
+  public get componentName(): string {
+    return 'UpdatePasswordComponent';
+  }
+
+  public get global(): string {
+    return 'Global';
+  }
+
 }

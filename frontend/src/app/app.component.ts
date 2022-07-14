@@ -13,7 +13,7 @@ export class AppComponent {
   constructor(private translate: TranslateService,
               private readonly sessionManagerService: sessionManagerService,
               private readonly routingService: RoutingService) {
-    translate.setDefaultLang('fr');
+    translate.setDefaultLang('en');
 
     if (sessionManagerService.isActive()) {
       sessionManagerService.subscribeIdle();

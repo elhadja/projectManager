@@ -2,7 +2,8 @@
     "Global": {
         "requiredField": "Required field",
         "invalidEmail": "Invalid email",
-        "invalidField": "This field is not valide"
+        "invalidField": "This field is not valide",
+        "validateButton": "Validate"
     },
     "LoginComponent": {
         "requiredPassword": "Password is required",
@@ -41,5 +42,10 @@
         "projectDescription": "Project Description",
         "projectManagers": "manager",
         "projectUsers": "users"
+    },
+    "UpdatePasswordComponent": {
+        "componentTitle": "Reset your password",
+        "newPasswordLabel": "New password",
+        "confirmPassword": "Confirm password"
     }
 }

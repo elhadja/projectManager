@@ -2,7 +2,8 @@
     "Global": {
         "requiredField": "Ce champs est obligatoire",
         "invalidEmail": "L'adresse email n'est pas valide",
-        "invalidField": "Ce champs n'est pas correcte"
+        "invalidField": "Ce champs n'est pas correcte",
+        "validateButton": "Valider"
     },
     "LoginComponent": {
         "requiredPassword": "Le mot de passe est obligatoire",
@@ -31,5 +32,10 @@
         "resetPasswordButton": "Réinitialiser",
         "login": "Se connecter",
         "signup": "S'inscrire"
+    },
+    "UpdatePasswordComponent": {
+        "componentTitle": "Modifier votre mot de passe",
+        "newPasswordLabel": "Entrez votre nouveau mot de passe",
+        "confirmPassword": "Confirmez le mot de passe"
     }
 }

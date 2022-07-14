@@ -44,4 +44,12 @@ export class RegisterComponent {
   public gotoLoginComponent():void {
     this.routingService.gotoLoginComponent();
   }
+
+  public get componentName(): string {
+    return 'RegisterComponent';
+  }
+
+  public get global(): string {
+    return 'Global';
+  }
 }

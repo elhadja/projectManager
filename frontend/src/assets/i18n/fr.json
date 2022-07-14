@@ -1,6 +1,8 @@
 {
     "Global": {
-        "requiredField": "Ce champs est obligatoire"
+        "requiredField": "Ce champs est obligatoire",
+        "invalidEmail": "L'adresse email n'est pas valide",
+        "invalidField": "Ce champs n'est pas correcte"
     },
     "LoginComponent": {
         "requiredPassword": "Le mot de passe est obligatoire",
@@ -12,5 +14,14 @@
         "createAnAccount": "Créer un compte",
         "loginWithGoogle": "Se connecter avec Google",
         "LoginComponentTitle": "Se connecter à ProjectManager"
+    },
+    "RegisterComponent": {
+        "componentTitle": "Créer un compte",
+        "emailLabel": "Adresse email",
+        "pseudoLabel": "Pseudo",
+        "passwordInput": "Mot de passe",
+        "signupButton": "S'inscrire",
+        "AlreadHaveAnAccountText": "Vous avez déjà un compte ?",
+        "loginText": "Se connecter"
     }
 }

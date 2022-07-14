@@ -1,6 +1,8 @@
 {
     "Global": {
-        "requiredField": "Required field"
+        "requiredField": "Required field",
+        "invalidEmail": "Invalid email",
+        "invalidField": "This field is not valide"
     },
     "LoginComponent": {
         "requiredPassword": "Password is required",
@@ -12,6 +14,15 @@
         "createAnAccount": "Create an account",
         "loginWithGoogle": "Login with Google",
         "LoginComponentTitle": "Sign in to ProjectManager"
+    },
+    "RegisterComponent": {
+        "componentTitle": "Create an account",
+        "emailLabel": "Email",
+        "pseudoLabel": "Username",
+        "passwordInput": "Passwword",
+        "signupButton": "Signup",
+        "AlreadHaveAnAccountText": "Do you have an account ?",
+        "loginText": "login"
     },
     "HomeComponent": {
         "projects": "Projects"

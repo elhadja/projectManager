@@ -4,39 +4,39 @@
             <div class="d-flex justify-content-center" style="margin: 20px;">
                 <img src="assets/images/project.png" width="70" height="70" alt="">
             </div>
-            <h1 class="text-center">Sign up</h1>
+            <h1 class="text-center">{{ componentName + '.componentTitle' | translate }}</h1>
             <form [formGroup]="signupFormGroup" (ngSubmit)="onSignup()" class="d-flex flex-column bloc rounded">
                 <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>Email</mat-label>
+                    <mat-label>{{ componentName + '.emailLabel' | translate }}</mat-label>
                     <input type="email" matInput formControlName="email" required>
                     <mat-error *ngIf="email?.hasError('email')">
-                        Please enter a valid email address
+                        {{ global + '.invalidEmail' | translate }}
                     </mat-error>
                     <mat-error *ngIf="email?.hasError('required')">
-                        Email is <strong>required</strong>
+                        {{ global + '.requiredField' | translate }}
                     </mat-error>
                 </mat-form-field >
 
                 <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>Pseudo</mat-label>
+                    <mat-label>{{ componentName + '.pseudoLabel' | translate }}</mat-label>
                     <input type="text" matInput formControlName="pseudo" required>
                     <mat-error *ngIf="pseudo?.hasError('required')">
-                        Please enter a valid pseudo
+                        {{ global + '.invalidField' | translate }}
                     </mat-error>
                </mat-form-field >
 
                 <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>Enter your password</mat-label>
+                    <mat-label>{{ componentName + '.passwordInput' | translate }}</mat-label>
                     <input matInput formControlName="password" [type]="hidePassword ? 'password' : 'text'" required>
                     <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
                     <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
                     <mat-error *ngIf="password?.hasError('required')">
-                        Password is <strong>required</strong>
+                        {{ global + '.requiredField' | translate }}
                     </mat-error>
                 </mat-form-field>
-                <button mat-stroked-button type="submit" [disabled]='!signupFormGroup.valid'>signup</button>
-                <span class="mt-4">Already have an account ? <a class="link" style="color: blue; text-decoration: underline;" (click)="gotoLoginComponent()">login</a></span>
+                <button mat-stroked-button type="submit" [disabled]='!signupFormGroup.valid'>{{ componentName + '.signupButton' | translate }}</button>
+                <span class="mt-4">{{ componentName + '.AlreadHaveAnAccountText' | translate }}  <a class="link" style="color: blue; text-decoration: underline;" (click)="gotoLoginComponent()">{{ componentName + '.loginText' | translate }}</a></span>
             </form>
         </div>
     </div>

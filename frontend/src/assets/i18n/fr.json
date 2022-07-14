@@ -3,7 +3,11 @@
         "requiredField": "Ce champs est obligatoire",
         "invalidEmail": "L'adresse email n'est pas valide",
         "invalidField": "Ce champs n'est pas correcte",
-        "validateButton": "Valider"
+        "validateButton": "Valider",
+        "addButton": "Ajouter",
+        "deleteButton": "Supprimer",
+        "acceptButton": "Accepter",
+        "createButton": "Créer"
     },
     "LoginComponent": {
         "requiredPassword": "Le mot de passe est obligatoire",
@@ -37,5 +41,26 @@
         "componentTitle": "Modifier votre mot de passe",
         "newPasswordLabel": "Entrez votre nouveau mot de passe",
         "confirmPassword": "Confirmez le mot de passe"
+    },
+    "HomeComponent": {
+        "componentTitle": "Projets",
+        "projectsTable": {
+            "title": "Vos projets",
+            "id": "ID",
+            "name": "Nom",
+            "description": "Description",
+            "managers": "Gestionnaires"
+        },
+        "invitationsTable": {
+            "title": "Invitations",
+            "name": "Nom",
+            "description": "Description",
+            "guest": "Envoyé par"
+        }
+    },
+    "CreateProjectComponent": {
+        "componentTitle": "Créer un projet",
+        "projectNameLabel": "Nom du projet",
+        "projectDescriptionLabel": "Description du projet"
     }
 }

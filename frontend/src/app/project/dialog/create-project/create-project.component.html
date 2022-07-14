@@ -1,21 +1,21 @@
 <div class="container">
     <div class="row">
         <div class="col d-flex flex-column justify-content-center">
-            <h1 class="text-center">New project</h1>
+            <h1 class="text-center">{{ componentName + '.componentTitle' | translate }}</h1>
             <div>
                 <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>Project Name</mat-label>
+                    <mat-label>{{ componentName + '.projectNameLabel' | translate }}</mat-label>
                     <input matInput [formControl]="projectName" minlength="2">
                 </mat-form-field>
                 <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>Project Description</mat-label>
+                    <mat-label>{{ componentName + '.projectDescriptionLabel' | translate }}</mat-label>
                     <input matInput [formControl]="projectDescription">
                 </mat-form-field>
             </div>
             <button mat-stroked-button class="mx-auto w-25"
                     (click)="onAddProject()"
                     [disabled]="!isValidForm()">
-                create
+                    {{ global + '.createButton' | translate }}
             </button>
         </div>
     </div>

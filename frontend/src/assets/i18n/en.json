@@ -3,7 +3,11 @@
         "requiredField": "Required field",
         "invalidEmail": "Invalid email",
         "invalidField": "This field is not valide",
-        "validateButton": "Validate"
+        "validateButton": "Validate",
+        "addButton": "Add",
+        "deleteButton": "Delete",
+        "acceptButton": "Accepte",
+        "createButton": "Create"
     },
     "LoginComponent": {
         "requiredPassword": "Password is required",
@@ -33,9 +37,6 @@
         "login": "Log in",
         "signup": "Sign up"
     },
-    "HomeComponent": {
-        "projects": "Projects"
-    },
     "DialogProjectDetailsComponent": {
         "projectDetails": "Project Details",
         "projectName": "Project name",
@@ -47,5 +48,26 @@
         "componentTitle": "Reset your password",
         "newPasswordLabel": "New password",
         "confirmPassword": "Confirm password"
+    },
+    "HomeComponent": {
+        "componentTitle": "Projects",
+        "projectsTable": {
+            "title": "Your Projects",
+            "id": "ID",
+            "name": "Name",
+            "description": "Description",
+            "managers": "Managers"
+        },
+        "invitationsTable": {
+            "title": "Invitations",
+            "name": "Name",
+            "description": "Description",
+            "guest": "Guest"
+        }
+    },
+    "CreateProjectComponent": {
+        "componentTitle": "Create project",
+        "projectNameLabel": "Project name",
+        "projectDescriptionLabel": "Project description"
     }
 }

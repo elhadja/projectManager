@@ -23,5 +23,13 @@
         "signupButton": "S'inscrire",
         "AlreadHaveAnAccountText": "Vous avez déjà un compte ?",
         "loginText": "Se connecter"
+    },
+    "RequestNewPasswordComponent": {
+        "componentTitle": "Réinitialiser votre mot de passe",
+        "infos": "Entrer votre addresse mail et nous vous enverrons un lien pour réinitialiser votre mot de passe",
+        "emailInput": "Email",
+        "resetPasswordButton": "Réinitialiser",
+        "login": "Se connecter",
+        "signup": "S'inscrire"
     }
 }

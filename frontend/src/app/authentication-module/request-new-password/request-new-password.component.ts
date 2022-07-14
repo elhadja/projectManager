@@ -30,4 +30,12 @@ export class RequestNewPasswordComponent {
   public gotoLoginComponent(): void {
     this.routingService.gotoLoginComponent();
   }
+
+  public get componentName(): string {
+    return 'RequestNewPasswordComponent';
+  }
+
+  public get global(): string {
+    return 'Global';
+  }
 }

@@ -24,6 +24,14 @@
         "AlreadHaveAnAccountText": "Do you have an account ?",
         "loginText": "login"
     },
+    "RequestNewPasswordComponent": {
+        "componentTitle": "Reset password",
+        "infos": "Enter your email address below and we'll send you a link to reset your password.",
+        "emailInput": "Email",
+        "resetPasswordButton": "Reset password",
+        "login": "Log in",
+        "signup": "Sign up"
+    },
     "HomeComponent": {
         "projects": "Projects"
     },

@@ -9,7 +9,9 @@
         "acceptButton": "Accepte",
         "createButton": "Create",
         "cancelButton": "Cancel",
-        "searchButton": "Search"
+        "searchButton": "Search",
+        "yesButton": "Yes",
+        "noButton": "No"
     },
     "LoginComponent": {
         "requiredPassword": "Password is required",
@@ -88,5 +90,9 @@
            "pseudo": "Username",
            "manager": "Gestionnaire"
         }
+    },
+    "DialogConfirmComponent": {
+        "componentTitle": "Confirm",
+        "goQuestion": "Are you sure you want to continue ?"
     }
 }

@@ -9,6 +9,9 @@ import { TextLengthPipe } from './pipes/text-length.pipe';
 import { ActivityComponent } from './activity/activity.component';
 import { MatListModule } from '@angular/material/list';
 import { DialogActivityComponent } from './dialog-activity/dialog-activity.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { HttpLoaderFactory } from 'src/app/app.module';
 
 
 
@@ -25,7 +28,12 @@ import { DialogActivityComponent } from './dialog-activity/dialog-activity.compo
     MatDialogModule,
     MatButtonModule,
     MatListModule,
-    CommonModule
+    CommonModule,
+    TranslateModule.forChild({
+      loader: {provide: TranslateLoader, useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
   ],
   exports: [
     DialogInfosComponent,

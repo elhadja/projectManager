@@ -2,6 +2,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { PMConstants } from 'src/app/common/PMConstants';
 import { CustomRevisionEntityDTO } from 'src/app/dto/custom-revision-entity.dto';
@@ -44,7 +45,8 @@ export class BacklogComponent implements OnInit {
               private messageService: MessageService,
               private projectApiService: ProjectApiService,
               private route: ActivatedRoute,
-              private readonly _sessionManagerService: sessionManagerService) { 
+              private readonly _sessionManagerService: sessionManagerService,
+              private readonly _translateService: TranslateService) { 
 
     this.projectId = 0;
     const help = this.route.snapshot.paramMap.get('backlog-id');
@@ -338,5 +340,21 @@ export class BacklogComponent implements OnInit {
 
   get now(): Date {
     return new Date();
+  }
+
+  public get componentName(): string {
+    return 'BacklogComponent';
+  }
+
+  public get global(): string {
+    return 'Global';
+  }
+
+  public get sprintTable(): string {
+    return 'sprintTable';
+  }
+
+  public get backlogTable(): string {
+    return 'backlogTable';
   }
 }

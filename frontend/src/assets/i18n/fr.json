@@ -94,5 +94,31 @@
     "DialogConfirmComponent": {
         "componentTitle": "Confirmer",
         "goQuestion": "Êtes vous sûre de vouloir continuer ?"
+    },
+    "BacklogComponent": {
+        "componentTitle": "Backlog",
+        "totalStoryPointToolTip": "charge totale",
+        "realizedStoryPointToolTip": "story points réalisés",
+        "toDoStoryPointToolTip": "story points à faire",
+        "addUs": "ajouter",
+        "openUsButton": "Ouvrir",
+        "closeUsButton": "Fermer",
+        "removeUsButton": "Supprimer",
+        "startSprint": "Demarrer le sprint",
+        "finishSprint": "Terminer le sprint",
+        "createSprint": "Ajouter un sprint",
+        "sprintTable": {
+            "id": "id",
+            "summary": "description",
+            "storyPoint": "storypoint",
+            "importance": "importance",
+            "status": "statut"
+        },
+        "backlogTable": {
+            "id": "id",
+            "summary": "description",
+            "storyPoint": "storypoint",
+            "importance": "importance"
+        }
     }
 }

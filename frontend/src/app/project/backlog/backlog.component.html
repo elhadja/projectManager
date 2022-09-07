@@ -37,22 +37,22 @@
                                                 class="px-2"
                                                 dataFormat="yyyy-mm-dd">
                                     </p-calendar>
-                                    <p-badge matTooltip="total story points" severity="info" styleClass="p-mr-2" [value]="sprintWrapper.totalStoryPoints"></p-badge>
-                                    <p-badge matTooltip="done" class="mx-1" severity="success" styleClass="p-mr-2" [value]="sprintWrapper.totalClosedUserStoriesStoryPoints"></p-badge>
-                                    <p-badge matTooltip="todo" severity="danger" styleClass="p-mr-2" [value]="sprintWrapper.totalOpenedUserStoriesStoryPoints"></p-badge>
+                                    <p-badge [matTooltip]="componentName + '.' + 'totalStoryPointToolTip' | translate" severity="info" styleClass="p-mr-2" [value]="sprintWrapper.totalStoryPoints"></p-badge>
+                                    <p-badge [matTooltip]="componentName + '.' + 'realizedStoryPointToolTip' | translate" class="mx-1" severity="success" styleClass="p-mr-2" [value]="sprintWrapper.totalClosedUserStoriesStoryPoints"></p-badge>
+                                    <p-badge [matTooltip]="componentName + '.' + 'toDoStoryPointToolTip' | translate" severity="danger" styleClass="p-mr-2" [value]="sprintWrapper.totalOpenedUserStoriesStoryPoints"></p-badge>
                                 </div>
                                 <div class="table-action">
-                                    <button *ngIf="sprintWrapper.selectedUserStoriesFromSprint.length > 0" class="text-danger" mat-stroked-button (click)=onDeleteSelectedSprintsUserStories(sprintWrapper)>delete U.S</button>
-                                    <button *ngIf="sprintWrapper.selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onCloseSelectedSprintsUserStories(sprintWrapper)>Close U.S</button>
-                                    <button *ngIf="sprintWrapper.selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onOpenSelectedSprintsUserStories(sprintWrapper)>Open U.S</button>
-                                    <button mat-stroked-button class="text-primary" (click)=onOpenCreateUserStoryDialogFromSprint(sprintWrapper.sprint.id)>create U.S</button>
+                                    <button *ngIf="sprintWrapper.selectedUserStoriesFromSprint.length > 0" class="text-danger" mat-stroked-button (click)=onDeleteSelectedSprintsUserStories(sprintWrapper)>{{ componentName + '.removeUsButton' | translate }}</button>
+                                    <button *ngIf="sprintWrapper.selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onCloseSelectedSprintsUserStories(sprintWrapper)>{{ componentName + '.closeUsButton' | translate }}</button>
+                                    <button *ngIf="sprintWrapper.selectedUserStoriesFromSprint.length > 0" class="text-primary" mat-stroked-button (click)=onOpenSelectedSprintsUserStories(sprintWrapper)>{{ componentName + '.openUsButton' | translate }}</button>
+                                    <button mat-stroked-button class="text-primary" (click)=onOpenCreateUserStoryDialogFromSprint(sprintWrapper.sprint.id)>{{ componentName + '.addUs' | translate }}</button>
                                     <button [class.text-primary]="!isActiveSprint" *ngIf="sprintWrapper.sprint.status === 'CREATED'; else terminate" mat-stroked-button 
                                             (click)="onStartSprint(sprintWrapper)"
                                             [disabled]="isActiveSprint && sprintWrapper.sprint.status !== SPRINT_STATUS_STARTED">
-                                        Start
+                                        {{ componentName + '.startSprint' | translate }}
                                     </button>
                                     <ng-template  #terminate>
-                                        <button class="text-danger" mat-stroked-button (click)="onTerminateSprint(sprintWrapper)">Terminate</button>
+                                        <button class="text-danger" mat-stroked-button (click)="onTerminateSprint(sprintWrapper)">{{ componentName + '.finishSprint' | translate }}</button>
                                     </ng-template>
                                 </div>
                             </div>
@@ -72,11 +72,11 @@
                                 <th style="width: 3rem">
                                     <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                                 </th>
-                                <th>ID</th>
-                                <th>summary</th>
-                                <th>storyPoint</th>
-                                <th>Importance</th>
-                                <th>Status</th>
+                                <th>{{ componentName + '.' + sprintTable + '.id' | translate }}</th>
+                                <th>{{ componentName + '.' + sprintTable + '.summary' | translate }}</th>
+                                <th>{{ componentName + '.' + sprintTable + '.storyPoint' | translate }}</th>
+                                <th>{{ componentName + '.' + sprintTable + '.importance' | translate }}</th>
+                                <th>{{ componentName + '.' + sprintTable + '.status' | translate }}</th>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-row>
@@ -117,9 +117,9 @@
                                 <span style="vertical-align:baseline;">Backlog</span>
                             </div>
                             <div class="table-action">
-                                <button *ngIf="selectedUserStoriesFromBacklog.length > 0" class="text-danger" mat-stroked-button (click)=onDeleteSelectedBacklogUserStories()>delete U.S</button>
-                                <button mat-stroked-button class="text-primary" (click)=onOpenCreateUserStoryDialogFromBacklog()>create U.S</button>
-                                <button mat-stroked-button class="text-primary" (click)=onOpenCreateSprintDialog()>create sprint</button>
+                                <button *ngIf="selectedUserStoriesFromBacklog.length > 0" class="text-danger" mat-stroked-button (click)=onDeleteSelectedBacklogUserStories()>{{ componentName + '.removeUsButton' | translate }}</button>
+                                <button mat-stroked-button class="text-primary" (click)=onOpenCreateUserStoryDialogFromBacklog()>{{ componentName + '.addUs' | translate }}</button>
+                                <button mat-stroked-button class="text-primary" (click)=onOpenCreateSprintDialog()>{{ componentName + '.createSprint' | translate }}</button>
                             </div>
                         </div>
                     </ng-template>
@@ -137,12 +137,13 @@
                             <th style="width: 3rem">
                                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                             </th>
-                            <th>ID</th>
-                            <th>summary</th>
+                            <th>{{ componentName + '.' + backlogTable + '.id' | translate }}</th>
+                            <th>{{ componentName + '.' + backlogTable + '.summary' | translate }}</th>
                             <th class="d-flex justify-content-between">
-                                storyPoint
-                                <p-badge severity="success" styleClass="p-mr-2" [value]="backlogTotalStoryPoints"></p-badge></th>
-                            <th>Importance</th>
+                                {{ componentName + '.' + backlogTable + '.storyPoint' | translate }}
+                                <p-badge severity="success" styleClass="p-mr-2" [value]="backlogTotalStoryPoints"></p-badge>
+                            </th>
+                            <th>{{ componentName + '.' + backlogTable + '.importance' | translate }}</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-row>

@@ -3,6 +3,7 @@
         "requiredField": "Required field",
         "invalidEmail": "Invalid email",
         "invalidField": "This field is not valide",
+        "minCharacterError": "Must contain at least {{value}} characteres",
         "validateButton": "Validate",
         "addButton": "Add",
         "deleteButton": "Delete",
@@ -11,7 +12,8 @@
         "cancelButton": "Cancel",
         "searchButton": "Search",
         "yesButton": "Yes",
-        "noButton": "No"
+        "noButton": "No",
+        "updateButton": "Update"
     },
     "LoginComponent": {
         "requiredPassword": "Password is required",
@@ -120,5 +122,21 @@
             "storyPoint": "storypoint",
             "importance": "importance"
         }
+    },
+    "DialogCreateUerStoryComponent": {
+        "title": "User story",
+        "summary": "Summary",
+        "description": "Description",
+        "storyPoints": "Story points",
+        "importance": "Importance"
+    },
+    "DialogCreateSprintComponent": {
+        "title": "Create sprint",
+        "name": "Name"
+    },
+    "ActivityComponent": {
+        "activities": "Activities",
+        "showActivities": "Show activities",
+        "hideActivities": "HideActivities"
     }
 }

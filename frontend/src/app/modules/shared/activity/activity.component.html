@@ -1,8 +1,9 @@
 <div class="row my-3" *ngIf="activities != null && activities.length > 0">
     <div class="col">
         <div class="d-flex justify-content-between">
-            <h2>Activities</h2>
-            <button *ngIf="manageVisibility" mat-stroked-button class="text-primary" (click)="showActivities = !showActivities">{{ showActivities ? "Hide Activities" : "Show Activities" }}</button>
+            <h2>{{ componentName + '.activities' | translate }}</h2>
+            <button *ngIf="manageVisibility" mat-stroked-button class="text-primary" (click)="showActivities = !showActivities">
+                {{ (showActivities ? componentName + ".hideActivities" : componentName + ".showActivities") | translate }}</button>
         </div>
         <div *ngIf="showActivities">
             <mat-list>

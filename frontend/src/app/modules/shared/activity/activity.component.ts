@@ -20,4 +20,8 @@ export class ActivityComponent {
 
     this.activities = [];
   }
+
+  public get componentName(): string {
+    return 'ActivityComponent';
+  }
 }

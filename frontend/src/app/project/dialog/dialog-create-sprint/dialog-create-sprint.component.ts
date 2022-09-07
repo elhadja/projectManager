@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+/* eslint-disable indent */
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AddSprintToProjectOutputDTO } from 'src/app/dto/addSprintToProjectOutputDTO';
@@ -8,7 +9,7 @@ import { AddSprintToProjectOutputDTO } from 'src/app/dto/addSprintToProjectOutpu
   templateUrl: './dialog-create-sprint.component.html',
   styleUrls: ['./dialog-create-sprint.component.css']
 })
-export class DialogCreateSprintComponent implements OnInit {
+export class DialogCreateSprintComponent {
   public sprintForm: FormGroup;
 
   constructor(private readonly fb: FormBuilder,
@@ -18,9 +19,6 @@ export class DialogCreateSprintComponent implements OnInit {
     });
    }
 
-  ngOnInit(): void {
-  }
-
   public onValidate(): void {
     this.dialogRef.close({
       name: this.name?.value
@@ -29,6 +27,10 @@ export class DialogCreateSprintComponent implements OnInit {
 
   public get name() {
     return this.sprintForm.get('name');
+  }
+
+  public get componentName(): string {
+    return 'DialogCreateSprintComponent';
   }
 
 }

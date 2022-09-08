@@ -187,4 +187,12 @@ export class DialogCreateTaskComponent implements OnInit {
   get dependencies() {
     return this.taskFormGroup.get('dependencies');
   }
+
+  public get componentName(): string {
+    return 'x';
+  }
+
+  public get global(): string {
+    return 'Global';
+  }
 }

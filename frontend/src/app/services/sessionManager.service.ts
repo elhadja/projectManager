@@ -1,6 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import { PMConstants } from '../common/PMConstants';
 import { DialogInfosComponent } from '../modules/shared/dialog-infos/dialog-infos.component';
@@ -60,6 +61,11 @@ export class sessionManagerService {
   public subscribeIdle(): void {
     this.idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
     this.idle.watch();
+  }
+
+  public setLanguage(lang: string): void {
+    this.injector.get(TranslateService).use(lang);
+    this.injector.get(API).setLang(lang);
   }
 
   public start(token: string, expiresIn: number, userId?: number): void {

@@ -35,6 +35,12 @@
                         {{ global + '.requiredField' | translate }}
                     </mat-error>
                 </mat-form-field>
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>{{ global + '.language' | translate }}</mat-label>
+                    <mat-select formControlName="lang">
+                        <mat-option *ngFor="let option of languages" [value]="option.value">{{option.label}}</mat-option>
+                    </mat-select>
+                </mat-form-field >
                 <button mat-stroked-button type="submit" [disabled]='!signupFormGroup.valid'>{{ componentName + '.signupButton' | translate }}</button>
                 <span class="mt-4">{{ componentName + '.AlreadHaveAnAccountText' | translate }}  <a class="link" style="color: blue; text-decoration: underline;" (click)="gotoLoginComponent()">{{ componentName + '.loginText' | translate }}</a></span>
             </form>

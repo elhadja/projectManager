@@ -13,6 +13,7 @@ export class API {
   private httpOptions: {
         headers?: HttpHeaders;
     } | undefined;
+  private accept_language = PMConstants.DEFAULT_LANG;
 
   constructor(private httpClient: HttpClient, private messageService: MessageService,
     private readonly appErrorHandler: AppErrorHandler) {
@@ -67,6 +68,10 @@ export class API {
     if (token != null && token != '') {
       this.httpOptions.headers = this.httpOptions.headers?.set('Authorization', 'Bearer ' + token);
     }
+  }
+
+  public setLang(lang: string): void {
+    this.accept_language = lang;
   }
 
   public clearHeader(): void {

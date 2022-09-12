@@ -1,4 +1,16 @@
 export class PMConstants {
+  public static DEFAULT_LANG = 'fr';
+  public static AVAILABLE_LANG = [
+    {
+      label: 'Français',
+      value: 'fr'
+    },
+    {
+      label: 'English',
+      value: 'en'
+    }
+  ];
+
   // Auth module URI
   public static AUTHENTICATION_MODULE_BASE_URI = 'auth';
   public static SIGNUP_URI = 'signup';

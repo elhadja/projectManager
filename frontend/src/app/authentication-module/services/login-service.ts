@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
 import { ApiConstant } from 'src/app/common/ApiConstant';
-import { PMConstants } from 'src/app/common/PMConstants';
 import { LoginInputDTO } from 'src/app/dto/login.input.interface';
 import { LoginOutputDTO } from 'src/app/dto/login.output.interface';
 import { UserApiService } from 'src/app/PMApi/user-api.service';

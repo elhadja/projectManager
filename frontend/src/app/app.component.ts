@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { PMConstants } from './common/PMConstants';
 import { RoutingService } from './services/routing.service';
 import { sessionManagerService } from './services/sessionManager.service';
 
@@ -13,7 +14,7 @@ export class AppComponent {
   constructor(private translate: TranslateService,
               private readonly sessionManagerService: sessionManagerService,
               private readonly routingService: RoutingService) {
-    translate.setDefaultLang('fr');
+    translate.setDefaultLang(PMConstants.DEFAULT_LANG);
 
     if (sessionManagerService.isActive()) {
       sessionManagerService.subscribeIdle();

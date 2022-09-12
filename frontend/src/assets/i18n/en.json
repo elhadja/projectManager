@@ -13,7 +13,8 @@
         "searchButton": "Search",
         "yesButton": "Yes",
         "noButton": "No",
-        "updateButton": "Update"
+        "updateButton": "Update",
+        "language": "Language"
     },
     "LoginComponent": {
         "requiredPassword": "Password is required",

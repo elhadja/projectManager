@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PMConstants } from 'src/app/common/PMConstants';
 import { RoutingService } from 'src/app/services/routing.service';
@@ -20,7 +20,7 @@ export class RegisterComponent {
       email: new FormControl('', [Validators.email]),
       pseudo: new FormControl(''),
       password: new FormControl(''),
-      lang: new FormControl(PMConstants.DEFAULT_LANG)
+      lang: new FormControl(_sessionManager.getLanguage())
     });
 
     this.lang?.valueChanges.subscribe(value => _sessionManager.setLanguage(value));

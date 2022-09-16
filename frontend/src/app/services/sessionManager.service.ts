@@ -2,7 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DEFAULT_INTERRUPTSOURCES, Idle } from '@ng-idle/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { PMConstants } from '../common/PMConstants';
 import { DialogInfosComponent } from '../modules/shared/dialog-infos/dialog-infos.component';
 import { API } from './Api';
@@ -17,10 +17,9 @@ export class sessionManagerService {
   public idleCountdown: number;
 
   public $idleWarningMessageSubject: Subject<string>;
-
   public userLoggedEmitter: Subject<boolean>;
   public projectSelectedSubject: Subject<void>;
-  private readonly invalidId: number;
+  public curranLanguageSubject: Subject<string>;
 
   constructor(private readonly routingService: RoutingService,
              private readonly idle: Idle,
@@ -28,9 +27,9 @@ export class sessionManagerService {
              private readonly injector: Injector) {
     this.userLoggedEmitter = new Subject<boolean>();
     this.projectSelectedSubject = new Subject<void>();
-    this.invalidId = -1;
     this.idleCountdown = this.IDLE_TIMEOUT;
     this.$idleWarningMessageSubject = new Subject();
+    this.curranLanguageSubject = new Subject();
 
     idle.setIdle(this.IDLE_END);
     idle.setTimeout(this.IDLE_TIMEOUT);
@@ -66,6 +65,25 @@ export class sessionManagerService {
   public setLanguage(lang: string): void {
     this.injector.get(TranslateService).use(lang);
     this.injector.get(API).setLang(lang);
+    localStorage.setItem(PMConstants.SESSION_LANG, lang);
+    this.curranLanguageSubject.next(lang);
+  }
+
+  public getLanguage(): string {
+    let currentLang: string | null = this.injector.get(TranslateService).currentLang;
+    if (currentLang != null && currentLang !== '') {
+      return currentLang;
+    }
+    currentLang = localStorage.getItem(PMConstants.SESSION_LANG);
+    if (currentLang != null) {
+      return currentLang;
+    }
+    
+    return this.injector.get(TranslateService).getDefaultLang();
+  }
+
+  public getCurrentLanguage(): Subject<string> {
+    return this.curranLanguageSubject;
   }
 
   public start(token: string, expiresIn: number, userId?: number): void {

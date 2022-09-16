@@ -42,8 +42,9 @@ export class PMConstants {
   public static SPRINT_STATUS_CLOSED = 'CLOSED';
 
   // session keys
-  public static SESSION_USER_ID_KEY = "USER_ID";
-  public static SESSION_PROJECT_ID_KEY = "PROJECT_ID";
-  public static SESSION_TOKEN_ID_KEY = "TOKEN";
-  public static SESSION_EXPIRATION = "EXPIRES_IN";
+  public static SESSION_USER_ID_KEY = 'USER_ID';
+  public static SESSION_PROJECT_ID_KEY = 'PROJECT_ID';
+  public static SESSION_TOKEN_ID_KEY = 'TOKEN';
+  public static SESSION_EXPIRATION = 'EXPIRES_IN';
+  public static SESSION_LANG = 'CURRENT_LANG';
 }

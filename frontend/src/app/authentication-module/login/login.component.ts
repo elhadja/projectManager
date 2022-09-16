@@ -30,7 +30,7 @@ export class LoginComponent {
     this.hidePassword = true;
     this.userIdentifierFormControl = new FormControl('', [Validators.required, Validators.minLength(this.USER_IDENTIFIER_MIN_LENGTH)]);
     this.passwordFormControl = new FormControl('', [Validators.required]);
-    this.lang = new FormControl(PMConstants.DEFAULT_LANG);
+    this.lang = new FormControl(sessionManagerService.getLanguage());
     this.lang.valueChanges.subscribe(val => sessionManagerService.setLanguage(val));
   }
 

@@ -4,12 +4,19 @@
     </ng-template>
     <ng-template pTemplate="end">
         <div>
+            <ng-container [ngSwitch]="currentLanguage">
+                <ng-container *ngSwitchCase="'fr'" >
+                    <img src="assets/images/france.png" width="30" height="30" alt="" type="button" (click)="menuLanguage.toggle($event)">
+                </ng-container>
+                <ng-container *ngSwitchCase="'en'" >
+                    <img src="assets/images/royaume-uni.png" width="30" height="30" alt="" type="button" (click)="menuLanguage.toggle($event)">
+                </ng-container>
+
+            </ng-container>
+            <p-slideMenu #menuLanguage [model]="languageItems" [popup]="true"></p-slideMenu>
             <img src="assets/images/compte.png" width="30" height="30" alt=""
                 #btn type="button" label="Show" (click)="menu.toggle($event)">
             <p-slideMenu #menu [model]="userItems" [popup]="true"></p-slideMenu>
-            <!--
-            <img src="assets/images/france.png" width="30" height="30" alt="">
-            -->
         </div>
     </ng-template>
 </p-menubar>

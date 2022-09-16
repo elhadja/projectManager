@@ -41,6 +41,15 @@ export class MenuBarComponent implements OnInit {
       this.currentLanguage = language;
     });
     this.initializeMenu();
+
+    PMConstants.AVAILABLE_LANG.forEach(language => {
+      this.languageItems.push({
+        label: language.label,
+        command: () => {
+          this.sessionService.setLanguage(language.value);
+        }
+      });
+    });
   }
 
   private initializeMenu(): void {
@@ -73,17 +82,6 @@ export class MenuBarComponent implements OnInit {
         command: () => { this.routingService.gotoAccountComponent(); }
       }
     ];
-
-    PMConstants.AVAILABLE_LANG.forEach(language => {
-      this.languageItems.push({
-        label: language.label,
-        command: () => {
-          this.sessionService.setLanguage(language.value);
-        }
-      });
-    });
-
-    this.languageItems = [...new Set(this.languageItems)];
   }
 
   private isProjectSelected(): boolean {

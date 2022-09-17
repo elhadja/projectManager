@@ -13,7 +13,6 @@ export class API {
   private httpOptions: {
         headers?: HttpHeaders;
     } | undefined;
-  private accept_language = PMConstants.DEFAULT_LANG;
 
   constructor(private httpClient: HttpClient, private messageService: MessageService,
     private readonly appErrorHandler: AppErrorHandler) {
@@ -71,7 +70,9 @@ export class API {
   }
 
   public setLang(lang: string): void {
-    this.accept_language = lang;
+    if (this.httpOptions != null) {
+      this.httpOptions.headers = this.httpOptions.headers?.set('Accept-Language', lang);
+    }
   }
 
   public clearHeader(): void {

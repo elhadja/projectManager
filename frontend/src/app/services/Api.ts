@@ -12,18 +12,24 @@ export class API {
   private baseURI: string;
   private httpOptions: {
         headers?: HttpHeaders;
-    } | undefined;
+    };
 
   constructor(private httpClient: HttpClient, private messageService: MessageService,
     private readonly appErrorHandler: AppErrorHandler) {
     this.baseURI = environment.api_base_uri;
-    this.httpOptions = undefined;
+    this.httpOptions =  {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept-Language': PMConstants.DEFAULT_LANG,
+      })
+    };
+
     const token = localStorage.getItem(PMConstants.SESSION_TOKEN_ID_KEY);
     this.setHttpOptions(token ?? '');
   }
 
   public postWithoutHeaders(uri: string, body: any): Observable<any> {
-    return this.httpClient.post(this.baseURI + uri, body)
+    return this.httpClient.post(this.baseURI + uri, body, {headers: this.httpOptions?.headers?.delete('Authorization')})
       .pipe(
         catchError(this.appErrorHandler.handleApiRequestError)
       );
@@ -55,7 +61,7 @@ export class API {
   }
 
   public setHttpOptions(token: string) {
-    if (this.httpOptions == null || this.httpOptions.headers == null) {
+    if (this.httpOptions.headers == null) {
       this.httpOptions = {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
@@ -70,9 +76,7 @@ export class API {
   }
 
   public setLang(lang: string): void {
-    if (this.httpOptions != null) {
-      this.httpOptions.headers = this.httpOptions.headers?.set('Accept-Language', lang);
-    }
+    this.httpOptions.headers = this.httpOptions.headers?.set('Accept-Language', lang);
   }
 
   public clearHeader(): void {

@@ -1,6 +1,5 @@
-package com.elhadjium.PMBackend.controller;
+package com.elhadjium.PMBackend.dto;
 
-import com.elhadjium.PMBackend.dto.DTOValidator;
 import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.util.JavaUtil;
 

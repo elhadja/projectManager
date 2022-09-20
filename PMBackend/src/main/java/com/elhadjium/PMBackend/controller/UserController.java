@@ -27,6 +27,7 @@ import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.common.MessageManager;
 import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.controller.constant.UserControllerConstant;
+import com.elhadjium.PMBackend.dto.AddUserProjectInputDTO;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserInvitationsOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserProjectOutputDTO;

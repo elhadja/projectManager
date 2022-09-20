@@ -1,16 +1,12 @@
 package com.elhadjium.PMBackend.controller;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,29 +24,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
+import com.elhadjium.PMBackend.common.MessageManager;
 import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.controller.constant.UserControllerConstant;
 import com.elhadjium.PMBackend.dto.ErrorOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserInvitationsOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUserProjectOutputDTO;
 import com.elhadjium.PMBackend.dto.GetUsersByCriteriaInputDTO;
-import com.elhadjium.PMBackend.dto.UserDTO;
 import com.elhadjium.PMBackend.dto.LoginInputDTO;
 import com.elhadjium.PMBackend.dto.LoginOutputDTO;
 import com.elhadjium.PMBackend.dto.PasswordReinitialisationTokenInputDTO;
 import com.elhadjium.PMBackend.dto.ProjectManagerOutputDTO;
 import com.elhadjium.PMBackend.dto.UpdateEmailInput;
 import com.elhadjium.PMBackend.dto.UpdatePasswordInputDTO;
+import com.elhadjium.PMBackend.dto.UserDTO;
 import com.elhadjium.PMBackend.dto.signupInputDTO;
 import com.elhadjium.PMBackend.entity.CustomUserDetails;
 import com.elhadjium.PMBackend.entity.InvitationToProject;
 import com.elhadjium.PMBackend.entity.UserAccount;
 import com.elhadjium.PMBackend.exception.PMBadCredentialsException;
+import com.elhadjium.PMBackend.exception.PMEntityNotExistsException;
 import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.exception.PMRuntimeException;
 import com.elhadjium.PMBackend.service.UserService;
-import com.elhadjium.PMBackend.util.DateTimeUtil;
-import com.elhadjium.PMBackend.util.JavaUtil;
 import com.elhadjium.PMBackend.util.JwtToken;
 import com.google.api.client.auth.openidconnect.IdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
@@ -70,10 +66,10 @@ public class UserController {
 	private AuthenticationManager authManager;
 	
 	@Autowired
-	private JwtToken jwt;
+	private MessageManager messageManager;
 	
 	@Autowired
-	private MessageSource messageSource;
+	private JwtToken jwt;
 	
 	// TODO to remove
 	@PostMapping("testEmail")
@@ -99,7 +95,7 @@ public class UserController {
 		try {
 			authManager.authenticate(new UsernamePasswordAuthenticationToken(input.getUserIdentifier(), input.getPassword())); 
 		} catch (BadCredentialsException e) {
-			throw new PMBadCredentialsException("Incorrect credentials");
+			throw new PMBadCredentialsException(messageManager.getTranslation(MessageManager.INCORRECT_CREDENTIALS));
 		}
 
 		CustomUserDetails userCusDetails = (CustomUserDetails) userService.loadUserByUsername(input.getUserIdentifier());
@@ -112,7 +108,6 @@ public class UserController {
 	
 	@PostMapping("loginWithGoogle")
 	public LoginOutputDTO loginWithGoogle(@RequestBody String googleTokenId) throws Exception {
-		File file = new File("jeTaime.txt");
 		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
 				.setAudience(Collections.singletonList("834948493456-5qgjhtcvu6v0ueso0nbmed40m4a3r2ev.apps.googleusercontent.com"))
 				.build();
@@ -128,7 +123,7 @@ public class UserController {
 			}
 		}
 		
-		throw new PMBadCredentialsException("Incorrect credentials");
+		throw new PMBadCredentialsException(messageManager.getTranslation(MessageManager.INCORRECT_CREDENTIALS));
 	}
 	
 	@PostMapping("{id}/projects")
@@ -215,7 +210,9 @@ public class UserController {
 		link.append("?token=");
 		link.append(jwt.generateToken(input.getEmail(), System.currentTimeMillis() + (12 * 60 * 60 * 1000), "secret"));
 		
-		userService.sendSimpleEmail(input.getEmail(), "Password Reinitialization", link.toString());
+		userService.sendSimpleEmail(input.getEmail(),
+									messageManager.getTranslation(MessageManager.PASSWORD_RESET_SUBJECT),
+									link.toString());
 	}
 	
 	private String buildReinitialisationLink(String frontendURI, String tokenId) {
@@ -233,18 +230,12 @@ public class UserController {
 			email = jwt.extractUsername(jwToken);
 			userService.loadUserByUsername(email);
 		} catch (ExpiredJwtException | UsernameNotFoundException e) {
-			throw new PMInvalidInputDTO("This token has expired or are not valide, try to get a new token");
+			throw new PMInvalidInputDTO(messageManager.getTranslation(MessageManager.INVALLID_TOKEN));
 		}
 
 		userService.updateUserPassword(email, newUserPassword);
 	}
 	
-	// TODO remove
-	@GetMapping("test")
-	public String test() {
-		return messageSource.getMessage("good.morning.message", null, LocaleContextHolder.getLocale());
-	}
-
 	@GetMapping("{id}")
 	public UserDTO getUserById(@PathVariable("id") Long userId) throws Exception {
 		UserAccount user = userService.getUserById(userId);
@@ -269,11 +260,14 @@ public class UserController {
 	
 	@PostMapping("{id}/updateEmail")
 	public void updateuserEmail(@PathVariable("id") String userId, @RequestBody UpdateEmailInput input) {
-		UserAccount user = userService.getUserById(Long.valueOf(userId));
-		if (user != null) {
-			userService.sendSimpleEmail(input.getEmail(), "Mail confirmation", buildReinitialisationLink(input.getUrl(), user.getEmail() + "##" + input.getEmail()));
-		} else {
-			throw new PMInvalidInputDTO("Invalid user identifier");
+		try {
+			UserAccount user = userService.getUserById(Long.valueOf(userId));
+			userService.sendSimpleEmail(input.getEmail(),
+									messageManager.getTranslation(MessageManager.MAIL_CONFIRMATION_SUBJECT),
+									buildReinitialisationLink(input.getUrl(), user.getEmail() + "##" + input.getEmail()));
+
+		} catch (NoSuchElementException e) {
+			throw new PMEntityNotExistsException(messageManager.getTranslation(MessageManager.ENTITY_NOT_FOUND_ERROR));
 		}
 	}
 
@@ -285,7 +279,7 @@ public class UserController {
 			userService.loadUserByUsername(mails.split("##")[0]);
 			newEmail = mails.split("##")[1];
 		} catch (ExpiredJwtException | UsernameNotFoundException e) {
-			throw new PMInvalidInputDTO("This token has expired or are not valide");
+			throw new PMInvalidInputDTO(messageManager.getTranslation(MessageManager.INVALLID_TOKEN));
 		}
 
 		userService.UpdateUserEmail(Long.valueOf(userId), newEmail);

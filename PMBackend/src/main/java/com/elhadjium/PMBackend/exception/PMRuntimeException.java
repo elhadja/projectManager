@@ -3,23 +3,39 @@ package com.elhadjium.PMBackend.exception;
 public class PMRuntimeException extends RuntimeException{
 	private static final long serialVersionUID = 1L;
 	
-	private int status;
+	private String details;
+	private int statusCode = 500;
 
 	public PMRuntimeException(String message) {
 		super(message);
-		status = 500;
+		this.details = message;
 	}
-
-	public PMRuntimeException(String message, int status) {
+	
+	protected PMRuntimeException(String message, int statusCode) {
 		super(message);
-		this.status = status;
+		this.statusCode = statusCode;
+	}
+	
+	protected PMRuntimeException(String message, String details, int statusCode) {
+		super(message);
+		this.statusCode = statusCode;
+		this.details = details;
 	}
 
-	public int getStatus() {
-		return status;
+
+	public String getDetails() {
+		return details;
 	}
 
-	public void setStatus(int status) {
-		this.status = status;
+	public void setDetails(String details) {
+		this.details = details;
+	}
+
+	public int getStatusCode() {
+		return statusCode;
+	}
+
+	protected void setStatusCode(int statusCode) {
+		this.statusCode = statusCode;
 	}
 }

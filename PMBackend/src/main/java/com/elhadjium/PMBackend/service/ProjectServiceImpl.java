@@ -129,19 +129,19 @@ public class ProjectServiceImpl implements ProjectService {
 			}
 		}
 		if (!isManager) {
-			throw new PMRuntimeException("You don't have access to this functionality", 400);
+			throw new PMRuntimeException("You don't have access to this functionality");
 		}
 
 		UserAccount guest = userDAO.findById(input.getGuestId()).get();
 		guest.getProjects().forEach((project) -> {
 			if (project.getProject().getId() == projectId) {
-				throw new PMRuntimeException("User already on this project", 400);
+				throw new PMRuntimeException("User already on this project");
 			}
 		});
 		
 		guest.getInvitationnToProject().forEach((invitation) -> {
 			if (invitation.getProject().getId() == projectId) {
-				throw new PMRuntimeException("An anvitation was already sent to this user", 400);
+				throw new PMRuntimeException("An anvitation was already sent to this user");
 			}
 		});
 		

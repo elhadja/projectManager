@@ -287,12 +287,8 @@ public class UserController {
 	}
 
 	// TODO handle Any Exception othan than PMruntimeException
-	@ExceptionHandler({PMRuntimeException.class})
-	public ResponseEntity<?> handleException(PMRuntimeException ex) {
-		ErrorOutputDTO errorOutputDTO = new ErrorOutputDTO();
-		errorOutputDTO.setMessage(ex.getMessage());
-		errorOutputDTO.setMessageDescription(ex.getMessage());
-
-		return ResponseEntity.status(ex.getStatus()).body(errorOutputDTO);
+	@ExceptionHandler({Exception.class})
+	public ResponseEntity<?> handleException(Exception ex) {
+		return ControllerUtil.handleException(ex);
 	}
 }

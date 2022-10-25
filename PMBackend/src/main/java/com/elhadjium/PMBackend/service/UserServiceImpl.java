@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
+import com.elhadjium.PMBackend.common.MessageManager;
+import com.elhadjium.PMBackend.common.PMConstants;
 import com.elhadjium.PMBackend.dao.InvitationToProjectDAO;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
@@ -44,10 +46,10 @@ public class UserServiceImpl implements UserService {
 	private ProjectDAO projectDAO;
 	
 	@Autowired
-	private MessageSource messageSource;
+	private InvitationToProjectDAO invitationToProjectDAO;
 	
 	@Autowired
-	private InvitationToProjectDAO invitationToProjectDAO;
+	private MessageManager messageManager;
 	
 	private BCryptPasswordEncoder passwordEncodere = new BCryptPasswordEncoder();
 	
@@ -58,7 +60,7 @@ public class UserServiceImpl implements UserService {
 	public Long signup(UserAccount user) {
 		if (userDAO.findByPseudo(user.getPseudo()) != null || userDAO.findByEmail(user.getEmail()) != null) {
 			// TODO use message manager
-			throw new PMEntityExistsException(messageSource.getMessage("msgErrorUserAlreadExists", null, LocaleContextHolder.getLocale()));
+			throw new PMEntityExistsException(messageManager.getTranslation(MessageManager.ENTITY_ALREADY_EXISTS));
 		}
 
 		user.setPassword(passwordEncodere.encode(user.getPassword()));
@@ -74,14 +76,14 @@ public class UserServiceImpl implements UserService {
 			}
 			return new CustomUserDetailsImpl(userIdentifier, u.getPassword(), u.getId(), (Collection<? extends GrantedAuthority>) new ArrayList<GrantedAuthority>());
 		} catch (Exception e) {
-			throw new UsernameNotFoundException("user not found");
+			throw new UsernameNotFoundException(messageManager.getTranslation(MessageManager.ENTITY_NOT_FOUND_ERROR));
 		}
 	}
 	
 	@Transactional
 	public Long CreateUserProject(Long userId, Project project) {
 		if (projectDAO.findByName(project.getName()) != null) {
-			throw new PMEntityExistsException(messageSource.getMessage("msgErrorProjectAlreadyExists", null, LocaleContextHolder.getLocale()));
+			throw new PMEntityExistsException(messageManager.getTranslation(MessageManager.PROJECT_ALREADY_EXISTS));
 		}
 		
 		try {
@@ -93,7 +95,7 @@ public class UserServiceImpl implements UserService {
 			project = projectDAO.save(project);
 			user.addProject(project);
 		} catch (NoSuchElementException e) {
-			throwUserNotFoundException(userId, messageSource);
+			throw new PMEntityNotExistsException(MessageManager.getEntityNotFoundDetails(userId));
 		}
 		
 		return project.getId();
@@ -107,7 +109,7 @@ public class UserServiceImpl implements UserService {
 				projects.add(userProject.getProject());
 			}
 		} catch (NoSuchElementException e) {
-			throwUserNotFoundException(userId, messageSource);
+			throw new PMEntityNotExistsException(MessageManager.getEntityNotFoundDetails(userId));
 		}
 
 		return projects;

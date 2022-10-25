@@ -12,6 +12,8 @@ public class MessageManager {
 	public static final String INVALLID_TOKEN = "msgErrorInvalidToken";
 	public static final String MAIL_CONFIRMATION_SUBJECT = "mailConfirmationSubject";
 	public static final String ENTITY_NOT_FOUND_ERROR = "entityNotFoundError";
+	public static final String ENTITY_ALREADY_EXISTS = "msgErrorUserAlreadExists";
+	public static final String PROJECT_ALREADY_EXISTS = "msgErrorProjectAlreadyExists";
 	
 	@Autowired
 	private MessageSource messageSource;
@@ -22,5 +24,9 @@ public class MessageManager {
 	
 	public String getTranslation(String key, Object ...args) {
 		return messageSource.getMessage(key, args, LocaleContextHolder.getLocale());
+	}
+	
+	public static String getEntityNotFoundDetails(long entityId) {
+		return  "The PK with value " + entityId + " not found. Ensure that that value is correct and exists";
 	}
 }

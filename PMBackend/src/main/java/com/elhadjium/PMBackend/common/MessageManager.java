@@ -14,6 +14,10 @@ public class MessageManager {
 	public static final String ENTITY_NOT_FOUND_ERROR = "entityNotFoundError";
 	public static final String ENTITY_ALREADY_EXISTS = "msgErrorUserAlreadExists";
 	public static final String PROJECT_ALREADY_EXISTS = "msgErrorProjectAlreadyExists";
+	public static final String NO_RIGHTS_FOR_SENDING_INVITATIONS = "noRightsForSendingInvitations";
+	public static final String USER_ALREADY_ASSOCIATED_WITH_PROJECT = "userAlreadyExists";
+	public static final String INVITATION_ALREADY_SENT = "invitationAlreadySentToUse";
+	public static final String SPRINT_ALREADY_ONGOING = "sprintAlreadyOnGoing";
 	
 	@Autowired
 	private MessageSource messageSource;

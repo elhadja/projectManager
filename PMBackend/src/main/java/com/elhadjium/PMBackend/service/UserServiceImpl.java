@@ -76,6 +76,7 @@ public class UserServiceImpl implements UserService {
 			}
 			return new CustomUserDetailsImpl(userIdentifier, u.getPassword(), u.getId(), (Collection<? extends GrantedAuthority>) new ArrayList<GrantedAuthority>());
 		} catch (Exception e) {
+			// TODO use a specific message
 			throw new UsernameNotFoundException(messageManager.getTranslation(MessageManager.ENTITY_NOT_FOUND_ERROR));
 		}
 	}
@@ -95,7 +96,7 @@ public class UserServiceImpl implements UserService {
 			project = projectDAO.save(project);
 			user.addProject(project);
 		} catch (NoSuchElementException e) {
-			throw new PMEntityNotExistsException(MessageManager.getEntityNotFoundDetails(userId));
+			throw new PMEntityNotExistsException(null, MessageManager.getEntityNotFoundDetails(userId));
 		}
 		
 		return project.getId();
@@ -109,7 +110,7 @@ public class UserServiceImpl implements UserService {
 				projects.add(userProject.getProject());
 			}
 		} catch (NoSuchElementException e) {
-			throw new PMEntityNotExistsException(MessageManager.getEntityNotFoundDetails(userId));
+			throw new PMEntityNotExistsException(null, MessageManager.getEntityNotFoundDetails(userId));
 		}
 
 		return projects;
@@ -129,12 +130,6 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 	
-	public static void throwUserNotFoundException(Long userId, MessageSource messageSource) {
-			throw new PMEntityNotExistsException(messageSource.getMessage("msgErrorEntityNotFound", 
-																			new Object[] {messageSource.getMessage("user", null, LocaleContextHolder.getLocale()), userId} ,
-																			LocaleContextHolder.getLocale()));
-	}
-
 	@Override
 	public List<UserAccount> getUsersByCriteria(GetUsersByCriteriaInputDTO input) {
 		return userDAO.getUsersByCriteria(input.getPseudo(), input.getFirstname(), input.getLastname());

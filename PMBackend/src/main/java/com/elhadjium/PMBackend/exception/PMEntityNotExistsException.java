@@ -1,7 +1,5 @@
 package com.elhadjium.PMBackend.exception;
 
-import org.springframework.web.client.HttpStatusCodeException;
-
 public class PMEntityNotExistsException extends PMRuntimeException {
 	private static final long serialVersionUID = 1L;
 
@@ -10,7 +8,7 @@ public class PMEntityNotExistsException extends PMRuntimeException {
 	}
 	
 	public PMEntityNotExistsException(String message, String details) {
-		super(message, null, 404);
+		super(message, details, 404);
 	}
 
 }

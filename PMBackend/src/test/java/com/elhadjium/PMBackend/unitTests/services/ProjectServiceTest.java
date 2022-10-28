@@ -16,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
+import com.elhadjium.PMBackend.common.MessageManager;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.dto.InviteUsersToProjectInputDTO;
@@ -34,6 +35,9 @@ public class ProjectServiceTest {
 	
 	@Mock
 	private UserDAO userDAO;
+	
+	@Mock
+	private MessageManager messageManager;
 	
 	@InjectMocks
 	private ProjectService projectService = new ProjectServiceImpl();

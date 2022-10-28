@@ -63,7 +63,7 @@ public class UpdateUsertStoryInputDTO implements DTOValidator {
 	@Override
 	public void validate() {
 		if (JavaUtil.isNullOrEmpty(summary)) {
-			throw new PMInvalidInputDTO("Summary field are required");
+			throw new PMInvalidInputDTO(null, "Summary field are required");
 		}
 		
 	}

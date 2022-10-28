@@ -25,7 +25,7 @@ public class UpdatePasswordInputDTO implements DTOValidator {
 	@Override
 	public void validate() {
 		if (password == null || password.length() == 0 || !password.equals(confirmedPassword)) {
-			throw new PMInvalidInputDTO("Passwords must be the same");
+			throw new PMInvalidInputDTO(null, "Passwords must be the same");
 		}
 	}
 

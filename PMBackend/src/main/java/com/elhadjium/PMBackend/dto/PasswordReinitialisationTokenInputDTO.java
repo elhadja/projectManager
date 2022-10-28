@@ -36,7 +36,7 @@ public class PasswordReinitialisationTokenInputDTO implements DTOValidator {
 	@Override
 	public void validate() {
 		if (JavaUtil.isNullOrEmpty(email) || JavaUtil.isNullOrEmpty(url)) {
-			throw new PMInvalidInputDTO("user email and URI are required");
+			throw new PMInvalidInputDTO(null, "user email and URI are required");
 		}
 	}
 }

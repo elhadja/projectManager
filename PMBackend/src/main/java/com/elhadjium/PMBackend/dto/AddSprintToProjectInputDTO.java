@@ -36,7 +36,7 @@ public class AddSprintToProjectInputDTO implements DTOValidator {
 	@Override
 	public void validate() {
 		if (JavaUtil.isNullOrEmpty(name)) {
-			throw new PMInvalidInputDTO("Sprint name are required");
+			throw new PMInvalidInputDTO(null, "Sprint name are required");
 		}
 	}
 	

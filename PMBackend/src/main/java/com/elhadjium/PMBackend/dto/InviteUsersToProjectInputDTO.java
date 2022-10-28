@@ -35,7 +35,7 @@ public class InviteUsersToProjectInputDTO implements DTOValidator {
 	@Override
 	public void validate() {
 		if (guestId == authorId) {
-			throw new PMInvalidInputDTO("guestId and Author Id must be different");
+			throw new PMInvalidInputDTO(null, "guestId and Author Id must be different");
 		}
 		
 	}

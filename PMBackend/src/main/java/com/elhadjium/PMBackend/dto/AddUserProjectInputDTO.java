@@ -26,8 +26,7 @@ public class AddUserProjectInputDTO implements DTOValidator {
 	@Override
 	public void validate() {
 		if (JavaUtil.isNullOrEmpty(name)) {
-			// TODO to internationalize
-			throw new PMInvalidInputDTO("invalid input");
+			throw new PMInvalidInputDTO(null, "name are required");
 		}
 	}
 

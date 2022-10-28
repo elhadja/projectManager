@@ -1,16 +1,177 @@
 {
-    "loginComponent": {
+    "Global": {
+        "requiredField": "Required field",
+        "invalidEmail": "Invalid email",
+        "invalidField": "This field is not valide",
+        "minCharacterError": "Must contain at least {{value}} characteres",
+        "validateButton": "Validate",
+        "addButton": "Add",
+        "deleteButton": "Delete",
+        "acceptButton": "Accepte",
+        "createButton": "Create",
+        "cancelButton": "Cancel",
+        "searchButton": "Search",
+        "yesButton": "Yes",
+        "noButton": "No",
+        "updateButton": "Update",
+        "language": "Language"
+    },
+    "LoginComponent": {
         "requiredPassword": "Password is required",
-        "passwordLabel": "enter your fucking password"
+        "passwordLabel": "Password",
+        "emailOrUsernameLabel": "Email or username",
+        "forgotYourPasswordLabel": "Forgot your password",
+        "loginButton": "Login",
+        "newToProjectManagerLabel": "New to ProjectManager ?",
+        "createAnAccount": "Create an account",
+        "loginWithGoogle": "Login with Google",
+        "LoginComponentTitle": "Sign in to ProjectManager"
+    },
+    "RegisterComponent": {
+        "componentTitle": "Create an account",
+        "emailLabel": "Email",
+        "pseudoLabel": "Username",
+        "passwordInput": "Passwword",
+        "signupButton": "Signup",
+        "AlreadHaveAnAccountText": "Do you have an account ?",
+        "loginText": "login"
+    },
+    "RequestNewPasswordComponent": {
+        "componentTitle": "Reset password",
+        "infos": "Enter your email address below and we'll send you a link to reset your password.",
+        "emailInput": "Email",
+        "resetPasswordButton": "Reset password",
+        "login": "Log in",
+        "signup": "Sign up"
+    },
+    "UpdatePasswordComponent": {
+        "componentTitle": "Reset your password",
+        "newPasswordLabel": "New password",
+        "confirmPassword": "Confirm password"
     },
     "HomeComponent": {
-        "projects": "Projects"
+        "componentTitle": "Projects",
+        "projectsTable": {
+            "title": "Your Projects",
+            "id": "ID",
+            "name": "Name",
+            "description": "Description",
+            "managers": "Managers"
+        },
+        "invitationsTable": {
+            "title": "Invitations",
+            "name": "Name",
+            "description": "Description",
+            "guest": "Guest"
+        }
+    },
+    "CreateProjectComponent": {
+        "componentTitle": "Create project",
+        "projectNameLabel": "Project name",
+        "projectDescriptionLabel": "Project description"
     },
     "DialogProjectDetailsComponent": {
-        "projectDetails": "Project Details",
+        "componentTitle": "Project details",
+        "homeTab": "Home",
+        "manageUsers": "Participants management",
         "projectName": "Project name",
-        "projectDescription": "Project Description",
-        "projectManagers": "manager",
-        "projectUsers": "users"
+        "projectDescription": "Project description",
+        "projectManagers": "managers",
+        "projectUsers": "participants",
+        "addUserToProject": "Add participants",
+        "firstname": "firstname",
+        "lastname": "lastname",
+        "pseudo": "Username",
+        "searchUserTable": {
+            "sendInvitationButton": "Send invitation",
+            "firstname": "firstname",
+            "lastname": "lastname",
+            "pseudo": "Username"
+        },
+        "participantsTable": {
+           "title": "Participants",
+           "pseudo": "Username",
+           "manager": "Gestionnaire"
+        }
+    },
+    "DialogConfirmComponent": {
+        "componentTitle": "Confirm",
+        "goQuestion": "Are you sure you want to continue ?"
+    },
+    "BacklogComponent": {
+        "componentTitle": "Backlog",
+        "totalStoryPointToolTip": "total story points",
+        "realizedStoryPointToolTip": "realized story points",
+        "toDoStoryPointToolTip": "story points to do",
+        "addUs": "Add",
+        "openUsButton": "Open",
+        "closeUsButton": "Close",
+        "removeUsButton": "delete",
+        "startSprint": "Start sprint",
+        "finishSprint": "Terminate sprint",
+        "createSprint": "Add sprint",
+        "sprintTable": {
+            "id": "id",
+            "summary": "description",
+            "storyPoint": "storypoint",
+            "importance": "importance",
+            "status": "status"
+        },
+        "backlogTable": {
+            "id": "id",
+            "summary": "description",
+            "storyPoint": "storypoint",
+            "importance": "importance"
+        }
+    },
+    "DialogCreateUerStoryComponent": {
+        "title": "User story",
+        "summary": "Summary",
+        "description": "Description",
+        "storyPoints": "Story points",
+        "importance": "Importance"
+    },
+    "DialogCreateSprintComponent": {
+        "title": "Create sprint",
+        "name": "Name"
+    },
+    "ActivityComponent": {
+        "activities": "Activities",
+        "showActivities": "Show activities",
+        "hideActivities": "HideActivities"
+    },
+    "TaskComponent": {
+        "kanban": "Kanban",
+        "bySprint": "By sprint",
+        "chooseASprint": "Select a sprint",
+        "active": "started",
+        "tasksTable": {
+            "taskTableTitle": "Tasks",
+            "id": "id",
+            "userStory": "user story",
+            "description": "description",
+            "duration": "duration",
+            "dependencies": "dependencies",
+            "assignedTo": "assigned to",
+            "status": "status",
+            "empty": "No tasks in selected sprint"
+        },
+        "kanbanPanel": {
+            "todo": "TO DO",
+            "doing": "DOING",
+            "done": "DONE",
+            "task": "task: {{id}}",
+            "us": "us:"
+        },
+        "DialogCreateTaskComponent": {
+            "title": "Task",
+            "description": "description",
+            "sprint": "Sprint",
+            "userStory": "User story",
+            "duration": "Duration",
+            "responsable": "Responsable",
+            "dependencies": "Dependencies",
+            "dod": "Defintion of done"
+        }
     }
 }

@@ -394,7 +394,7 @@ public class ProjectControllerTest {
 		ResponseEntity<?> response = projectController.handleException(new PMInvalidInputDTO(""));
 		
 		// then
-		assertEquals(400, response.getStatusCodeValue());
+		assertTrue(response.getBody() instanceof ErrorOutputDTO);
 	}
 	
 	@Test

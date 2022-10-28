@@ -19,7 +19,7 @@ export class AppErrorHandler {
         this.messageService.showErrorMessage(error.error.message);
       }
     } else if (error.status === 500) {
-      this.messageService.showErrorMessage('Internal server error, please contact an administrator');
+      this.messageService.showErrorMessage( error.error.message ?? 'Internal server error, please contact an administrator');
     } else if (error.status === 0) {
       console.log(error.error);
       this.messageService.showErrorMessage('Server is down, contact an administrator');

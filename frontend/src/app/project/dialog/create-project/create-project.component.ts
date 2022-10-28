@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MessageService } from 'src/app/services/message.service';
 import { DialogCreateProjectService } from '../../services/dialogCreateProject.service';
@@ -8,7 +8,7 @@ import { DialogCreateProjectService } from '../../services/dialogCreateProject.s
   templateUrl: './create-project.component.html',
   styleUrls: ['./create-project.component.css']
 })
-export class CreateProjectComponent implements OnInit {
+export class CreateProjectComponent {
   projectName: FormControl;
   projectDescription: FormControl;
 
@@ -16,9 +16,6 @@ export class CreateProjectComponent implements OnInit {
     private messageService: MessageService) {
     this.projectName = new FormControl('', [Validators.required]);
     this.projectDescription = new FormControl('');
-  }
-
-  ngOnInit(): void {
   }
 
   public onAddProject(): void {
@@ -35,4 +32,11 @@ export class CreateProjectComponent implements OnInit {
     return this.projectName.valid;
   }
 
+  public get componentName(): string {
+    return 'CreateProjectComponent';
+  }
+
+  public get global(): string {
+    return 'Global';
+  }
 }

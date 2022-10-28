@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.elhadjium.PMBackend.Project;
 import com.elhadjium.PMBackend.UserProject;
 import com.elhadjium.PMBackend.common.Mapping;
+import com.elhadjium.PMBackend.common.MessageManager;
 import com.elhadjium.PMBackend.dao.CustomRevisionEntityDAO;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.SprintDAO;
@@ -75,6 +76,9 @@ public class ProjectServiceImpl implements ProjectService {
 	@Autowired
 	private CustomRevisionEntityDAO customRevisionEntityDAO;
 	
+	@Autowired
+	private MessageManager messageManager;
+	
 	// TODO integration testing
 	@Transactional
 	public void updateProject(Long projectId, UpdateProjectInputDTO updateProjectInputDTO) {
@@ -129,19 +133,19 @@ public class ProjectServiceImpl implements ProjectService {
 			}
 		}
 		if (!isManager) {
-			throw new PMRuntimeException("You don't have access to this functionality", 400);
+			throw new PMRuntimeException(messageManager.getTranslation(MessageManager.NO_RIGHTS_FOR_SENDING_INVITATIONS));
 		}
 
 		UserAccount guest = userDAO.findById(input.getGuestId()).get();
 		guest.getProjects().forEach((project) -> {
 			if (project.getProject().getId() == projectId) {
-				throw new PMRuntimeException("User already on this project", 400);
+				throw new PMRuntimeException(messageManager.getTranslation(MessageManager.USER_ALREADY_ASSOCIATED_WITH_PROJECT, author.getId()));
 			}
 		});
 		
 		guest.getInvitationnToProject().forEach((invitation) -> {
 			if (invitation.getProject().getId() == projectId) {
-				throw new PMRuntimeException("An anvitation was already sent to this user", 400);
+				throw new PMRuntimeException(messageManager.getTranslation(MessageManager.INVITATION_ALREADY_SENT, guest.getId()));
 			}
 		});
 		
@@ -341,7 +345,7 @@ public class ProjectServiceImpl implements ProjectService {
 	public void startSprint(Long projectId, Long sprintId, StartSprintDTO input) {
 		Sprint sprint = sprintDAO.findById(sprintId).get();
 		if (sprint.getProject().getSprints().stream().anyMatch(s -> s.getStatus().equals(SprintStatus.STARTED))) {
-			throw new PMInvalidInputDTO("Another sprint is on going"); //TODO An functional exception should be defined
+			throw new PMRuntimeException(messageManager.getTranslation(MessageManager.SPRINT_ALREADY_ONGOING));
 		}
 		sprint.setStatus(SprintStatus.STARTED);
 		sprint.setStartDate(input.getStartDate());

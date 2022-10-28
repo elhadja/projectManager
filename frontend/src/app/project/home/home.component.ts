@@ -66,11 +66,6 @@ export class HomeComponent implements OnInit {
     this.ngOnInit();
   }
 
-
-  public getComponentName(): string {
-    return 'HomeComponent';
-  }
-
   public onOpenAddProjectDialog(): void {
     this.matDialog.open(CreateProjectComponent);
   }
@@ -175,4 +170,19 @@ export class HomeComponent implements OnInit {
     return rowData.projectManagers.some(manager => this.homeService.sessionManager.getUserId() === manager.id);
   }
 
+  public get componentName(): string {
+    return 'HomeComponent';
+  }
+
+  public get projectTableName(): string {
+    return `${this.componentName}.projectsTable`;
+  }
+
+  public get invitationsTableName(): string {
+    return `${this.componentName}.invitationsTable`;
+  }
+
+  public get global(): string {
+    return 'Global';
+  }
 }

@@ -19,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.elhadjium.PMBackend.common.MessageManager;
 import com.elhadjium.PMBackend.controller.UserController;
 import com.elhadjium.PMBackend.dto.LoginInputDTO;
 import com.elhadjium.PMBackend.dto.PasswordReinitialisationTokenInputDTO;
@@ -40,6 +41,9 @@ public class UserControllerTest {
 	
 	@Mock
 	private AuthenticationManager authManager;
+	
+	@Mock
+	private MessageManager messageManager;
 	
 	@Mock
 	private JwtToken jwt;
@@ -131,7 +135,7 @@ public class UserControllerTest {
 		userController.generateTokenForPasswordReinitialisation(new PasswordReinitialisationTokenInputDTO(email, uri));
 		
 		// then
-		verify(userService).sendSimpleEmail(Mockito.eq(email), any(String.class), Mockito.eq(uri + "?token=" + token));
+		verify(userService).sendSimpleEmail(Mockito.eq(email), Mockito.nullable(String.class), Mockito.eq(uri + "?token=" + token));
 	}
 
 	@Test 

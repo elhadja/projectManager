@@ -6,4 +6,9 @@ public class PMEntityNotExistsException extends PMRuntimeException {
 	public PMEntityNotExistsException(String message) {
 		super(message, 404);
 	}
+	
+	public PMEntityNotExistsException(String message, String details) {
+		super(message, details, 404);
+	}
+
 }

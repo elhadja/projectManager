@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
+import { PMConstants } from 'src/app/common/PMConstants';
 import { RoutingService } from 'src/app/services/routing.service';
 import { sessionManagerService } from 'src/app/services/sessionManager.service';
 
@@ -12,14 +13,18 @@ import { sessionManagerService } from 'src/app/services/sessionManager.service';
 export class MenuBarComponent implements OnInit {
   public items: MenuItem[];
   public userItems: MenuItem[];
+  public languageItems: MenuItem[];
   public isVisible: boolean;
+  public currentLanguage: string;
 
   constructor(private router: Router,
              private sessionService: sessionManagerService,
              private routingService: RoutingService) { 
     this.items = [];
     this.userItems = [];
+    this.languageItems = [];
     this.isVisible = sessionService.getUserId() > 0;
+    this.currentLanguage = '';
 
     this.sessionService.userLoggedEmitter.subscribe((isUserLogged) => {
       this.isVisible = isUserLogged;
@@ -32,7 +37,19 @@ export class MenuBarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.sessionService.getCurrentLanguage().subscribe(language => {
+      this.currentLanguage = language;
+    });
     this.initializeMenu();
+
+    PMConstants.AVAILABLE_LANG.forEach(language => {
+      this.languageItems.push({
+        label: language.label,
+        command: () => {
+          this.sessionService.setLanguage(language.value);
+        }
+      });
+    });
   }
 
   private initializeMenu(): void {

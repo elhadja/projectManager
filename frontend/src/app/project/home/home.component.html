@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row">
         <div class="col d-flex justify-content-between mb-2">
-            <h1>{{ getComponentName() + ".projects" | translate }}</h1>
+            <h1>{{ componentName + '.componentTitle' | translate }}</h1>
         </div>
     </div>
     <div class="row justify-content-center">
@@ -13,8 +13,8 @@
                         class="bg-primary">
                     <ng-template pTemplate="caption">
                         <div class="d-flex justify-content-between">
-                            <h3>Your projects</h3>
-                            <button mat-stroked-button class="text-primary" (click)="onOpenAddProjectDialog()">add project</button>
+                            <h3>{{ projectTableName + '.title' | translate }}</h3>
+                            <button mat-stroked-button class="text-primary" (click)="onOpenAddProjectDialog()">{{ global + '.addButton' | translate }}</button>
                         </div>
                     </ng-template>
                     <ng-template pTemplate="colgroup">
@@ -29,10 +29,10 @@
                     </ng-template>
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>ID</th>
-                            <th>name</th>
-                            <th>description</th>
-                            <th>managers</th>
+                            <th>{{ projectTableName + '.id' | translate }}</th>
+                            <th>{{ projectTableName + '.name' | translate }}</th>
+                            <th>{{ projectTableName + '.description' | translate }}</th>
+                            <th>{{ projectTableName + '.managers' | translate }}</th>
                             <th></th>
                             <th></th>
                         </tr>
@@ -70,10 +70,10 @@
             </div>
 
             <div class="bloc">
-                <h3>Invitations</h3>
+                <h3>{{ invitationsTableName + '.title' | translate }}</h3>
                 <div *ngIf="selectedInvitations.length > 0" class="mb-2 table-action">
-                    <button mat-stroked-button class="text-primary" (click)="onAcceptInvitations()">accept</button>
-                    <button mat-stroked-button class="text-danger" (click)="onDeleteInvitations()">delete</button>
+                    <button mat-stroked-button class="text-primary" (click)="onAcceptInvitations()">{{ global + '.acceptButton' | translate }}</button>
+                    <button mat-stroked-button class="text-danger" (click)="onDeleteInvitations()">{{ global + '.deleteButton' | translate }}</button>
                 </div>
                 <p-table [value]="invitations" 
                         [(selection)]="selectedInvitations" dataKey="invitationToProjectId"
@@ -87,9 +87,9 @@
                             <th style="width: 3rem">
                                 <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                             </th>
-                            <th>name</th>
-                            <th>description</th>
-                            <th>inivation author</th>
+                            <th>{{ invitationsTableName + '.name' | translate }}</th>
+                            <th>{{ invitationsTableName + '.description' | translate }}</th>
+                            <th>{{ invitationsTableName + '.guest' | translate }}</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-row>

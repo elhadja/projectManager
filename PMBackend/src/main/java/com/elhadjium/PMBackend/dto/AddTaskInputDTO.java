@@ -64,15 +64,15 @@ public class AddTaskInputDTO implements DTOValidator {
 	@Override
 	public void validate() {
 		if(JavaUtil.isNullOrEmpty(description)) {
-			throw new PMInvalidInputDTO("task description are required");
+			throw new PMInvalidInputDTO(null, "task description are required");
 		}
 		
 		if (duration != null && duration.floatValue() <= 0) {
-			throw new PMInvalidInputDTO("Task duration must be greather than 0.");
+			throw new PMInvalidInputDTO(null, "Task duration must be greather than 0.");
 		}
 		
 		if ((userId != null && userId.longValue() <=  0)) {
-			throw new PMInvalidInputDTO("user  identifers must be greather than 0");
+			throw new PMInvalidInputDTO(null, "user  identifers must be greather than 0");
 		}
 	}
 }

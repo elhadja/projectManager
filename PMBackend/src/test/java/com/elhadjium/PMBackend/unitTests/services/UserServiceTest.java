@@ -13,6 +13,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.elhadjium.PMBackend.Project;
+import com.elhadjium.PMBackend.common.MessageManager;
 import com.elhadjium.PMBackend.dao.ProjectDAO;
 import com.elhadjium.PMBackend.dao.UserDAO;
 import com.elhadjium.PMBackend.entity.UserAccount;
@@ -30,6 +31,9 @@ public class UserServiceTest {
 	
 	@Mock
 	private MessageSource messageSource;
+	
+	@Mock
+	private MessageManager messageManager;
 	
 	@InjectMocks
 	private UserService userService = new UserServiceImpl();

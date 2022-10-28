@@ -1,6 +1,5 @@
-package com.elhadjium.PMBackend.controller;
+package com.elhadjium.PMBackend.dto;
 
-import com.elhadjium.PMBackend.dto.DTOValidator;
 import com.elhadjium.PMBackend.exception.PMInvalidInputDTO;
 import com.elhadjium.PMBackend.util.JavaUtil;
 
@@ -27,8 +26,7 @@ public class AddUserProjectInputDTO implements DTOValidator {
 	@Override
 	public void validate() {
 		if (JavaUtil.isNullOrEmpty(name)) {
-			// TODO to internationalize
-			throw new PMInvalidInputDTO("invalid input");
+			throw new PMInvalidInputDTO(null, "name are required");
 		}
 	}
 

@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { PMConstants } from 'src/app/common/PMConstants';
 import { RoutingService } from 'src/app/services/routing.service';
+import { sessionManagerService } from 'src/app/services/sessionManager.service';
 import { SignupService } from '../services/signup.service';
 
 @Component({
@@ -11,14 +13,17 @@ export class RegisterComponent {
   public signupFormGroup: FormGroup;
   public hidePassword: boolean;
 
-  constructor(private signupService: SignupService, private readonly routingService: RoutingService) {
+  constructor(private signupService: SignupService, private readonly routingService: RoutingService, private readonly _sessionManager: sessionManagerService) {
     this.hidePassword = true;
 
     this.signupFormGroup = new FormGroup({
       email: new FormControl('', [Validators.email]),
       pseudo: new FormControl(''),
-      password: new FormControl('')
+      password: new FormControl(''),
+      lang: new FormControl(_sessionManager.getLanguage())
     });
+
+    this.lang?.valueChanges.subscribe(value => _sessionManager.setLanguage(value));
   }
 
   public onSignup(): void {
@@ -41,7 +46,23 @@ export class RegisterComponent {
     return this.signupFormGroup.get('password');
   }
 
+  get lang() {
+    return this.signupFormGroup.get('lang');
+  }
+
   public gotoLoginComponent():void {
     this.routingService.gotoLoginComponent();
+  }
+
+  public get componentName(): string {
+    return 'RegisterComponent';
+  }
+
+  public get global(): string {
+    return 'Global';
+  }
+
+  public get languages(): {label: string, value: string}[] {
+    return PMConstants.AVAILABLE_LANG;
   }
 }

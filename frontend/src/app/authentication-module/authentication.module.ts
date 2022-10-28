@@ -16,6 +16,7 @@ import { RequestNewPasswordComponent } from './request-new-password/request-new-
 import { UpdatePasswordComponent } from './update-password/update-password.component';
 import { GoogleLoginProvider, SocialAuthServiceConfig, SocialLoginModule } from 'angularx-social-login';
 import { AuthenticationRoutingModule } from './authentication-routing.module';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { AuthenticationRoutingModule } from './authentication-routing.module';
     MatFormFieldModule,
     MatIconModule,
     MatButtonModule,
+    MatSelectModule,
     SocialLoginModule,
     AuthenticationRoutingModule,
     TranslateModule.forChild({

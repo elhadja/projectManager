@@ -1,21 +1,23 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h2 mat-dialog-title class="text-center">Create sprint</h2>
+            <h2 mat-dialog-title class="text-center">{{ componentName + '.title' | translate }}</h2>
             <form [formGroup]="sprintForm" (ngSubmit)="onValidate()">
                 <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>name</mat-label>
+                    <mat-label>{{ componentName + '.name' | translate }}</mat-label>
                     <input type="text" matInput formControlName="name" required minlength="2">
                     <mat-error *ngIf="name != null && name.hasError('required')">
-                        this field is <strong>required</strong>
+                        {{ 'Global.requiredField' | translate }}
                     </mat-error>
                     <mat-error *ngIf="name != null && name.hasError('minlength')">
-                        2 characteres <strong>minimum</strong>
+                        {{ 'Global.minCharacterError' | translate:{value: 2} }}
                     </mat-error>
                 </mat-form-field >
 
-                <button mat-stroked-button type="submit" [class.text-primary]="sprintForm.valid" class="mr-1" [disabled]="sprintForm.invalid">validate</button>
-                <button mat-stroked-button mat-dialog-close type="button" class="text-danger" >cancel</button>
+                <button mat-stroked-button type="submit" [class.text-primary]="sprintForm.valid" class="mr-1 mt-4" [disabled]="sprintForm.invalid">
+                    {{ 'Global.validateButton' | translate }}
+                </button>
+                <button mat-stroked-button mat-dialog-close type="button" class="text-danger" >{{ 'Global.cancelButton' | translate }}</button>
             </form>
         </div>
     </div>

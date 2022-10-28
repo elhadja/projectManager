@@ -1,9 +1,9 @@
-<div class="mat-dialog-title">Confirme</div>
+<div class="mat-dialog-title">{{ componentName + '.componentTitle' | translate }}</div>
 <div class="mat-dialog-content">
     <p *ngIf="data.message != null" class="text-"> {{ data.message }} </p>
-    <p> Are you sure you want to continue ?</p>
+    {{ componentName + '.goQuestion' | translate }}
 </div>
 <div class="mat-dialog-actions">
-    <button mat-stroked-button [mat-dialog-close]="true" (click)="onAccept()">Yes</button>
-    <button mat-stroked-button [mat-dialog-close]="false" (click)="onReject()">No</button>
+    <button mat-stroked-button [mat-dialog-close]="true" (click)="onAccept()">{{ global + '.yesButton' | translate }}</button>
+    <button mat-stroked-button [mat-dialog-close]="false" (click)="onReject()">{{ global + '.noButton' | translate }}</button>
 </div>

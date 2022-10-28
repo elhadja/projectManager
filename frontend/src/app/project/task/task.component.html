@@ -2,8 +2,8 @@
     <div class="row my-3">
         <div class="col d-flex justify-content-center">
             <mat-button-toggle-group [value]="0" [(ngModel)]="selectedView">
-                <mat-button-toggle [value]="0">By Sprint</mat-button-toggle>
-                <mat-button-toggle [value]="1">Kanban</mat-button-toggle>
+                <mat-button-toggle [value]="0">{{ componentName + '.bySprint' | translate }}</mat-button-toggle>
+                <mat-button-toggle [value]="1">{{ componentName + '.kanban' | translate }}</mat-button-toggle>
             </mat-button-toggle-group>
         </div>
     </div>
@@ -12,12 +12,12 @@
     <div class="row" *ngIf="selectedView == 0">
         <div class="col">
             <mat-form-field appearance="legacy" class="w-30">
-                <mat-label>Choose a sprint</mat-label>
+                <mat-label>{{ componentName + '.chooseASprint' | translate }}</mat-label>
                 <mat-select [(ngModel)]="selectedSprint" (selectionChange)="onSprintSelected()">
                     <mat-option *ngFor="let sprint of projectSprints" [value]="sprint.id">
                         {{sprint.name}}
                         <ng-container *ngIf="activeSprintId === sprint.id">
-                            (active sprint)
+                            ({{ componentName + '.active' | translate }})
                         </ng-container>
                     </mat-option>
                 </mat-select>
@@ -28,23 +28,23 @@
                 <ng-template pTemplate="caption">
                     
                     <div class="d-flex flex-row justify-content-between">
-                        <h3>Sprint's tasks</h3>
+                        <h3>{{ componentName + '.tasksTable.taskTableTitle' | translate }}</h3>
                        <div class="table-action">
-                            <pm-button class="text-primary" [label]="'add Task'" (click)="onCreateTask()"></pm-button>
-                            <button *ngIf="selectedTasks.length > 0" mat-stroked-button class="text-danger" (click)=onDeleteSelectedTasks()>delete tasks</button>
+                            <pm-button class="text-primary" [label]="'Global.addButton' | translate" (click)="onCreateTask()"></pm-button>
+                            <button *ngIf="selectedTasks.length > 0" mat-stroked-button class="text-danger" (click)=onDeleteSelectedTasks()>{{ 'Global.deleteButton' | translate }}</button>
                         </div>
                     </div>
                 </ng-template>
  
                 <ng-template pTemplate="colgroup">
                     <colgroup>
-                        <col style="width:5%">
+                        <col style="width:2%">
                         <col style="width:5%">
                         <col style="width:5%">
                         <col style="width:30%">
                         <col style="width:5%">
                         <col style="width:15%">
-                        <col style="width:5%">
+                        <col style="width:8%">
                         <col style="width:5%">
                     </colgroup>
                 </ng-template>
@@ -54,13 +54,13 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="id">ID <p-sortIcon field="id"></p-sortIcon></th>
-                        <th>US IDs</th>
-                        <th>Description</th>
-                        <th pSortableColumn="duration">Duration <p-sortIcon field="duration"></p-sortIcon></th>
-                        <th>dependencies</th>
-                        <th pSortableColumn="userPseudo">user <p-sortIcon field="userPseudo"></p-sortIcon></th>
-                        <th pSortableColumn="status">status <p-sortIcon field="status"></p-sortIcon></th>
+                        <th pSortableColumn="id">{{ componentName + '.tasksTable.id' | translate }}<p-sortIcon field="id"></p-sortIcon></th>
+                        <th>{{ componentName + '.tasksTable.userStory' | translate }}</th>
+                        <th>{{ componentName + '.tasksTable.description' | translate }}</th>
+                        <th pSortableColumn="duration">{{ componentName + '.tasksTable.duration' | translate }}<p-sortIcon field="duration"></p-sortIcon></th>
+                        <th>{{ componentName + '.tasksTable.dependencies' | translate }}</th>
+                        <th pSortableColumn="userPseudo">{{ componentName + '.tasksTable.assignedTo' | translate }}<p-sortIcon field="userPseudo"></p-sortIcon></th>
+                        <th pSortableColumn="status">{{ componentName + '.tasksTable.status' | translate }}<p-sortIcon field="status"></p-sortIcon></th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-row>
@@ -88,7 +88,7 @@
                 <ng-template pTemplate="emptymessage" let-columns>
                     <tr>
                         <td class="text-center" colspan = "8">
-                            No tasks in selected sprint
+                            {{ componentName + '.tasksTable.empty' | translate }}
                         </td>
                     </tr>
                 </ng-template>
@@ -101,7 +101,7 @@
         <ng-container *ngIf="activeSprintId > 0; else noActiveSprint">
             <div class="col-4">
                 <mat-card style="background-color: #f8f9fa;">
-                    <mat-card-title>TODO</mat-card-title>
+                    <mat-card-title>{{ componentName + '.kanbanPanel.todo' | translate }}</mat-card-title>
                     <mat-card-content>
                         <mat-list 
                             cdkDropList 
@@ -111,7 +111,7 @@
                             (cdkDropListDropped)="dropTaskOnTodoList($event)">
                             <mat-card mat-list-item class="my-2" *ngFor="let task of todoTasks;" cdkDrag>
                                 <mat-card-title style="font-size: small;">
-                                    <span class="link" (click)="onUpdateTask(task)">ID: {{task.id}}</span> - US:
+                                    <span class="link" (click)="onUpdateTask(task)"> {{ componentName + '.kanbanPanel.task' | translate:{id: task.id} }}</span> - {{ componentName + '.kanbanPanel.us' | translate }}
                                     <ng-container *ngFor="let usId of task.userStoriesIDs;  let isLast = last;">
                                         {{ usId }}
                                         <ng-container *ngIf="!isLast">, </ng-container>
@@ -125,7 +125,7 @@
         </div>
             <div class="col-4">
                 <mat-card style="background-color: #f8f9fa;">
-                    <mat-card-title>DOING</mat-card-title>
+                    <mat-card-title>{{ componentName + '.kanbanPanel.doing' | translate }}</mat-card-title>
                     <mat-card-content>
                         <mat-list 
                             cdkDropList 
@@ -135,7 +135,7 @@
                             (cdkDropListDropped)="dropTaskOnDoingList($event)">
                             <mat-card mat-list-item class="my-2" *ngFor="let task of doingTasks;" cdkDrag>
                                 <mat-card-title style="font-size: small;">
-                                    <span class="link" (click)="onUpdateTask(task)">ID: {{task.id}}</span> - US:
+                                    <span class="link" (click)="onUpdateTask(task)">{{ componentName + '.kanbanPanel.task' | translate:{id: task.id} }}</span> - {{ componentName + '.kanbanPanel.us' | translate }}
                                     <ng-container *ngFor="let usId of task.userStoriesIDs;  let isLast = last;">
                                         {{ usId }}
                                         <ng-container *ngIf="!isLast">, </ng-container>
@@ -150,7 +150,7 @@
             </div>
             <div class="col-4">
                 <mat-card style="background-color: #f8f9fa;">
-                    <mat-card-title>DONE</mat-card-title>
+                    <mat-card-title>{{ componentName + '.kanbanPanel.done' | translate }}</mat-card-title>
                     <mat-card-content>
                         <mat-list 
                             cdkDropList 
@@ -160,7 +160,7 @@
                             (cdkDropListDropped)="dropTaskOnDoneList($event)">
                             <mat-card mat-list-item class="my-2" *ngFor="let task of doneTasks;" cdkDrag>
                                 <mat-card-title style="font-size: small;">
-                                    <span class="link" (click)="onUpdateTask(task)">ID: {{task.id}}</span> - US:
+                                    <span class="link" (click)="onUpdateTask(task)">{{ componentName + '.kanbanPanel.task' | translate:{id: task.id} }}</span> - {{ componentName + '.kanbanPanel.us' | translate }}
                                     <ng-container *ngFor="let usId of task.userStoriesIDs;  let isLast = last;">
                                         {{ usId }}
                                         <ng-container *ngIf="!isLast">, </ng-container>

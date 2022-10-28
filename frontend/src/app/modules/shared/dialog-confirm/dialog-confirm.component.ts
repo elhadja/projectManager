@@ -18,4 +18,13 @@ export class DialogConfirmComponent {
     this.matDialogRef.close(false);
   }
 
+  public get componentName(): string {
+    return 'DialogConfirmComponent';
+  }
+
+  public get global(): string {
+    return 'Global';
+  }
+
+
 }

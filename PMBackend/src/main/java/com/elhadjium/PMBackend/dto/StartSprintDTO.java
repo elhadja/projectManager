@@ -29,11 +29,11 @@ public class StartSprintDTO implements DTOValidator {
 	@Override
 	public void validate() {
 		if (getStartDate() == null || getEndDate() == null) {
-			throw new PMInvalidInputDTO("start date and due date are required");
+			throw new PMInvalidInputDTO(null, "start date and due date are required");
 		}
 		
 		if (startDate != null && endDate != null && startDate.equals(endDate)) {
-			throw new PMInvalidInputDTO("start date should be different with due date");
+			throw new PMInvalidInputDTO(null, "start date should be different with due date");
 		}
 	}
 }

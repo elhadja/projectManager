@@ -87,4 +87,12 @@ export class DialogCreateUerStoryComponent implements OnInit {
   public get importance() {
     return this.userStoryForm.get('importance');
   }
+
+  public get componentName(): string {
+    return 'DialogCreateUerStoryComponent';
+  }
+
+  public get global(): string {
+    return 'Global';
+  }
 }

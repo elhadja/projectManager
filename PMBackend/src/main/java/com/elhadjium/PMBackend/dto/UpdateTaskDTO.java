@@ -64,7 +64,7 @@ public class UpdateTaskDTO implements DTOValidator {
 	@Override
 	public void validate() {
 		if(JavaUtil.isNullOrEmpty(description)) {
-			throw new PMInvalidInputDTO("task description are required");
+			throw new PMInvalidInputDTO(null, "task description are required");
 		}
 		
 		try {
@@ -73,11 +73,11 @@ public class UpdateTaskDTO implements DTOValidator {
 				throw new Exception();
 			}
 		} catch (Exception e) {
-			throw new PMInvalidInputDTO("Task duration is invalid.");
+			throw new PMInvalidInputDTO(null, "Task duration is invalid.");
 		}
 		
 		if (userId <= 0) {
-			throw new PMInvalidInputDTO("user identifer must be greather than 0");
+			throw new PMInvalidInputDTO(null, "user identifer must be greather than 0");
 		}
 	}
 }

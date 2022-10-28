@@ -176,4 +176,8 @@ export class TaskComponent implements OnInit {
       });
     }
   }
+
+  public get componentName(): string {
+    return 'TaskComponent';
+  }
 }

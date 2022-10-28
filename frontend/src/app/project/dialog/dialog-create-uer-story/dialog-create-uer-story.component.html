@@ -1,29 +1,29 @@
 <div class="ng-container">
     <div class="row">
         <div class="col">
-            <h2 mat-dialog-title class="text-center">User story</h2>
+            <h2 mat-dialog-title class="text-center">{{ componentName + '.title' | translate }}</h2>
             <form [formGroup]="userStoryForm" (ngSubmit)="onValidate()">
                 <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>Summary</mat-label>
+                    <mat-label>{{ componentName + '.summary' | translate }}</mat-label>
                     <textarea type="text" matInput formControlName="summary" rows="5" required minlength="2" maxlength="200"></textarea>
                     <mat-error *ngIf="summary != null && summary.hasError('required')">
-                        this field is <strong>required</strong>
+                        {{ global + '.requiredField' | translate }}
                     </mat-error>
                     <mat-error *ngIf="summary != null && summary.hasError('minlength')">
-                        2 characteres <strong>minimum</strong>
+                        {{ global + '.minCharacterError' | translate:{'value': 2} }}
                     </mat-error>
                 </mat-form-field >
                 <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>Description</mat-label>
+                    <mat-label>{{ componentName + '.description' | translate }}</mat-label>
                     <textarea type="text" matInput formControlName="description" rows="10" cols="200"></textarea>
                 </mat-form-field >
                 <div class="d-flex inline-form">
                     <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Story points</mat-label>
+                        <mat-label>{{ componentName + '.storyPoints' | translate }}</mat-label>
                         <input type="number" matInput formControlName="storyPoint" min="1">
                     </mat-form-field >
                     <mat-form-field appearance="fill" class="w-100">
-                        <mat-label>Importance</mat-label>
+                        <mat-label>{{ componentName + '.importance' | translate }}</mat-label>
                         <mat-select formControlName="importance">
                             <mat-option *ngFor="let option of userStoryImportanceValues" [value]="option.value">{{option.label}}</mat-option>
                         </mat-select>
@@ -31,9 +31,9 @@
                 </div>
                <button mat-stroked-button class="mr-2" type="submit"
                         [class.text-primary]="userStoryForm.valid"
-                       [disabled]="userStoryForm.invalid">{{ isUpdateMode ? 'Update' : 'Create' }}
+                       [disabled]="userStoryForm.invalid">{{ (isUpdateMode ? global + '.updateButton' : global + '.createButton') | translate }}
                 </button>
-                <button mat-stroked-button type="button" class="text-danger" (click)="onCancel()">annuler</button>
+                <button mat-stroked-button type="button" class="text-danger" (click)="onCancel()">{{ global + '.cancelButton' | translate }}</button>
             </form>
         </div>
     </div>

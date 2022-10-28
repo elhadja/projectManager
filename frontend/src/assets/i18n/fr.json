@@ -1,6 +1,143 @@
 {
-    "loginComponent": {
+    "Global": {
+        "requiredField": "Ce champs est obligatoire",
+        "invalidEmail": "L'adresse email n'est pas valide",
+        "invalidField": "Ce champs n'est pas correcte",
+        "minCharacterError": "Doit contenir au moins {{value}} caractères",
+        "validateButton": "Valider",
+        "addButton": "Ajouter",
+        "deleteButton": "Supprimer",
+        "acceptButton": "Accepter",
+        "createButton": "Créer",
+        "cancelButton": "Annuler",
+        "searchButton": "Rechercher",
+        "yesButton": "Oui",
+        "noButton": "Non",
+        "updateButton": "Modifier",
+        "language": "Langue"
+    },
+    "LoginComponent": {
         "requiredPassword": "Le mot de passe est obligatoire",
-        "passwordLabel": "Entrer votre mot de passe"
+        "passwordLabel": "Mot de passe",
+        "emailOrUsernameLabel": "email ou pseudo",
+        "forgotYourPasswordLabel": "Vous avez oublié votre mot de passe ?",
+        "loginButton": "Se connecter",
+        "newToProjectManagerLabel": "Nouveau chez ProjectManager ?",
+        "createAnAccount": "Créer un compte",
+        "loginWithGoogle": "Se connecter avec Google",
+        "LoginComponentTitle": "Se connecter à ProjectManager"
+    },
+    "RegisterComponent": {
+        "componentTitle": "Créer un compte",
+        "emailLabel": "Adresse email",
+        "pseudoLabel": "Pseudo",
+        "passwordInput": "Mot de passe",
+        "signupButton": "S'inscrire",
+        "AlreadHaveAnAccountText": "Vous avez déjà un compte ?",
+        "loginText": "Se connecter"
+    },
+    "RequestNewPasswordComponent": {
+        "componentTitle": "Réinitialiser votre mot de passe",
+        "infos": "Entrer votre addresse mail et nous vous enverrons un lien pour réinitialiser votre mot de passe",
+        "emailInput": "Email",
+        "resetPasswordButton": "Réinitialiser",
+        "login": "Se connecter",
+        "signup": "S'inscrire"
+    },
+    "UpdatePasswordComponent": {
+        "componentTitle": "Modifier votre mot de passe",
+        "newPasswordLabel": "Entrez votre nouveau mot de passe",
+        "confirmPassword": "Confirmez le mot de passe"
+    },
+    "HomeComponent": {
+        "componentTitle": "Projets",
+        "projectsTable": {
+            "title": "Vos projets",
+            "id": "ID",
+            "name": "Nom",
+            "description": "Description",
+            "managers": "Gestionnaires"
+        },
+        "invitationsTable": {
+            "title": "Invitations",
+            "name": "Nom",
+            "description": "Description",
+            "guest": "Envoyé par"
+        }
+    },
+    "CreateProjectComponent": {
+        "componentTitle": "Créer un projet",
+        "projectNameLabel": "Nom du projet",
+        "projectDescriptionLabel": "Description du projet"
+    },
+    "DialogProjectDetailsComponent": {
+        "componentTitle": "Détails du projet",
+        "homeTab": "Accueil",
+        "manageUsers": "Gestion des participants",
+        "projectName": "Nom du projet",
+        "projectDescription": "Description du project",
+        "projectManagers": "Gestionnaires",
+        "projectUsers": "participants",
+        "addUserToProject": "Ajouter des participants",
+        "firstname": "Prénom",
+        "lastname": "Nom",
+        "pseudo": "Pseudo",
+        "searchUserTable": {
+            "sendInvitationButton": "Enoyer une invitation",
+            "firstname": "Prénom",
+            "lastname": "Nom",
+            "pseudo": "Pseudo"
+        },
+        "participantsTable": {
+           "title": "Participants",
+           "pseudo": "Pseudo",
+           "manager": "Gestionnaire"
+        }
+    },
+    "DialogConfirmComponent": {
+        "componentTitle": "Confirmer",
+        "goQuestion": "Êtes vous sûre de vouloir continuer ?"
+    },
+    "BacklogComponent": {
+        "componentTitle": "Backlog",
+        "totalStoryPointToolTip": "charge totale",
+        "realizedStoryPointToolTip": "story points réalisés",
+        "toDoStoryPointToolTip": "story points à faire",
+        "addUs": "ajouter",
+        "openUsButton": "Ouvrir",
+        "closeUsButton": "Fermer",
+        "removeUsButton": "Supprimer",
+        "startSprint": "Demarrer le sprint",
+        "finishSprint": "Terminer le sprint",
+        "createSprint": "Ajouter un sprint",
+        "sprintTable": {
+            "id": "id",
+            "summary": "description",
+            "storyPoint": "storypoint",
+            "importance": "importance",
+            "status": "statut"
+        },
+        "backlogTable": {
+            "id": "id",
+            "summary": "description",
+            "storyPoint": "storypoint",
+            "importance": "importance"
+        }
+    },
+    "DialogCreateUerStoryComponent": {
+        "title": "Créer une User story",
+        "summary": "résumé",
+        "description": "Description",
+        "storyPoints": "Story points",
+        "importance": "Importance"
+    },
+    "DialogCreateSprintComponent": {
+        "title": "Créer un sprint",
+        "name": "Nom"
+    },
+    "ActivityComponent": {
+        "activities": "Activités",
+        "showActivities": "Afficher les activities",
+        "hideActivities": "Masquer les activities"
     }
 }

@@ -35,7 +35,7 @@ public class signupInputDTO implements DTOValidator {
 	@Override
 	public void validate() {
 		if (JavaUtil.isNullOrEmpty(email) || JavaUtil.isNullOrEmpty(pseudo) || JavaUtil.isNullOrEmpty(password)) {
-			throw new PMInvalidInputDTO("données invalide");
+			throw new PMInvalidInputDTO(null, "Required fields: email, pseudo and password");
 		}
 		// TODO check email format using regex
 		// TODO check password format using regex

@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { PMConstants } from 'src/app/common/PMConstants';
+import { DialogConfirmComponent } from 'src/app/modules/shared/dialog-confirm/dialog-confirm.component';
 import { RoutingService } from 'src/app/services/routing.service';
 import { sessionManagerService } from 'src/app/services/sessionManager.service';
+import { DialogAboutComponent } from '../dialog-about/dialog-about.component';
 
 @Component({
   selector: 'app-menu-bar',
@@ -17,9 +20,9 @@ export class MenuBarComponent implements OnInit {
   public isVisible: boolean;
   public currentLanguage: string;
 
-  constructor(private router: Router,
-             private sessionService: sessionManagerService,
-             private routingService: RoutingService) { 
+  constructor(private sessionService: sessionManagerService,
+             private routingService: RoutingService,
+             private readonly matDialog: MatDialog) { 
     this.items = [];
     this.userItems = [];
     this.languageItems = [];
@@ -80,6 +83,10 @@ export class MenuBarComponent implements OnInit {
       {
         label:'Mon compte',
         command: () => { this.routingService.gotoAccountComponent(); }
+      },
+      {
+        label:'About', // TODO i18n
+        command: () => { this.matDialog.open(DialogAboutComponent); }
       }
     ];
   }

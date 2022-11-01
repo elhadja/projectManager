@@ -77,12 +77,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     
     @Override
     public void configure(WebSecurity web) throws Exception {
-    	final String baseUrl = PMConstants.PMBaseUri + "/users";
-        web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/signup");
-        web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/login");
-        web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/" + UserControllerConstant.passwordReinitialisationToken);
-        web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/" + UserControllerConstant.reinitializePassword + "/**");
-        web.ignoring().antMatchers(HttpMethod.POST, baseUrl + "/" + UserControllerConstant.loginWithGoogle);
+    	final String usersBaseUrl = PMConstants.PMBaseUri + "/users";
+        web.ignoring().antMatchers(HttpMethod.POST, usersBaseUrl + "/signup");
+        web.ignoring().antMatchers(HttpMethod.POST, usersBaseUrl + "/login");
+        web.ignoring().antMatchers(HttpMethod.POST, usersBaseUrl + "/" + UserControllerConstant.passwordReinitialisationToken);
+        web.ignoring().antMatchers(HttpMethod.POST, usersBaseUrl + "/" + UserControllerConstant.reinitializePassword + "/**");
+        web.ignoring().antMatchers(HttpMethod.POST, usersBaseUrl + "/" + UserControllerConstant.loginWithGoogle);
+        web.ignoring().antMatchers(HttpMethod.GET, PMConstants.PMBaseUri + "/generic");
     }
     
     public void addCorsMappings(CorsRegistry registry) {

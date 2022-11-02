@@ -1,10 +1,10 @@
 (select _rev.id, _rev.timestamp, _rev.modified_by, 
 		case
 			when task_aud.revtype = 0 then :created_comment
-            when task_aud.revtype = 1 and user_mod = 1 and user_id is not null then 'user changed'
-            when task_aud.revtype = 1 and status_mod = 1 and status = :status_todo then :status_todo_comment
-            when task_aud.revtype = 1 and status_mod = 1 and status = :status_doing then :status_doing_comment
-            when task_aud.revtype = 1 and status_mod = 1 and status = :status_done then :status_done_comment
+            when task_aud.revtype = 1 and user_mod = true and user_id is not null then 'user changed'
+            when task_aud.revtype = 1 and status_mod = true and status = :status_todo then :status_todo_comment
+            when task_aud.revtype = 1 and status_mod = true and status = :status_doing then :status_doing_comment
+            when task_aud.revtype = 1 and status_mod = true and status = :status_done then :status_done_comment
 		end as comment
 from task_aud
 inner join custom_revision_entity _rev

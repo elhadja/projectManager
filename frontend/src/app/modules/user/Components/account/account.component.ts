@@ -46,4 +46,8 @@ export class AccountComponent implements OnInit {
   public openChangeEmailDialog(): void {
     this.matDialog.open(DialogUpdateEmailComponent).afterClosed().subscribe(() => this.refresh());
   }
+
+  get componentName(): string {
+    return 'AccountComponent';
+  }
 }

@@ -173,5 +173,21 @@
             "dependencies": "Dependencies",
             "dod": "Defintion of done"
         }
+    },
+    "MenuBarComponent": {
+        "projects": "Projects",
+        "backlog": "Backlog",
+        "tasks": "Tasks"
+    },
+    "AccountComponent": {
+        "title": "Account",
+        "identity": "Identity",
+        "connection": "Connection"
+    },
+    "DialogUserProfilComponent": {
+        "title": "Update profile",
+        "pseudo": "Pseudo",
+        "firstname": "Firstname",
+        "lastname": "Lastname"
     }
 }

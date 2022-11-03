@@ -14,6 +14,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { DialogUpdatePasswordComponent } from './Components/updatePassword/dialog-update-password/dialog-update-password.component';
 import { DialogUpdateEmailComponent } from './Components/dialog-update-email/dialog-update-email.component';
 import { ConfirmUpdatePasswordComponent } from './Components/confirm-update-password/confirm-update-password.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpLoaderFactory } from 'src/app/app.module';
+import { HttpClient } from '@angular/common/http';
 
 
 
@@ -48,6 +51,11 @@ const COMPONENTS = [
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
+    TranslateModule.forChild({
+      loader: {provide: TranslateLoader, useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     RouterModule.forChild(routes)
   ]
 })

@@ -87,7 +87,7 @@ export class API {
 
   public clearHeader(): void {
     if (this.httpOptions != null) {
-      this.httpOptions.headers = undefined;
+      this.httpOptions.headers?.delete('Authorization');
     }
   }
 

@@ -139,5 +139,40 @@
         "activities": "Activités",
         "showActivities": "Afficher les activities",
         "hideActivities": "Masquer les activities"
+    },
+    "TaskComponent": {
+        "kanban": "Kanban",
+        "bySprint": "Par Sprint",
+        "chooseASprint": "Selectionner un sprint",
+        "active": "En cours",
+        "tasksTable": {
+            "taskTableTitle": "Tâches",
+            "id": "id",
+            "userStory": "user story",
+            "description": "description",
+            "duration": "durée",
+            "dependencies": "dependences",
+            "assignedTo": "assigné à",
+            "status": "statut",
+            "empty": "Aucune tâche pour le sprint selectionné"
+        },
+        "kanbanPanel": {
+            "todo": "A Faire",
+            "doing": "En Cours",
+            "done": "fait",
+            "task": "tâche: {{id}}",
+            "us": "us:"
+        },
+        "DialogCreateTaskComponent": {
+            "title": "tâche",
+            "description": "description",
+            "sprint": "Sprint",
+            "userStory": "User story",
+            "duration": "Durée",
+            "responsable": "Responsable",
+            "dependencies": "Dependences",
+            "dod": "Defintion of done"
+        }
     }
+
 }

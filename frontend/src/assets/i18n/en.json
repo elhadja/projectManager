@@ -157,9 +157,9 @@
             "empty": "No tasks in selected sprint"
         },
         "kanbanPanel": {
-            "todo": "TO DO",
-            "doing": "DOING",
-            "done": "DONE",
+            "todo": "To Do",
+            "doing": "Doing",
+            "done": "Done",
             "task": "task: {{id}}",
             "us": "us:"
         },

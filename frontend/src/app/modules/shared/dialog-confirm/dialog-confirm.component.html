@@ -1,6 +1,6 @@
 <div class="mat-dialog-title">{{ componentName + '.componentTitle' | translate }}</div>
 <div class="mat-dialog-content">
-    <p *ngIf="data.message != null" class="text-"> {{ data.message }} </p>
+    <p *ngIf="data != null && data.message != null"> {{ data.message }} </p>
     {{ componentName + '.goQuestion' | translate }}
 </div>
 <div class="mat-dialog-actions">

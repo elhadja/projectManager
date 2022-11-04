@@ -2,7 +2,6 @@ import { AfterViewInit, Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { PMConstants } from './common/PMConstants';
 import { API } from './services/Api';
-import { RoutingService } from './services/routing.service';
 import { sessionManagerService } from './services/sessionManager.service';
 
 @Component({
@@ -16,6 +15,7 @@ export class AppComponent implements AfterViewInit {
               private readonly sessionManagerService: sessionManagerService,
               private readonly api: API) {
     translate.setDefaultLang(PMConstants.DEFAULT_LANG);
+    translate.use(sessionManagerService.getLanguage());
    
     if (sessionManagerService.isActive()) {
       sessionManagerService.subscribeIdle();

@@ -207,13 +207,15 @@ public class UserController {
 	@PostMapping(UserControllerConstant.passwordReinitialisationToken)
 	public void generateTokenForPasswordReinitialisation(@RequestBody PasswordReinitialisationTokenInputDTO input) {
 		input.validate();
-		StringBuilder link = new StringBuilder(input.getUrl());
-		link.append("?token=");
-		link.append(jwt.generateToken(input.getEmail(), System.currentTimeMillis() + (12 * 60 * 60 * 1000), "secret"));
-		
-		userService.sendSimpleEmail(input.getEmail(),
-									messageManager.getTranslation(MessageManager.PASSWORD_RESET_SUBJECT),
-									link.toString());
+		if (userService.findByEmail(input.getEmail()) != null) {
+			StringBuilder link = new StringBuilder(input.getUrl());
+			link.append("?token=");
+			link.append(jwt.generateToken(input.getEmail(), System.currentTimeMillis() + (12 * 60 * 60 * 1000), "secret"));
+			
+			userService.sendSimpleEmail(input.getEmail(),
+										messageManager.getTranslation(MessageManager.PASSWORD_RESET_SUBJECT),
+										link.toString());
+		}
 	}
 	
 	private String buildReinitialisationLink(String frontendURI, String tokenId) {

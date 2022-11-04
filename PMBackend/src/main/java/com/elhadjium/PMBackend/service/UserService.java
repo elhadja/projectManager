@@ -25,4 +25,5 @@ public interface UserService extends UserDetailsService {
 	public UserAccount getUserById(Long userId);
 	public UserAccount updateUser(UserAccount user);
 	public void UpdateUserEmail(Long userId, String newEmail);
+	public UserAccount findByEmail(String email);
 }

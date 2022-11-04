@@ -189,7 +189,7 @@ export class DialogCreateTaskComponent implements OnInit {
   }
 
   public get componentName(): string {
-    return 'x';
+    return 'DialogCreateTaskComponent';
   }
 
   public get global(): string {

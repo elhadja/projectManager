@@ -163,17 +163,17 @@
             "done": "Done",
             "task": "task: {{id}}",
             "us": "us:"
-        },
-        "DialogCreateTaskComponent": {
-            "title": "Task",
-            "description": "description",
-            "sprint": "Sprint",
-            "userStory": "User story",
-            "duration": "Duration",
-            "responsable": "Responsable",
-            "dependencies": "Dependencies",
-            "dod": "Defintion of done"
         }
+    },
+    "DialogCreateTaskComponent": {
+        "title": "Task",
+        "description": "description",
+        "sprint": "Sprint",
+        "userStory": "User story",
+        "duration": "Duration",
+        "responsable": "Responsable",
+        "dependencies": "Dependencies",
+        "dod": "Defintion of done"
     },
     "MenuBarComponent": {
         "projects": "Projects",

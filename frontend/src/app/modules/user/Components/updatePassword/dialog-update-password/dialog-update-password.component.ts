@@ -14,8 +14,6 @@ import { sessionManagerService } from 'src/app/services/sessionManager.service';
 })
 export class DialogUpdatePasswordComponent {
 
-  public readonly componentName = 'updatePassswordComponent';
-
   public password: FormControl;
   public confirmPassword: FormControl;
   public hidePassword: boolean;
@@ -41,6 +39,14 @@ export class DialogUpdatePasswordComponent {
       this.messageService.showSuccessMessage('Password updated');
       this.dialogRef.close();
     });
+  }
+
+  get componentName(): string {
+    return 'DialogUpdatePasswordComponent';
+  }
+
+  get global(): string {
+    return 'Global';
   }
 
 

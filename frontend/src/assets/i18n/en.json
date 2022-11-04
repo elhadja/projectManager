@@ -194,5 +194,10 @@
         "title": "Update your email",
         "help": "Enter your email address below and we'll send you a link to validate the new email.",
         "emailLabel": "Enter your new email"
+    },
+    "DialogUpdatePasswordComponent": {
+        "title": "Update your password",
+        "passwordLabel": "Enter your password",
+        "confirmPasswordLabel": "Confirm your password"
     }
 }

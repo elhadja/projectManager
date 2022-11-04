@@ -130,6 +130,7 @@ public class UserControllerTest {
 		final String uri = "http://webapp.com/reset";
 	
 		when(jwt.generateToken(any(String.class), any(Long.class), any(String.class))).thenReturn(token);
+		when(userService.findByEmail(email)).thenReturn(new UserAccount());
 		
 		// when
 		userController.generateTokenForPasswordReinitialisation(new PasswordReinitialisationTokenInputDTO(email, uri));

@@ -61,4 +61,8 @@ export class DialogUserProfilComponent implements OnInit {
   get pseudo() {
     return this.userProfileForm.get('pseudo');
   }
+
+  get componentName(): string {
+    return  'DialogUserProfilComponent';
+  }
 }

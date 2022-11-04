@@ -2,11 +2,11 @@ export class PMConstants {
   public static DEFAULT_LANG = 'fr';
   public static AVAILABLE_LANG = [
     {
-      label: 'Français',
+      label: 'french',
       value: 'fr'
     },
     {
-      label: 'English',
+      label: 'english',
       value: 'en'
     }
   ];

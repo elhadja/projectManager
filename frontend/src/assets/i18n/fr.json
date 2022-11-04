@@ -1,4 +1,5 @@
 {
+    "init": "fr",
     "Global": {
         "requiredField": "Ce champs est obligatoire",
         "invalidEmail": "L'adresse email n'est pas valide",
@@ -139,5 +140,70 @@
         "activities": "Activités",
         "showActivities": "Afficher les activities",
         "hideActivities": "Masquer les activities"
+    },
+    "TaskComponent": {
+        "kanban": "Kanban",
+        "bySprint": "Par Sprint",
+        "chooseASprint": "Selectionner un sprint",
+        "active": "En cours",
+        "tasksTable": {
+            "taskTableTitle": "Tâches",
+            "id": "id",
+            "userStory": "user story",
+            "description": "description",
+            "duration": "durée",
+            "dependencies": "dependences",
+            "assignedTo": "assigné à",
+            "status": "statut",
+            "empty": "Aucune tâche pour le sprint selectionné"
+        },
+        "kanbanPanel": {
+            "todo": "A Faire",
+            "doing": "En Cours",
+            "done": "fait",
+            "task": "tâche: {{id}}",
+            "us": "us:"
+        }
+    },
+    "DialogCreateTaskComponent": {
+        "title": "Tâche",
+        "description": "description",
+        "sprint": "Sprint",
+        "userStory": "User story",
+        "duration": "Durée",
+        "responsable": "Responsable",
+        "dependencies": "Dependences",
+        "dod": "Defintion of done"
+    },
+    "MenuBarComponent": {
+        "projects": "Projets",
+        "backlog": "Backlog",
+        "tasks": "Tâches",
+        "exit": "Quitter",
+        "account": "Mon compte",
+        "about": "A propos",
+        "french": "Français",
+        "english": "Anglais"
+    },
+    "AccountComponent": {
+        "title": "Mon compte",
+        "identity": "Identité",
+        "connection": "Connexion"
+    },
+    "DialogUserProfilComponent": {
+        "title": "Modifier mon profile",
+        "pseudo": "Pseudo",
+        "firstname": "Prénom",
+        "lastname": "Nom"
+    },
+    "DialogUpdateEmailComponent": {
+        "title": "Changer votre adresse mail",
+        "help": "Saisissez votre addresse mail ci-dessous et nous vous enverrons un lien de validation",
+        "emailLabel": "Enter your new email"
+    },
+    "DialogUpdatePasswordComponent": {
+        "title": "Modifier votre mot de passe",
+        "passwordLabel": "Entrer le nouveau mot de passe",
+        "confirmPasswordLabel": "Confirmer le mot de passe"
     }
 }

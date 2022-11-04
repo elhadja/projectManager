@@ -203,4 +203,9 @@ public class UserServiceImpl implements UserService {
 			user.setEmail(newEmail);
 		}
 	}
+	
+	@Override
+	public UserAccount findByEmail(String email) {
+		return userDAO.findByEmail(email);
+	}
 }

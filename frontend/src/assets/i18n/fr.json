@@ -189,5 +189,10 @@
         "pseudo": "Pseudo",
         "firstname": "Prénom",
         "lastname": "Nom"
+    },
+    "DialogUpdateEmailComponent": {
+        "title": "Changer votre adresse mail",
+        "help": "Saisissez votre addresse mail ci-dessous et nous vous enverrons un lien de validation",
+        "emailLabel": "Enter your new email"
     }
 }

@@ -26,4 +26,12 @@ export class DialogUpdateEmailComponent {
       this.matDialog.close();
     });
   }
+
+  get componentName(): string {
+    return 'DialogUpdateEmailComponent';
+  }
+
+  get global(): string {
+    return 'Global';
+  }
 }

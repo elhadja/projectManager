@@ -1,20 +1,20 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>Account</h1>
+            <h1>{{ componentName + '.title' | translate }}</h1>
         </div>
     </div>
     <div class="row">
         <div class="col-8">
             <mat-action-list class="list">
-                <div mat-subheader>Identity</div>
+                <div mat-subheader>{{ componentName + '.identity' | translate }}</div>
                 <mat-list-item (click)="openProfileDialog()">
                     <mat-icon mat-list-icon>account_circle</mat-icon>
                     <div mat-line>{{ userDTO?.firstname }} {{ userDTO?.lastname }}</div>
                     <div mat-line> {{ userDTO?.pseudo }} </div>
                 </mat-list-item>
                 <mat-divider></mat-divider>
-                <div mat-subheader>Connection</div>
+                <div mat-subheader>{{ componentName + '.connection' | translate }}</div>
                 <mat-list-item (click)="openChangeEmailDialog()">
                     <mat-icon mat-list-icon>mail</mat-icon>
                     <div mat-line>{{ userDTO?.email }}</div>

@@ -2,33 +2,35 @@
     <div class="row d-flex justify-content-center">
         <div class="col-12">
             <div class="d-flex flex-column justify-content-center">
-                <h1 class="text-center">Update my profil</h1>
+                <h1 class="text-center">{{ componentName + '.title' | translate }}</h1>
                 <form [formGroup]="userProfileForm" (ngSubmit)="updateUserProfile()">
                     <mat-form-field appearance="legacy" class="w-100">
-                        <mat-label>Your pseudo</mat-label>
+                        <mat-label>{{ componentName + '.pseudo' | translate }}</mat-label>
                         <input matInput type="text" formControlName="pseudo" minlength="" required="">
-                        <mat-error *ngIf="lastname?.hasError('minlength')">
-                            At least 2 letters
+                        <mat-error *ngIf="pseudo?.hasError('minlength')">
+                            {{ 'Global.minCharacterError' | translate :{'value': 2} }}
                         </mat-error>
                         <mat-error *ngIf="lastname?.hasError('required')">
-                            Pseudo is required
+                            {{ 'Global.requiredField' | translate }}
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field appearance="legacy" class="w-100">
-                        <mat-label>Your Firstname</mat-label>
+                        <mat-label>{{ componentName + '.firstname' | translate }}</mat-label>
                         <input matInput type="text" formControlName="firstname" minlength="2">
                         <mat-error *ngIf="firstname?.hasError('minlength')">
-                            At least 2 letters
+                            {{ 'Global.minCharacterError' | translate :{'value': 2} }}
                         </mat-error>
                     </mat-form-field>
                     <mat-form-field appearance="legacy" class="w-100">
-                        <mat-label>Your lastname</mat-label>
+                        <mat-label>{{ componentName + '.lastname' | translate }}</mat-label>
                         <input matInput type="text" formControlName="lastname" minlength="2">
                         <mat-error *ngIf="lastname?.hasError('minlength')">
-                            At least 2 letters
+                            {{ 'Global.minCharacterError' | translate :{'value': 2} }}
                         </mat-error>
                     </mat-form-field>
-                    <button mat-stroked-button type="submit" class="w-100" [disabled]='false'>Update</button>
+                    <button mat-stroked-button type="submit" class="w-100" [disabled]='false'>
+                        {{ 'Global.updateButton' | translate }}
+                    </button>
                 </form>
             </div>
         </div>

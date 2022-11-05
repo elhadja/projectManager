@@ -24,6 +24,8 @@ import { MomentModule } from 'angular2-moment';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { PMSharedModule } from './modules/shared/shared.module';
 import { AppErrorHandler } from './services/app_error_handler.service';
+import { DialogAboutComponent } from './components/dialog-about/dialog-about.component';
+import { GenericApi } from './PMApi/generic.api';
 
 
 const SERVICES = [API, 
@@ -33,7 +35,8 @@ const SERVICES = [API,
   ProjectApiService,
   RoutingService,
   UserApiService,
-  AppErrorHandler
+  AppErrorHandler,
+  GenericApi
 ];
 
 @NgModule({
@@ -42,6 +45,7 @@ const SERVICES = [API,
     MessageComponent,
     NotFoundComponent,
     MenuBarComponent,
+    DialogAboutComponent,
   ],
   imports: [
     BrowserModule,

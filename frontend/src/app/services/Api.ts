@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -54,6 +54,12 @@ export class API {
       catchError(this.appErrorHandler.handleApiRequestError)
     );
   }
+
+  public getWithoutAuthorization(uri: string): Observable<any> {
+    return this.httpClient.get(this.baseURI + uri, {headers: this.httpOptions?.headers?.delete('Authorization')}).pipe(
+      catchError(this.appErrorHandler.handleApiRequestError)
+    );
+  }
   public delete(uri: string): Observable<any> {
     return this.httpClient.delete(this.baseURI + uri, this.httpOptions).pipe(
       catchError(this.appErrorHandler.handleApiRequestError)
@@ -81,7 +87,7 @@ export class API {
 
   public clearHeader(): void {
     if (this.httpOptions != null) {
-      this.httpOptions.headers = undefined;
+      this.httpOptions.headers?.delete('Authorization');
     }
   }
 

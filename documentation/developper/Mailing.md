@@ -1,0 +1,1 @@
+Mails are handled by Backend and use Spring.
